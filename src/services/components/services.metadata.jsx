@@ -10,15 +10,21 @@ const servicesMetadata = {
 		render: (title) => <p>{title}</p>,
 		sort: true,
 	},
-	created_by: {},
-	updated_by: {},
+	created_by: {
+		header: 'created by'.toUpperCase(),
+		render: ({ first_name: firstName }) => <p>{firstName}</p>,
+	},
+	updated_by: {
+		header: 'updated by'.toUpperCase(),
+		render: ({ first_name: firstName }) => <p>{firstName}</p>,
+	},
 	created_at: {},
 	updated_at: {
 		header: 'last updated at'.toUpperCase(),
 		render: (time) => <p>{time}</p>,
 		sort: true,
 	},
-	exclude: ['created_by', 'updated_by', 'created_at', 'updated_at'],
+	exclude: ['created_at', 'updated_at'],
 };
 
 export default servicesMetadata;
