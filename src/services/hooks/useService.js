@@ -15,7 +15,7 @@ const useService = ({ id }) => {
 					const updatedService = await replaceUserIdWithProfile(serviceData);
 					setService(updatedService);
 				} catch (error) {
-					console.log(error);
+					// console.log(error);
 				}
 			})(),
 		[url]

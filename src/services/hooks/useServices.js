@@ -21,7 +21,7 @@ const useServices = ({ currentPage = 1, itemsPerPage = 10 }) => {
 					};
 					setServices(updatedService);
 				} catch (error) {
-					console.log(error);
+					// console.log(error);
 				}
 			})(),
 		[url]
