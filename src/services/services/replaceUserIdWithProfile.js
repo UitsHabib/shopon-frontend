@@ -4,8 +4,7 @@ import extractUserIds from './extractUserIds';
 const replaceUserIdWithProfile = async (service) => {
 	const userIds = extractUserIds(service);
 	const users = await Promise.all(
-		// eslint-disable-next-line no-return-await
-		userIds.map(async (userId) => await getUser({ id: userId }))
+		userIds.map(async (userId) => getUser({ id: userId }))
 	);
 
 	const updatedService = {
