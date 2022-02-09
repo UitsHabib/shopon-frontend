@@ -4,6 +4,7 @@ import useService from '../hooks/useService';
 
 const ServiceDetails = () => {
 	const { id: serviceId } = useParams();
+
 	const {
 		id,
 		title,
@@ -17,9 +18,9 @@ const ServiceDetails = () => {
 		<div>
 			<p>{id}</p>
 			<p>{title}</p>
-			<p>{createdBy}</p>
+			<p>{createdBy?.first_name}</p>
 			<p>{createdAt}</p>
-			<p>{updatedBy}</p>
+			<p>{updatedBy?.first_name}</p>
 			<p>{updatedAt}</p>
 		</div>
 	);

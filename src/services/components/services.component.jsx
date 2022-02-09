@@ -10,7 +10,6 @@ import servicesMetadata from './services.metadata';
 const Services = () => {
 	const [paginate, updatePage] = useState({ currentPage: 1, itemsPerPage: 2 });
 	const { services, meta } = useServices(paginate);
-	const totalNoOfItems = meta?.total || 0;
 
 	const updatedServicesMetadata = {
 		...servicesMetadata,
@@ -22,6 +21,7 @@ const Services = () => {
 			),
 		},
 	};
+	const totalNoOfItems = meta?.total || 0;
 
 	return (
 		<div className="flex flex-col">
