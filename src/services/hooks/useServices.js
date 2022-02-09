@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { get } from 'axios';
 
-const useServices = ({ page = 1, limit = 10 }) => {
+const useServices = ({ currentPage = 1, itemsPerPage = 10 }) => {
 	const [services, setServices] = useState([]);
-	const url = `/services?page=${page}&limit=${limit}`;
+	const url = `/services?page=${currentPage}&limit=${itemsPerPage}`;
 	useEffect(
 		() =>
 			(async () => {
