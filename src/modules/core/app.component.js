@@ -4,7 +4,7 @@ import { Switch, Route } from "react-router-dom";
 import NoMatch from "./NoMatch";
 import PublicRoute from "./PublicRoute";
 import PrivateRoute from "./PrivateRoute";
-import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes, MyProfile } from "../platform";
+import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes, MyProfile, Permissions } from "../platform";
 
 
 function App() {

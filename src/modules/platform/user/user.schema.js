@@ -53,7 +53,6 @@ export const loginSchema = object().shape({
         .email('This field should be a valid email address')
         .required('This field must not be empty'),
     password: string().required('This field must not be empty'),
-    // recaptchaToken: string().nullable().required('Captcha verification required')
 });
 
 const userSchema = {
