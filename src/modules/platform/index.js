@@ -4,6 +4,7 @@ import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPasswo
 
 export function PlatformRoutes() {
     const { path } = useRouteMatch();
+    //console.log(path);
 
     return (
         <Route>
