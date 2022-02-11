@@ -43,7 +43,7 @@ const Roles = () => {
         try {
             const response = await axios.patch(
                 `http://localhost:5000/api/roles/${id}`,
-                { title, description, permissions },
+                { title, description },
                 { withCredentials: true }
             );
             setRoles([...roles]);
