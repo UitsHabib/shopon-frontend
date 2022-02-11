@@ -8,7 +8,7 @@ import PrivateRoute from "../../core/PrivateRoute";
 
 function UserRoutes() {
     const { path } = useRouteMatch();
-
+    
     return (
         <Switch>
             <PrivateRoute exact path={path} component={UserManagement} />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, useRouteMatch } from 'react-router-dom';
 
 import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm } from './user';
-import { Permissions } from './permission';
+import Permissions from './permission';
 
 export function PlatformRoutes() {
     const { path } = useRouteMatch(); // /platform
@@ -10,6 +10,7 @@ export function PlatformRoutes() {
     return (
         <Route>
             <UserClientRoutes path={path} />
+            <Permissions path={path} />
         </Route>
     );
 }
@@ -22,5 +23,4 @@ export {
     ResetPassword,
     MyProfile,
     UserForm,
-    Permissions,
 };
