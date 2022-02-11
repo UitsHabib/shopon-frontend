@@ -1,13 +1,14 @@
-import React from "react";
-import { Switch, useRouteMatch } from "react-router-dom";
+import React from 'react';
+import { Switch, useRouteMatch } from 'react-router-dom';
 
-import Users from "./components/users.component";
-import UserManagement from "./components/user-management.component";
-import UserDetails from "./components/user-details.component";
-import PrivateRoute from "../../core/PrivateRoute";
+import Users from './components/users.component';
+import UserManagement from './components/user-management.component';
+import UserDetails from './components/user-details.component';
+import PrivateRoute from '../../core/PrivateRoute';
 
 function UserRoutes() {
     const { path } = useRouteMatch();
+    //   console.log(path);
 
     return (
         <Switch>
