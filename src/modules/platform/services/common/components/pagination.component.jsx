@@ -46,7 +46,7 @@ const Pagination = ({
 						<button
 							type="button"
 							onClick={() =>
-								currentPage + 1 < totalPages
+								currentPage + 1 <= totalPages
 									? updateCurrentPage(currentPage + 1)
 									: null
 							}
