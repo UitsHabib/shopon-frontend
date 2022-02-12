@@ -1,10 +1,16 @@
 import { SignInSchema } from "../../user.schema";
 import { Formik, Field, Form } from "formik";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const AddNewUser = () => {
     const [apiError, setapiError] = useState(null);
+
+    const admin = {
+        email: "habiburrahman3089@gmail.com",
+        password: "P@ssword123",
+    };
+
     const ApiSubmit = async (values) => {
         const newAdmin = {
             profile_id: 1,
@@ -37,6 +43,25 @@ const AddNewUser = () => {
             }
         }
     };
+
+    async function handleLogin(data) {
+        try {
+            const response = await axios.post(
+                "http://localhost:5000/api/login",
+                data,
+                { withCredentials: true }
+            );
+            localStorage.setItem("access_token", response.data.access_token);
+            console.log(response);
+            console.log("loged in ");
+        } catch (error) {
+            console.log(error);
+            alert("Error happened");
+        }
+    }
+    useEffect(() => {
+        handleLogin(admin);
+    }, []);
 
     return (
         <div
