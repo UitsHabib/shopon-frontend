@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useServices from '../hooks/useServices';
 
-import Table from '../../common/components/table/table.component';
-import Pagination from '../../common/components/pagination.component';
+import { Table, Pagination } from '../common/components';
 
 import servicesMetadata from './services.metadata';
 

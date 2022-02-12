@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import ServiceDetails from '../components/serviceDetails.component';
 import Services from '../components/services.component';
 
-const ServicesNavigation = () => {
+const ServicesRoutes = () => {
 	return (
 		<Routes>
 			<Route path="/" element={<Services />} />
@@ -12,4 +12,4 @@ const ServicesNavigation = () => {
 	);
 };
 
-export default ServicesNavigation;
+export default ServicesRoutes;

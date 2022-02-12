@@ -1,6 +1,6 @@
 import { get } from 'axios';
 
-const getUser = async ({ id }) => {
+const getUserById = async ({ id }) => {
 	const url = `/users/${id}`;
 	try {
 		const { data: user } = await get(url);
@@ -12,4 +12,4 @@ const getUser = async ({ id }) => {
 	return undefined;
 };
 
-export default getUser;
+export default getUserById;

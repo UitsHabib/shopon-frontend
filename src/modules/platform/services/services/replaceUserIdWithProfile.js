@@ -1,10 +1,10 @@
-import getUser from '../../common/services/getUser';
+import { getUserById } from '../common/services';
 import extractUserIds from './extractUserIds';
 
 const replaceUserIdWithProfile = async (service) => {
 	const userIds = extractUserIds(service);
 	const users = await Promise.all(
-		userIds.map(async (userId) => getUser({ id: userId }))
+		userIds.map(async (userId) => getUserById({ id: userId }))
 	);
 
 	const updatedService = {

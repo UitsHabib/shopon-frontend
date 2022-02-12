@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { post } from 'axios';
 
-import ServicesNavigation from './services/navigation/services.navigation';
+import ServicesRouter from './modules/platform/services';
 
 const assumeLoggedIn = async () => {
 	const credentials = {
@@ -22,7 +22,7 @@ const App = () => {
 	return (
 		<div>
 			<Routes>
-				<Route path="/services/*" element={<ServicesNavigation />} />
+				<Route path="/services/*" element={<ServicesRouter />} />
 			</Routes>
 		</div>
 	);
