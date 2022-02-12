@@ -38,7 +38,6 @@
 		"eject": "react-scripts eject",
 		"format": "prettier --write ."
 	},
-	"proxy": "http://localhost:5000/api",
 	"eslintConfig": {
 		"extends": [
 			"react-app",

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { post } from 'axios';
+import { api } from './modules/platform/services/common/services';
 
 import ServicesRouter from './modules/platform/services';
 
@@ -10,7 +10,7 @@ const assumeLoggedIn = async () => {
 		password: 'P@ssword123',
 	};
 	try {
-		await post('/login', credentials);
+		await api.post('/login', credentials);
 	} catch (error) {
 		console.log(error);
 	}

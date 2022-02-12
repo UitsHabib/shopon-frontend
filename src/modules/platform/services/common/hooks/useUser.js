@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { get } from 'axios';
+import { api } from '../services';
 
 const useUser = ({ id }) => {
 	const [user, serUser] = useState([]);
@@ -8,7 +8,7 @@ const useUser = ({ id }) => {
 		() =>
 			(async () => {
 				try {
-					const { data: userData } = await get(url);
+					const { data: userData } = api.get(url);
 					serUser(userData);
 				} catch (error) {
 					console.log(error);

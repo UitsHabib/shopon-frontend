@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { get } from 'axios';
+import { api } from '../common/services';
 import replaceUserIdWithProfile from '../services/replaceUserIdWithProfile';
 
 const useServices = ({ currentPage = 1, itemsPerPage = 10 }) => {
@@ -10,7 +10,7 @@ const useServices = ({ currentPage = 1, itemsPerPage = 10 }) => {
 		() =>
 			(async () => {
 				try {
-					const { data: servicesData } = await get(url);
+					const { data: servicesData } = await api.get(url);
 					const updatedService = {
 						...servicesData,
 						services: await Promise.all(

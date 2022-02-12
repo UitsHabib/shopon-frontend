@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { get } from 'axios';
+import { api } from '../common/services';
 
 import replaceUserIdWithProfile from '../services/replaceUserIdWithProfile';
 
@@ -11,7 +11,7 @@ const useService = ({ id }) => {
 		() =>
 			(async () => {
 				try {
-					const { data: serviceData } = await get(url);
+					const { data: serviceData } = await api.get(url);
 					const updatedService = await replaceUserIdWithProfile(serviceData);
 					setService(updatedService);
 				} catch (error) {

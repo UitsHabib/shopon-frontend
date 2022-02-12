@@ -1,4 +1,4 @@
-/* eslint-disable import/prefer-default-export */
 import getUserById from './getUserById';
+import api from './api';
 
-export { getUserById };
+export { getUserById, api };

@@ -1,9 +1,9 @@
-import { get } from 'axios';
+import api from './api';
 
 const getUserById = async ({ id }) => {
 	const url = `/users/${id}`;
 	try {
-		const { data: user } = await get(url);
+		const { data: user } = await api.get(url);
 		return user;
 	} catch (error) {
 		console.log(error);
