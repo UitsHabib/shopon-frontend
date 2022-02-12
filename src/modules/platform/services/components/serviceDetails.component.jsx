@@ -16,12 +16,20 @@ const ServiceDetails = () => {
 
 	return (
 		<div>
-			<p>{id}</p>
-			<p>{title}</p>
-			<p>{createdBy?.first_name}</p>
-			<p>{createdAt}</p>
-			<p>{updatedBy?.first_name}</p>
-			<p>{updatedAt}</p>
+			<p className="alert alert-secondary text-xl font-bold">Id: {id}</p>
+			<p className="alert alert-secondary text-xl font-bold">Title: {title}</p>
+			<p className="alert alert-secondary text-xl font-bold">
+				Created By: {createdBy?.first_name}
+			</p>
+			<p className="alert alert-secondary text-xl font-bold">
+				Created At: {createdAt}
+			</p>
+			<p className="alert alert-secondary text-xl font-bold">
+				Updated By: {updatedBy?.first_name}
+			</p>
+			<p className="alert alert-secondary text-xl font-bold">
+				Updated At: {updatedAt}
+			</p>
 		</div>
 	);
 };
