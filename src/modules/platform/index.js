@@ -3,6 +3,7 @@ import { Route, useRouteMatch } from 'react-router-dom';
 
 import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm } from './user';
 import { Permissions } from './permission';
+import { ProfileClientRoutes, Profiles } from './profile';
 
 export function PlatformRoutes() {
     const { path } = useRouteMatch(); // /platform
@@ -10,6 +11,7 @@ export function PlatformRoutes() {
     return (
         <Route>
             <UserClientRoutes path={path} />
+            <ProfileClientRoutes path={path} />
         </Route>
     );
 }
@@ -23,4 +25,5 @@ export {
     MyProfile,
     UserForm,
     Permissions,
+    Profiles
 };
