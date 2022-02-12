@@ -50,6 +50,7 @@ const Permissions = () => {
     return (
         <div className="permissions">
             <PermissionsTable
+                allValues={permissions}
                 permissions={paginate}
                 setPermissions={setPermissions}
                 sorting={sorting}

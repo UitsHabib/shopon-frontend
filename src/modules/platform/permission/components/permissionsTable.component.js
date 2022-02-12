@@ -5,33 +5,71 @@ import Table from "./common/table.component";
 import TableBody from "./common/tableBody.component";
 import TableHead from "./common/tableHead.component";
 import Modal from "./common/modal.component";
+import PermissionForm from "./permissionForm.component";
 
-const baseUrl = "http://localhost:5000"
+const baseUrl = "http://localhost:5000";
 
-const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
-    const [services, setServices] = useState(null);
+const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allValues }) => {
+    const [permission, setPermission] = useState({});
+    const [form, setForm] = useState("create");
     const [isOpen, setIsOpen] = useState(false);
 
     const { path } = useRouteMatch();
 
-    const handleServices = (data) => {
-        setServices(data);
+    const handleCreate = () => {
+        setIsOpen(prev => !prev);
+        setForm("create");
+    }
+
+    const handleEdit = (data) => {
+        setPermission(data);
+        setForm("update");
         setIsOpen((prev) => !prev);
     };
 
     const handleDelete = async (id) => {
-        try{
-            const response = await axios.delete(`${baseUrl}/api/permissions/${id}`, { withCredentials: true })
-            const data = permissions.filter(permission => permission.id !== response.data.id);
+        try {
+            const response = await axios.delete(
+                `${baseUrl}/api/permissions/${id}`,
+                { withCredentials: true }
+            );
+            const data = permissions.filter(
+                (permission) => permission.id !== response.data.id
+            );
             setPermissions(data);
-        } catch(error) {
+        } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const handleClose = () => {
-        setServices(null);
+        setPermission({});
+        setForm("create");
         setIsOpen((prev) => !prev);
+    };
+
+    const handleSubmit = async (values) => {
+        try {
+            if (form === "create") {
+                const response = await axios.post(
+                    `${baseUrl}/api/permissions`,
+                    values,
+                    { withCredentials: true }
+                );
+                setPermissions(prev => [response.data, ...prev])
+            } else {
+                const response = await axios.patch(
+                    `${baseUrl}/api/permissions/${permission.id}`,
+                    values,
+                    { withCredentials: true }
+                );
+                const index = allValues.findIndex(item => item.id === response.data.id);
+                allValues.splice(index, 1, response.data);
+                setPermissions(allValues);
+            }
+        } catch (error) {
+            console.log("edit", error);
+        }
     };
 
     const columns = [
@@ -82,7 +120,7 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
             path: "",
             content: (data) => (
                 <td>
-                    <button type="button" onClick={() => handleServices(data)}>
+                    <button type="button" onClick={() => handleEdit(data)}>
                         <i className="fas fa-edit" />
                     </button>
                     <button type="button" onClick={() => handleDelete(data.id)}>
@@ -98,6 +136,7 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
 
     return (
         <>
+            <button className="btn btn-success mb-2" type="button" onClick={handleCreate}>Add Permission</button>
             <Table>
                 <TableHead
                     columns={columns}
@@ -106,8 +145,14 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
                 />
                 <TableBody items={permissions} columns={columns} />
             </Table>
+
             <Modal isOpen={isOpen} onBtnClose={handleClose}>
-                <h1>Hello World</h1>
+                <PermissionForm
+                    form={form}
+                    permission={permission}
+                    modalClose={handleClose}
+                    handleSubmit={handleSubmit}
+                />
             </Modal>
         </>
     );
