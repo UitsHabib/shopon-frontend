@@ -1,5 +1,6 @@
 import React  from 'react';
-import Profiles  from './components/profiles.component'
+import Profiles  from './components/profiles.component';
+import CreateProfile from './components/common/create-profile.component';
 import ProfileRoutes from './profile.routes';
 
 export function ProfileClientRoutes(props) {
@@ -7,5 +8,6 @@ export function ProfileClientRoutes(props) {
 }
 
 export {
-    Profiles
+    Profiles,
+    CreateProfile
 };

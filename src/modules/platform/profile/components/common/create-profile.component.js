@@ -1,9 +1,23 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import axios from "axios";
 // import signUpSchema from "../schema/signUp.schema";
-import "react-datepicker/dist/react-datepicker.css";
 
 const CreateProfile = () => {
+	async function handleSubmit(data) {
+		try {
+			const response = await axios.post(
+				"http://localhost:5000/api/profiles",
+				data,
+				{ withCredentials: true }
+			);
+			window.location.href = "http://localhost:3000/platform/profiles";
+		} catch (error) {
+			console.log(error.response);
+            // window.location.href = "http://localhost:3000/platform/profiles";
+			// alert("Error happened!");
+		}
+	}
 	return (
 		<div>
 			<div
@@ -26,7 +40,8 @@ const CreateProfile = () => {
 					}}
 					// validationSchema={signUpSchema}
 					onSubmit={(values, actions) => {
-						console.log(values);
+						console.log(values.permissions);
+						handleSubmit(values);
 						actions.setSubmitting(false);
 					}}
 				>
@@ -34,8 +49,7 @@ const CreateProfile = () => {
 						<Form onSubmit={formikProps.handleSubmit}>
 							<div className="form-group">
 								<label className="form-label" htmlFor="title">
-									Title{" "}
-									<span className="text-danger">*</span>
+									Title <span className="text-danger">*</span>
 								</label>
 								<Field
 									id="title"
@@ -49,7 +63,10 @@ const CreateProfile = () => {
 							</div>
 
 							<div className="form-group">
-								<label className="form-label" htmlFor="description">
+								<label
+									className="form-label"
+									htmlFor="description"
+								>
 									Description{" "}
 									<span className="text-danger">*</span>
 								</label>
@@ -64,19 +81,33 @@ const CreateProfile = () => {
 								</div>
 							</div>
 
-							<div className="form-group">
-								<label className="form-label" htmlFor="permissions">
-									Permissions <span className="text-danger">*</span>
+							<div id="checkbox-group">Permissions</div>
+							<br />
+							<div role="group" aria-labelledby="checkbox-group">
+								<label style={{ marginRight: "5px" }}>
+									<Field
+										type="checkbox"
+										name="permissions"
+										value="1"
+									/>
+									1
 								</label>
-								<Field
-									id="permissions"
-									name="permissions"
-									type="text"
-									className="form-control"
-								></Field>
-								<div className="invalid-feedback d-block">
-									<ErrorMessage name="permissions" />
-								</div>
+								<label style={{ marginRight: "5px" }}>
+									<Field
+										type="checkbox"
+										name="permissions"
+										value="2"
+									/>
+									2
+								</label>
+								<label style={{ marginRight: "5px" }}>
+									<Field
+										type="checkbox"
+										name="permissions"
+										value="3"
+									/>
+									3
+								</label>
 							</div>
 
 							<button className="btn btn-primary" type="submit">

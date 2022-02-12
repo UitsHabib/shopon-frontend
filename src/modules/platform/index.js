@@ -3,7 +3,7 @@ import { Route, useRouteMatch } from 'react-router-dom';
 
 import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm } from './user';
 import { Permissions } from './permission';
-import { ProfileClientRoutes, Profiles } from './profile';
+import { ProfileClientRoutes, Profiles, CreateProfile } from './profile';
 
 export function PlatformRoutes() {
     const { path } = useRouteMatch(); // /platform
@@ -25,5 +25,6 @@ export {
     MyProfile,
     UserForm,
     Permissions,
-    Profiles
+    Profiles,
+    CreateProfile
 };

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Table from "./common/table.component";
-import axios from 'axios';
+import axios from "axios";
 import _ from "lodash";
 import Pagination from "./common/pagination.component";
 import Dropdown from "react-bootstrap/Dropdown";
+import { Link } from "react-router-dom";
 
-const api_endpoint = 'http://localhost:5000';
+const api_endpoint = "http://localhost:5000";
 
 const Profiles = () => {
 	const [profiles, setProfiles] = useState([]);
@@ -16,18 +17,19 @@ const Profiles = () => {
 	});
 
 	const [activePage, setActivePage] = useState(1);
-	const [pageCount, setPageCount] = useState(2);
+	const [pageCount, setPageCount] = useState(5);
 
-    //fetch profile data from database
-    async function getProfiles(){
-        try{
-            const promise = axios.get(`${api_endpoint}/api/profiles`, {withCredentials: true})
-            .then(res => setProfiles(res.data));
-            const response = await promise;
-        } catch(error) {
-            console.log("abuj", error);
-        }
-    }
+	//fetch profile data from database
+	async function getProfiles() {
+		try {
+			const promise = axios
+				.get(`${api_endpoint}/api/profiles`, { withCredentials: true })
+				.then((res) => setProfiles(res.data));
+			const response = await promise;
+		} catch (error) {
+			console.log("abuj", error);
+		}
+	}
 
 	useEffect(() => {
 		getProfiles();
@@ -101,8 +103,11 @@ const Profiles = () => {
 			content: (profile, key) => (
 				<td>
 					<Dropdown>
-						<Dropdown.Toggle variant="secondary" id="dropdown-basic">
-                            <i className="bi bi-pencil-square"></i>
+						<Dropdown.Toggle
+							variant="secondary"
+							id="dropdown-basic"
+						>
+							<i className="bi bi-pencil-square"></i>
 						</Dropdown.Toggle>
 
 						<Dropdown.Menu>
@@ -134,11 +139,14 @@ const Profiles = () => {
 							marginRight: "20px",
 						}}
 					>
-                   
-                            <button type="button"  className="btn btn-warning">
-                                Create new profile
-                            </button>
-                     
+						<Link
+							style={{ textDecoration: "none" }}
+							to="/platform/create-profile"
+						>
+							<button type="button" className="btn btn-warning">
+								Create new profile
+							</button>
+						</Link>
 					</span>
 				</nav>
 			</div>
