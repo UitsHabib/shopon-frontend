@@ -1,4 +1,4 @@
-import { string, object, ref } from "yup";
+import { string, object, ref, number } from "yup";
 import XRegExp from "xregexp";
 import * as Yup from "yup";
 import PhoneNumber from "awesome-phonenumber";
@@ -65,7 +65,6 @@ export const loginSchema = object().shape({
         .email("This field should be a valid email address")
         .required("This field must not be empty"),
     password: string().required("This field must not be empty"),
-    // recaptchaToken: string().nullable().required('Captcha verification required')
 });
 
 const userSchema = {
@@ -197,4 +196,35 @@ export const SignInSchema = Yup.object().shape({
         .test("passwords-match", "Passwords must match", function (value) {
             return this.parent.password === value;
         }),
+});
+
+export const updateUserSchema = object().shape({
+    first_name: string()
+        .trim()
+        .min(3, "This field must be at least 2 character long.")
+        .max(20, "This field must be at most 20 character long.")
+        .required("This field must not be empty."),
+
+    last_name: string()
+        .trim()
+        .min(3, "This field must be at least 2 character long.")
+        .max(20, "This field must be at most 20 character long.")
+        .required("This field must not be empty."),
+
+    email: string()
+        .trim()
+        .email("This field must be a valid email")
+        .min(2, "This field must be at least 2 character long.")
+        .max(50, "This field must be at most 50 character long.")
+        .required("This field must not be empty."),
+
+    password: string()
+        .max(50, "This field must be at most 50 character long.")
+        .required("This field must not be empty."),
+
+    confirm_password: string()
+        .oneOf([ref("password"), null], "Passwords must match")
+        .required("This field must not be empty."),
+
+    role_id: number().required("This field must not be empty."),
 });

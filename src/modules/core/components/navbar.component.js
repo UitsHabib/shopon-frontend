@@ -2,6 +2,10 @@ import { Link } from "react-router-dom";
 import getLoggedInUser from "../service/get-logged-in-user";
 
 const Navbar = (props) => {
+    const { path } = props;
+    //console.log(path);
+    const pathNames = path.split("/").filter((pathName) => pathName != "login");
+    let nextPath = "";
     return (
         <>
             <nav
@@ -13,9 +17,11 @@ const Navbar = (props) => {
                         ShopOn
                     </Link>
 
-                    <Link className="navbar-brand" to="/platform">
-                        Platform
-                    </Link>
+                    {getLoggedInUser() && (
+                        <Link className="navbar-brand" to="/platform">
+                            Platform
+                        </Link>
+                    )}
                 </div>
 
                 {!getLoggedInUser() && (
@@ -28,7 +34,9 @@ const Navbar = (props) => {
                     <div className="d-flex flex-wrap justify-content-end mt-3">
                         <div>
                             <p className="navbar-brand">
-                                {`${getLoggedInUser().first_name} ${getLoggedInUser().last_name}` }
+                                {`${getLoggedInUser().first_name} ${
+                                    getLoggedInUser().last_name
+                                }`}
                             </p>
                         </div>
 
@@ -38,6 +46,19 @@ const Navbar = (props) => {
                     </div>
                 )}
             </nav>
+
+            {/* {pathNames.map((pathName, index) => {
+                //console.log(pathName)
+                if (pathName != "") {
+                    nextPath += "/" + pathName;
+                    //console.log(nextPath);
+                    return (
+                        <Link key={index} to={`${nextPath}`} className="mx-2">
+                            {pathName === 'platform' ? 'admin panel' : pathName}
+                        </Link>
+                    );
+                }
+            })} */}
         </>
     );
 };

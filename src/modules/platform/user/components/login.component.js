@@ -6,7 +6,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 const Login = (props) => {
     async function handleLogin(data) {
         try {
-            const response = await axios.post('http://localhost:5000/api/login', data);
+            const response = await axios.post('http://localhost:5000/api/login', data, { withCredentials: true });
             localStorage.setItem("loggedInUser", JSON.stringify(response.data));
             window.location.href = "/";
         } catch(error) {
