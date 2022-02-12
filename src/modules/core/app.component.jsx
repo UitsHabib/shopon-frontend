@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import { api } from './modules/platform/services/common/services';
+import { api } from '../platform/services/common/services';
 
-import ServicesRouter from './modules/platform/services';
+import ServicesRouter from '../platform/services';
 
 const assumeLoggedIn = async () => {
 	const credentials = {
