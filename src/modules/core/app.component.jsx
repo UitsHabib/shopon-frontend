@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { api } from '../platform/services/common/services';
 
-import ServicesRouter from '../platform/services';
+import ServicesRoutes from '../platform/services';
 
 const assumeLoggedIn = async () => {
 	const credentials = {
@@ -22,7 +22,7 @@ const App = () => {
 	return (
 		<div>
 			<Routes>
-				<Route path="/services/*" element={<ServicesRouter />} />
+				<Route path="/services/*" element={<ServicesRoutes />} />
 			</Routes>
 		</div>
 	);
