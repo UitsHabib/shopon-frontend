@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import './dashboard.component.css';
 const Dashboard = (props) => {
     return (
-        <Link to="/service-list" style={{ color: 'black' }}>
+        <Link to="/platform" style={{ color: 'black' }}>
             <div
                 className="card text-center mt-5  hvr-grow-shadow hvr-round-corners"
                 style={{
@@ -28,7 +28,7 @@ const Dashboard = (props) => {
                             alignItems: 'center',
                         }}
                     >
-                        <h3 className="card-title">Admin Panel</h3>
+                        <h3 className="card-title">Platform</h3>
                     </div>
                 </div>
             </div>

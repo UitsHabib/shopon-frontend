@@ -13,7 +13,7 @@ const ServiceList = () => {
                         style={{ textDecoration: 'none', color: 'black' }}
                     >
                         <span className="hvr-underline-from-left p-2">
-                            Admin
+                            Users
                         </span>
                     </Link>
                 </li>
