@@ -42,8 +42,7 @@ function Roles() {
         getRoles();
     }, []);
 
-    const handleSort = (sorters, key) => {
-        sorters.order = sorters.order === "asc" ? "desc" : "asc";
+    const handleSort = (sorters) => {
         setSorters({ ...sorters });
     };
 
@@ -76,11 +75,13 @@ function Roles() {
         {
             label: "ID",
             key: "id",
+            sortable: "true",
             content: (role, key) => <th scope="row">{role[key]}</th>,
         },
         {
             label: "Title",
             key: "title",
+            sortable: "true",
             content: (role, key) => <td scope="row">{role[key]}</td>,
         },
         {
