@@ -16,6 +16,11 @@ const Navbar = (props) => {
                     <Link className="navbar-brand" to="/platform">
                         Platform
                     </Link>
+
+                    <Link className="navbar-brand" to="/permission">
+                        Permission
+                    </Link>
+
                 </div>
 
                 {!getLoggedInUser() && (
@@ -28,7 +33,7 @@ const Navbar = (props) => {
                     <div className="d-flex flex-wrap justify-content-end mt-3">
                         <div>
                             <p className="navbar-brand">
-                                {`${getLoggedInUser().first_name} ${getLoggedInUser().last_name}` }
+                                {`${getLoggedInUser().first_name} ${getLoggedInUser().last_name}`}
                             </p>
                         </div>
 
