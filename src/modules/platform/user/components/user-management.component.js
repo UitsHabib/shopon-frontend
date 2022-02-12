@@ -1,14 +1,14 @@
-import { Link, useRouteMatch } from "react-router-dom";
+import { Link, useRouteMatch } from 'react-router-dom';
 
 const UserManagement = (props) => {
     const { path } = useRouteMatch();
 
-    const listItems = ["Users", "Permission", "Profile", "Role", "Service"];
+    const listItems = ['Users', 'Permissions', 'Profiles', 'Roles', 'Services'];
     return (
         <>
             <div
                 className="d-flex flex-wrap flex-column justify-content-around mt-2"
-                style={{ width: "30rem" }}
+                style={{ width: '30rem' }}
             >
                 {listItems.map((listItem, index) => {
                     return (

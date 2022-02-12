@@ -28,9 +28,9 @@ function UserRoutes() {
             <PrivateRoute path={`${path}/users`} component={Users} />
 
             <PrivateRoute path={`${path}/permission`} component={Permission} />
-            <PrivateRoute path={`${path}/role`} component={Role} />
+            <PrivateRoute path={`${path}/roles`} component={Role} />
             <PrivateRoute path={`${path}/service`} component={Service} />
-            <PrivateRoute path={`${path}/profile`} component={Profile} />
+            <PrivateRoute path={`${path}/profiles`} component={Profile} />
         </Switch>
     );
 }

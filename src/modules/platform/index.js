@@ -14,6 +14,7 @@ import {
 import { Roles } from './role';
 import { Permissions } from './permission';
 import { RoleClientRoutes } from './role';
+import { ProfileClientRoutes, Profiles, CreateProfile } from './profile';
 
 export function PlatformRoutes() {
     const { path } = useRouteMatch(); // /platform
@@ -22,6 +23,7 @@ export function PlatformRoutes() {
         <Route>
             <UserClientRoutes path={path} />
             <RoleClientRoutes path={path} />
+            <ProfileClientRoutes path={path} />
         </Route>
     );
 }
@@ -36,4 +38,6 @@ export {
     UserForm,
     Permissions,
     Roles,
+    Profiles,
+    CreateProfile,
 };
