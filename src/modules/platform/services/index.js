@@ -1,3 +1,5 @@
 import ServicesRoutes from './routes/services.routes';
 
-export default ServicesRoutes;
+export default function ServiceClientRoutes(props) {
+	return <ServicesRoutes path={props.path} />;
+}
