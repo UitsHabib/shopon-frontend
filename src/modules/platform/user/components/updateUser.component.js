@@ -1,8 +1,10 @@
+import axios from "axios";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
-import axios from "axios";
-import { updateUserSchema } from "../user.schema";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+
+import { updateUserSchema } from "../user.schema";
+
 const api_endPoint = "http://localhost:5000/api";
 
 const UpdateUser = (props) => {
@@ -11,7 +13,7 @@ const UpdateUser = (props) => {
     const [user, setUser] = useState();
     const [roles, setRoles] = useState();
     const [profiles, setProfiles] = useState();
-    const [loggedIn, setLoggedIn] = useState(false);
+    const [dataImported, setDataImported] = useState(false);
 
     const removeNull = (value) => {
         if (value === null) return "";
@@ -22,23 +24,17 @@ const UpdateUser = (props) => {
     async function updateUserAdmin(data) {
         try {
             const updatedUser = {
-                new : roles.map(role => {if(role.title ===data.roleID) return role.role_id }),
-
                 profile_id: getProfile_id(data.profile_id),
                 first_name: data.first_name,
-                last_name: data.last_name,
-                // email: data.email,
-                password: data.password,
-                role_id: getRole_id(data.role_id),
+                last_name : data.last_name,
+                // email  : data.email,
+                password  : data.password,
+                role_id   : getRole_id(data.role_id),
             };
 
-            const response = await axios.patch(
-                `http://localhost:5000/api/users/${usersID}`,
-                updatedUser,
-                { withCredentials: true }
-            );
-            alert(`User ${user.first_name} ${user.last_name} updated`);
+            await axios.patch(`http://localhost:5000/api/users/${usersID}`,updatedUser,{ withCredentials: true });
             
+            alert(`User ${user.first_name} ${user.last_name} updated`);
             props.history.push("/platform/users");
 
             // props.history.push(`${props.history.state?.prevPath}`);
@@ -49,36 +45,27 @@ const UpdateUser = (props) => {
 
     async function getUser(user_id) {
         try {
-            setLoggedIn(true);
-            const response = await axios.get(
-                `${api_endPoint}/users/${user_id}`,
-                { withCredentials: true }
-            );
-            setUser(response.data);
+            setDataImported(true);
+            const {data} = await axios.get(`${api_endPoint}/users/${user_id}`,{ withCredentials: true });
+            setUser(data);
         } catch (error) {
             console.log(error);
         }
     }
     async function getRoles() {
         try {
-            setLoggedIn(true);
-            const response = await axios.get(
-                `${api_endPoint}/roles`,
-                { withCredentials: true }
-            );
-            setRoles(response.data);
+            setDataImported(true);
+            const {data} = await axios.get(`${api_endPoint}/roles`,{ withCredentials: true });
+            setRoles(data);
         } catch (error) {
             console.log(error);
         }
     }
     async function getProfiles() {
         try {
-            setLoggedIn(true);
-            const response = await axios.get(
-                `${api_endPoint}/profiles`,
-                { withCredentials: true }
-            );
-            setProfiles(response.data);
+            setDataImported(true);
+            const {data} = await axios.get(`${api_endPoint}/profiles`,{ withCredentials: true });
+            setProfiles(data);
         } catch (error) {
             console.log(error);
         }
@@ -87,35 +74,25 @@ const UpdateUser = (props) => {
     const getProfile_id = (title) => {
         if(title  && profiles){
         let profileID;
-        const profile = profiles.filter(profile =>{
-            if (profile.title ===  title)
-              {
-                  profileID = profile.id;
-                    return profile;}
-        })
+        profiles.filter(profile =>{ if (profile.title ===  title)profileID = profile.id;})
         return profileID;}
     }    
     const getRole_id = (title) => {
         if(title && roles){
         let roleID;
-        const role = roles.filter(role =>{
-            if (role.title ===  title)
-              {
-                  roleID = role.id;
-                    return role;}
-        })
+        roles.filter(role =>{ if(role.title ===  title)roleID = role.id; })
         return roleID;}
     }
 
 
 
     useEffect(() => {
-        if (!loggedIn) {
+        if (!dataImported) {
             getRoles();
             getProfiles();
             getUser(usersID);
         }
-    }, [user, loggedIn, roles , profiles]);
+    }, [user, dataImported, roles , profiles]);
 
     return (
         <>
@@ -123,7 +100,7 @@ const UpdateUser = (props) => {
                 className="btn btn-success"
                 onClick={() => {
                     // props.history.push(`${props.history.state?.prevPath}`);
-                    setLoggedIn(false);
+                    setDataImported(false);
                     props.history.push("/platform/users");
                     // console.log(`${props.history.state?.prevPath}`);
                 }}
@@ -137,20 +114,16 @@ const UpdateUser = (props) => {
             </div>
             <hr />
             {user && profiles && roles ? (
-                <div
-                    className="card bg-light "
-                    style={{ margin: "auto", maxWidth: "45rem" }}
-                >
+                <div className="card bg-light " style={{ margin: "auto", maxWidth: "45rem" }}>
                     <Formik
                         initialValues={{
-                            profile_id: removeNull(profiles.find((profile) => profile.id === user.profile_id).title ),
-                            first_name: user.first_name,
-                            last_name: user.last_name,
-                            email: user.email,
-                            password: removeNull(user.password),
+                            profile_id      : removeNull(profiles.find((profile) => profile.id === user.profile_id).title ),
+                            first_name      : user.first_name,
+                            last_name       : user.last_name,
+                            email           : user.email,
+                            password        : removeNull(user.password),
                             confirm_password: removeNull(user.confirm_password),
-                            role_id:  removeNull(roles.find((role) => role.id === user.role_id).title ),
-                            new : roles.map(role => {if(role.id ===user.roleID) return role.title })
+                            role_id         :  removeNull(roles.find((role) => role.id === user.role_id).title )
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
