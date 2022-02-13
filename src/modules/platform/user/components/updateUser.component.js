@@ -1,7 +1,7 @@
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { updateUserSchema } from "../../user.schema";
+import { updateUserSchema } from "../user.schema";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 const api_endPoint = "http://localhost:5000/api";
 
@@ -9,6 +9,8 @@ const UpdateUser = (props) => {
     const usersID = props.location.state.data;
     const { path } = useRouteMatch();
     const [user, setUser] = useState();
+    const [roles, setRoles] = useState();
+    const [profiles, setProfiles] = useState();
     const [loggedIn, setLoggedIn] = useState(false);
 
     const removeNull = (value) => {
@@ -19,26 +21,27 @@ const UpdateUser = (props) => {
 
     async function updateUserAdmin(data) {
         try {
-            console.log("up date data : ", data);
             const updatedUser = {
-                profile_id: data.profile_id,
+                new : roles.map(role => {if(role.title ===data.roleID) return role.role_id }),
+
+                profile_id: getProfile_id(data.profile_id),
                 first_name: data.first_name,
                 last_name: data.last_name,
                 // email: data.email,
                 password: data.password,
-                role_id: data.role_id,
+                role_id: getRole_id(data.role_id),
             };
-            console.log("up dated user : ", updatedUser);
+
             const response = await axios.patch(
                 `http://localhost:5000/api/users/${usersID}`,
                 updatedUser,
                 { withCredentials: true }
             );
-            console.log(response);
+            alert(`User ${user.first_name} ${user.last_name} updated`);
+            
+            props.history.push("/platform/users");
 
-            alert(`User ${usersID} updated`);
-
-            props.history.push(`${props.history.state?.prevPath}`);
+            // props.history.push(`${props.history.state?.prevPath}`);
         } catch (error) {
             console.log(error.response.data);
         }
@@ -51,28 +54,78 @@ const UpdateUser = (props) => {
                 `${api_endPoint}/users/${user_id}`,
                 { withCredentials: true }
             );
-
-            console.log("Response : ", response);
-            console.log("Response.data : ", response.data);
-
             setUser(response.data);
         } catch (error) {
             console.log(error);
         }
     }
+    async function getRoles() {
+        try {
+            setLoggedIn(true);
+            const response = await axios.get(
+                `${api_endPoint}/roles`,
+                { withCredentials: true }
+            );
+            setRoles(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function getProfiles() {
+        try {
+            setLoggedIn(true);
+            const response = await axios.get(
+                `${api_endPoint}/profiles`,
+                { withCredentials: true }
+            );
+            setProfiles(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    const getProfile_id = (title) => {
+        if(title  && profiles){
+        let profileID;
+        const profile = profiles.filter(profile =>{
+            if (profile.title ===  title)
+              {
+                  profileID = profile.id;
+                    return profile;}
+        })
+        return profileID;}
+    }    
+    const getRole_id = (title) => {
+        if(title && roles){
+        let roleID;
+        const role = roles.filter(role =>{
+            if (role.title ===  title)
+              {
+                  roleID = role.id;
+                    return role;}
+        })
+        return roleID;}
+    }
+
+
+
     useEffect(() => {
         if (!loggedIn) {
-            console.log("User ID : ", usersID);
+            getRoles();
+            getProfiles();
             getUser(usersID);
         }
-    }, [user, loggedIn]);
+    }, [user, loggedIn, roles , profiles]);
 
     return (
         <>
             <button
                 className="btn btn-success"
                 onClick={() => {
-                    props.history.push(`${props.history.state?.prevPath}`);
+                    // props.history.push(`${props.history.state?.prevPath}`);
+                    setLoggedIn(false);
+                    props.history.push("/platform/users");
+                    // console.log(`${props.history.state?.prevPath}`);
                 }}
                 style={{ margin: "20px", marginLeft: "85%" }}
             >
@@ -83,25 +136,24 @@ const UpdateUser = (props) => {
                 <h3>Updating user {usersID}</h3>
             </div>
             <hr />
-            {user ? (
+            {user && profiles && roles ? (
                 <div
                     className="card bg-light "
                     style={{ margin: "auto", maxWidth: "45rem" }}
                 >
                     <Formik
                         initialValues={{
-                            profile_id: user.profile_id,
+                            profile_id: removeNull(profiles.find((profile) => profile.id === user.profile_id).title ),
                             first_name: user.first_name,
                             last_name: user.last_name,
                             email: user.email,
                             password: removeNull(user.password),
                             confirm_password: removeNull(user.confirm_password),
-                            role_id: removeNull(user.role_id),
+                            role_id:  removeNull(roles.find((role) => role.id === user.role_id).title ),
+                            new : roles.map(role => {if(role.id ===user.roleID) return role.title })
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
-                            console.log(values);
-                            console.log(values.first_name);
                             updateUserAdmin(values);
                             actions.setSubmitting(false);
                         }}
@@ -121,10 +173,18 @@ const UpdateUser = (props) => {
                                     </label>
                                     <Field
                                         className="form-control"
-                                        type="text"
+                                        as="select"
                                         id="profile_id"
                                         name="profile_id"
-                                    />
+                                    >
+                                        {
+                                            profiles ?
+                                            profiles.map((profile , index)=>{
+                                                return <option key={index} >{profile.title}</option>;
+                                            })
+                                            : ""
+                                        }
+                                    </Field>
                                     <div className="invalid-feedback d-block">
                                         <ErrorMessage name="profile_id" />
                                     </div>
@@ -167,7 +227,7 @@ const UpdateUser = (props) => {
                                     </div>
                                 </div>
 
-                                {/* <div
+                                <div
                                     className="form-group"
                                 >
                                     <label
@@ -177,16 +237,18 @@ const UpdateUser = (props) => {
                                         Email
                                         <span className="text-danger">*</span>
                                     </label>
-                                    <Field
+                                    <Field 
+                                        
                                         className="form-control"
                                         type="email"
                                         id="email"
                                         name="email"
+                                        disabled={true}
                                     />
                                     <div className="invalid-feedback d-block">
                                         <ErrorMessage name="email" />
                                     </div>
-                                </div> */}
+                                </div>
 
                                 <div className="form-group">
                                     <label
@@ -236,10 +298,19 @@ const UpdateUser = (props) => {
                                     </label>
                                     <Field
                                         className="form-control"
-                                        type="text"
+                                        as="select"
                                         id="role_id"
                                         name="role_id"
-                                    />
+                                    >
+                                        {
+                                            roles ?
+                                            roles.map((role , index)=>{
+                                                return <option key={index} >{role.title}</option>;
+                                            })
+                                            : ""
+                                        }
+
+                                    </Field>
                                     <div className="invalid-feedback d-block">
                                         <ErrorMessage name="role_id" />
                                     </div>
