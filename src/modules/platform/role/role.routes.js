@@ -1,7 +1,7 @@
 import React from 'react';
 import { Switch, useRouteMatch } from 'react-router-dom';
 
-import Roles from './components/roles.compoent';
+import Roles from './components/roles.component';
 import PrivateRoute from '../../core/PrivateRoute';
 
 function RoleRoutes() {

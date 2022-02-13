@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, useRouteMatch } from 'react-router-dom';
+import React from "react";
+import { Route, useRouteMatch } from "react-router-dom";
 
 import {
     UserClientRoutes,
@@ -11,9 +11,9 @@ import {
     MyProfile,
     UserForm,
 } from './user';
-import { Roles } from './role';
+
 import { Permissions } from './permission';
-import { RoleClientRoutes } from './role';
+import { RoleClientRoutes, Roles } from './role';
 import { ProfileClientRoutes, Profiles, CreateProfile } from './profile';
 import ServicesClientRoutes from './services';
 
