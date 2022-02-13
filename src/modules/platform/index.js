@@ -39,5 +39,5 @@ export {
     Permissions,
     Roles,
     Profiles,
-    CreateProfile,
+    CreateProfile
 };

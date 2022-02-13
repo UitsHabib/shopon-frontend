@@ -1,17 +1,22 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import axios from "axios";
-// import signUpSchema from "../schema/signUp.schema";
+import { createSchema } from "../../profile.schema";
+import { useRouteMatch } from "react-router-dom";
+
+const api_endpoint = "http://localhost:5000";
 
 const CreateProfile = () => {
+    const { path } = useRouteMatch();
 	async function handleSubmit(data) {
+        console.log(path)
 		try {
 			const response = await axios.post(
-				"http://localhost:5000/api/profiles",
+				`${api_endpoint}/api/profiles`,
 				data,
 				{ withCredentials: true }
 			);
-			window.location.href = "http://localhost:3000/platform/profiles";
+            window.location.href = "http://localhost:3000/platform/profiles";
 		} catch (error) {
 			console.log(error.response);
             // window.location.href = "http://localhost:3000/platform/profiles";
@@ -38,9 +43,9 @@ const CreateProfile = () => {
 						description: "",
 						permissions: [],
 					}}
-					// validationSchema={signUpSchema}
+					validationSchema={createSchema}
 					onSubmit={(values, actions) => {
-						console.log(values.permissions);
+						// console.log(values.permissions);
 						handleSubmit(values);
 						actions.setSubmitting(false);
 					}}
@@ -82,33 +87,26 @@ const CreateProfile = () => {
 							</div>
 
 							<div id="checkbox-group">Permissions</div>
-							<br />
 							<div role="group" aria-labelledby="checkbox-group">
-								<label style={{ marginRight: "5px" }}>
+								<label>
 									<Field
 										type="checkbox"
 										name="permissions"
 										value="1"
 									/>
-									1
+									System Admin Permission
 								</label>
-								<label style={{ marginRight: "5px" }}>
+                                <br />
+								<label>
 									<Field
 										type="checkbox"
 										name="permissions"
 										value="2"
 									/>
-									2
-								</label>
-								<label style={{ marginRight: "5px" }}>
-									<Field
-										type="checkbox"
-										name="permissions"
-										value="3"
-									/>
-									3
+									Manager Permission
 								</label>
 							</div>
+                            <br />
 
 							<button className="btn btn-primary" type="submit">
 								Add new profile

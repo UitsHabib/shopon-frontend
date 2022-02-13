@@ -15,15 +15,10 @@ function UserRoutes() {
     return (
         <Switch>
             <PrivateRoute exact path={path} component={UserManagement} />
-            <PrivateRoute
-                path={`${path}/users/:id/update`}
-                component={UpdateUser}
-            />
+            <PrivateRoute path={`${path}/users/:id/update`} component={UpdateUser}/>
             <PrivateRoute path={`${path}/users/create`} component={UserForm} />
             <PrivateRoute path={`${path}/users/:id`} component={UserDetails} />
             <PrivateRoute path={`${path}/users`} component={Users} />
-
-            
         </Switch>
     );
 }
