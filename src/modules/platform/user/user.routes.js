@@ -6,7 +6,7 @@ import UserManagement from './components/user-management.component';
 import UserDetails from './components/user-details.component';
 import PrivateRoute from '../../core/PrivateRoute';
 import UserForm from './components/user-form.component';
-import UpdateUser from './components/update-delete/updateUser.component';
+import UpdateUser from './components/updateUser.component';
 
 
 function UserRoutes() {

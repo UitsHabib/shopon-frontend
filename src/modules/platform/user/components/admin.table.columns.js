@@ -1,6 +1,13 @@
+import DeleteUser from "./deleteUser.service";
+import { Link } from "react-router-dom";
 
 
-function getColumns(){
+function getColumns(props , path , setUserDeleted){
+
+  // const nPath = path + "/" + profile.id +'/update';
+
+
+
     const columns = [
         {
           label: "Profile ID",
@@ -35,8 +42,15 @@ function getColumns(){
             label: "Actions",
             content: (profile, detail) => (
                 <td>
-                    <button type="button" class="btn btn-outline-secondary" style={{marginRight: '10px'}}>UPDATE</button>
-                    <button type="button" class="btn btn-outline-danger">DELETE</button>
+                   <Link  className="btn btn-outline-secondary" to={{ pathname: path + "/" + profile.id +'/update' , state: { prevPath: props.location.pathname , data : profile.id }}}>
+                   UPDATE
+                </Link>
+                    {/* <button onClick={()=>{
+                      props.history.push(`/platform/users/${profile.id}/update`, { data: profile.id });
+                    }} type="button" class="btn btn-outline-secondary" style={{marginRight: '10px'}}>UPDATE</button> */}
+                    <button onClick={()=>{
+                      DeleteUser(profile.id , setUserDeleted , profile) ;
+                    }} type="button" class="btn btn-outline-danger">DELETE</button>
                 </td>
             ),
           }
