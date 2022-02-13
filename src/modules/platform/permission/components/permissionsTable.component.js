@@ -1,31 +1,13 @@
-import { useState } from "react";
 import { Link, useRouteMatch } from "react-router-dom";
 import axios from "axios";
 import Table from "./common/table.component";
 import TableBody from "./common/tableBody.component";
 import TableHead from "./common/tableHead.component";
-import Modal from "./common/modal.component";
-import PermissionForm from "./permissionForm.component";
 
 const baseUrl = "http://localhost:5000";
 
-const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allValues }) => {
-    const [permission, setPermission] = useState({});
-    const [form, setForm] = useState("create");
-    const [isOpen, setIsOpen] = useState(false);
-
+const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
     const { path } = useRouteMatch();
-
-    const handleCreate = () => {
-        setIsOpen(prev => !prev);
-        setForm("create");
-    }
-
-    const handleEdit = (data) => {
-        setPermission(data);
-        setForm("update");
-        setIsOpen((prev) => !prev);
-    };
 
     const handleDelete = async (id) => {
         try {
@@ -39,36 +21,6 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allVal
             setPermissions(data);
         } catch (error) {
             console.log(error);
-        }
-    };
-
-    const handleClose = () => {
-        setPermission({});
-        setForm("create");
-        setIsOpen((prev) => !prev);
-    };
-
-    const handleSubmit = async (values) => {
-        try {
-            if (form === "create") {
-                const { data } = await axios.post(
-                    `${baseUrl}/api/permissions`,
-                    values,
-                    { withCredentials: true }
-                );
-                setPermissions(prev => [data, ...prev])
-            } else {
-                const { data } = await axios.patch(
-                    `${baseUrl}/api/permissions/${permission.id}`,
-                    values,
-                    { withCredentials: true }
-                );
-                const index = allValues.findIndex(item => item.id === data.id);
-                allValues.splice(index, 1, data);
-                setPermissions(allValues);
-            }
-        } catch (error) {
-            console.log("edit", error);
         }
     };
 
@@ -120,9 +72,9 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allVal
             path: "",
             content: (data) => (
                 <td>
-                    <button type="button" onClick={() => handleEdit(data)}>
+                    <Link to={{ pathname: `${path}/update/${data.id}`, data: data }}>
                         <i className="fas fa-edit" />
-                    </button>
+                    </Link>
                     <button type="button" onClick={() => handleDelete(data.id)}>
                         <i className="fas fa-trash-alt" />
                     </button>
@@ -136,7 +88,9 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allVal
 
     return (
         <>
-            <button className="btn btn-success mb-2" type="button" onClick={handleCreate}>Add Permission</button>
+            <Link className="btn btn-success mb-2" to={{ pathname: `${path}/create`}}>
+                Add Permission
+            </Link>
             <Table>
                 <TableHead
                     columns={columns}
@@ -145,15 +99,6 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allVal
                 />
                 <TableBody items={permissions} columns={columns} />
             </Table>
-
-            <Modal isOpen={isOpen} onBtnClose={handleClose}>
-                <PermissionForm
-                    form={form}
-                    permission={permission}
-                    modalClose={handleClose}
-                    handleSubmit={handleSubmit}
-                />
-            </Modal>
         </>
     );
 };

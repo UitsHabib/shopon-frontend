@@ -14,8 +14,8 @@ const Permissions = () => {
 
     const getPermissions = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/api/permissions`, { withCredentials: true });
-            setPermissions(response.data);
+            const { data } = await axios.get(`${baseUrl}/api/permissions`, { withCredentials: true });
+            setPermissions(data);
         } catch (error) {
             console.log(error);
         }
@@ -30,15 +30,9 @@ const Permissions = () => {
         setActivePage(1);
     };
 
-    const handleActivePage = (value) => {
-        setActivePage(value);
-    };
+    const handleActivePage = value => setActivePage(value);
 
-    const sortedPermissions = _.orderBy(
-        permissions,
-        [sorting.path],
-        [sorting.order]
-    );
+    const sortedPermissions = _.orderBy(permissions, [sorting.path], [sorting.order]);
 
     const paginatingPremissions = (permissions) => {
         const start = (activePage - 1) * count;
@@ -50,7 +44,6 @@ const Permissions = () => {
     return (
         <div className="permissions">
             <PermissionsTable
-                allValues={permissions}
                 permissions={paginate}
                 setPermissions={setPermissions}
                 sorting={sorting}

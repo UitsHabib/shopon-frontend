@@ -4,7 +4,6 @@ const CheckboxGroup = ({ options, name, value, ...rest }) => {
     return (
         <Field name={name} {...rest}>
             {({ field }) => {
-                console.log(field.value);
                 return options.map((option) => (
                     <label className="d-block" htmlFor={option.id} key={option.id}>
                         <input
