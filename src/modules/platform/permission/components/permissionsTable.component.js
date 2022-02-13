@@ -51,20 +51,20 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort, allVal
     const handleSubmit = async (values) => {
         try {
             if (form === "create") {
-                const response = await axios.post(
+                const { data } = await axios.post(
                     `${baseUrl}/api/permissions`,
                     values,
                     { withCredentials: true }
                 );
-                setPermissions(prev => [response.data, ...prev])
+                setPermissions(prev => [data, ...prev])
             } else {
-                const response = await axios.patch(
+                const { data } = await axios.patch(
                     `${baseUrl}/api/permissions/${permission.id}`,
                     values,
                     { withCredentials: true }
                 );
-                const index = allValues.findIndex(item => item.id === response.data.id);
-                allValues.splice(index, 1, response.data);
+                const index = allValues.findIndex(item => item.id === data.id);
+                allValues.splice(index, 1, data);
                 setPermissions(allValues);
             }
         } catch (error) {
