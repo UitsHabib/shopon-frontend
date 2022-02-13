@@ -8,6 +8,8 @@ const Table = (props) => {
 
     return (
         <>
+        <div className="border border-success my-5">
+
             <table className="table table-hover">
                 <TableHeader
                     columns={columns}
@@ -16,6 +18,7 @@ const Table = (props) => {
                 />
                 <TableBody items={items} columns={columns} />
             </table>
+        </div>
         </>
     );
 };
