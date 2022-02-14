@@ -6,7 +6,7 @@ const Dashboard = (props) => {
 			<DashboardItem title="Platform" link="/platform" />
 			<DashboardItem title="Customer" link="/customer" />
 			<DashboardItem title="Shop" link="/shop" />
-			<DashboardItem title="Complaint" link="/complain" />
+			<DashboardItem title="Complaint" link="/complaint" />
 		</div>
 	);
 };

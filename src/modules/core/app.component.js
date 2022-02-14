@@ -16,6 +16,9 @@ import {
 	Permissions,
 	UpdateMyProfile,
 } from '../platform';
+import { CustomerDummy } from '../customer';
+import { ShopDummy } from '../shop';
+import { ComplaintDummy } from '../complaint';
 
 function App() {
 	return (
@@ -26,6 +29,9 @@ function App() {
 			<Route path="/reset-password" component={ResetPassword} />
 			<Route path="/forgot-password" component={ForgotPassword} />
 			<Route path="/platform" component={PlatformRoutes} />
+			<Route path="/customer" component={CustomerDummy} />
+			<Route path="/shop" component={ShopDummy} />
+			<Route path="/complaint" component={ComplaintDummy} />
 			{/* // TODO :  */}
 			{/* <Route path="/role" component={RoleRoutes}/> */}
 			<PrivateRoute path="/my-profile" component={MyProfile} />
