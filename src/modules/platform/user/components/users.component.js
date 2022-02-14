@@ -4,6 +4,7 @@ import getColumns from "./admin.table.columns";
 import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import _ from "lodash";
+import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 const Users = (props) => {
@@ -25,7 +26,7 @@ const Users = (props) => {
 
     const columns = getColumns(props , path , setUserDeleted);
 
-    const handleSort = sortColumn => setSortColumn(sortColumn);
+    const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
     const sortUsers = (users) => {
         const sortedUsers = _.orderBy(
@@ -48,7 +49,7 @@ const Users = (props) => {
 
     async function getUsers() {
         try {
-            const {data} = await axios.get(
+            const { data } = await axios.get(
                 "http://localhost:5000/api/users",
                 { withCredentials: "true" }
             );
@@ -66,7 +67,17 @@ const Users = (props) => {
     }, [deletedUsers]);
 
     return (
-        <>
+        <div className="container">
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div></div>
+                <Link
+                    to="/platform/users/create"
+                    className="btn btn-primary m-2"
+                >
+                    Creat A new User{" "}
+                </Link>
+            </div>
+
             <Table
                 users={userList}
                 columns={columns}
@@ -79,7 +90,7 @@ const Users = (props) => {
                 activePage={activePage}
                 onClickPage={handleClickPage}
             />
-        </>
+        </div>
     );
 };
 
