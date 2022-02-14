@@ -5,14 +5,17 @@ import CreateProfile from './components/common/create-profile.component';
 import Profiles from './components/profiles.component';
 
 function ProfileRoutes() {
-    const { path } = useRouteMatch();
+	const { path } = useRouteMatch();
 
-    return (
-        <Switch>
-            <PrivateRoute path={`${path}/profiles`} component={Profiles} />
-            <PrivateRoute path={`${path}/profiles/create`} component={CreateProfile} />
-        </Switch>
-    );
+	return (
+		<Switch>
+			<PrivateRoute
+				path={`${path}/profiles/create`}
+				component={CreateProfile}
+			/>
+			<PrivateRoute path={`${path}/profiles`} component={Profiles} />
+		</Switch>
+	);
 }
 
 export default ProfileRoutes;

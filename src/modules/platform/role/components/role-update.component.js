@@ -112,6 +112,14 @@ const RoleUpdate = () => {
 										onSubmit={formikProps.handleSubmit}
 										className="d-flex flex-column justify-content-center align-item-center"
 									>
+										<button
+											className="btn btn-danger align-self-end"
+											type="button"
+											onClick={() => history.goBack()}
+										>
+											<i className="bi bi-backspace mx-2"></i>
+											Return to Roles
+										</button>
 										<div className="form-group">
 											<label htmlFor="title" className="form-label h4">
 												Title

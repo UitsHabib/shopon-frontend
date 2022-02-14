@@ -31,15 +31,15 @@ export function PlatformRoutes() {
 }
 
 export {
-	Login,
-	Logout,
-	Dashboard,
-	ForgotPassword,
-	ResetPassword,
-	MyProfile,
-	UserForm,
-	Permissions,
-	Roles,
-	Profiles,
-	CreateProfile,
+    Login,
+    Logout,
+    Dashboard,
+    ForgotPassword,
+    ResetPassword,
+    MyProfile,
+    UserForm,
+    Permissions,
+    Roles,
+    Profiles,
+    CreateProfile
 };
