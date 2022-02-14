@@ -1,4 +1,4 @@
-import React  from 'react';
+import React from 'react';
 import UserRoutes from './user.routes';
 import Login from './components/login.component';
 import Logout from './components/logout.component';
@@ -9,6 +9,7 @@ import MyProfile from './components/my-profile/my-profile.component';
 import UserForm from './components/user-form.component';
 
 export function UserClientRoutes(props) {
+    // console.log('In UserClientRoutes', props.path);
     return <UserRoutes path={props.path} />;
 }
 
@@ -19,5 +20,5 @@ export {
     ForgotPassword,
     ResetPassword,
     MyProfile,
-    UserForm
+    UserForm,
 };

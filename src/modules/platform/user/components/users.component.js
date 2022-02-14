@@ -5,8 +5,11 @@ import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import _ from "lodash";
 import { Link } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
-const Users = () => {
+const Users = (props) => {
+    const { path } = useRouteMatch();
+
     const [users, setUsers] = useState([]);
     const [sortColumn, setSortColumn] = useState({
         path: "profile_id",
@@ -16,7 +19,12 @@ const Users = () => {
     const [activePage, setActivePage] = useState(1);
     const [pageCount, setPageCount] = useState(3);
 
-    const columns = getColumns();
+    const [deletedUsers , setDeletedUsers] = useState(0); 
+    const setUserDeleted = () =>{
+        setDeletedUsers(deletedUsers + 1 );
+    }
+
+    const columns = getColumns(props , path , setUserDeleted);
 
     const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
@@ -29,7 +37,9 @@ const Users = () => {
         return sortedUsers;
     };
 
-    const handleClickPage = (activePage) => setActivePage(activePage);
+    
+
+    const handleClickPage = activePage => setActivePage(activePage);
 
     const paginateUsers = () => {
         const start = (activePage - 1) * pageCount;
@@ -54,7 +64,7 @@ const Users = () => {
 
     useEffect(() => {
         getUsers();
-    }, []);
+    }, [deletedUsers]);
 
     return (
         <div className="container">
