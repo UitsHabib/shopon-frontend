@@ -6,13 +6,14 @@ import getLoggedInUser from "./service/get-logged-in-user";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
     const loggedInUser = getLoggedInUser();
+    console.log(rest);
     
     return (
         <Route {...rest} render={props => {
             return (
                 loggedInUser ? (
                     <>
-                        <Navbar />
+                        <Navbar path={rest.path} />
                         <Component {...props}/>
                     </>
                 ) : (

@@ -5,7 +5,7 @@ import Logout from './components/logout.component';
 import Dashboard from './components/dashboard.component';
 import ForgotPassword from './components/forgot-password.component';
 import ResetPassword from './components/reset-password.component';
-import MyProfile from './components/my-profile/my-profile.component';
+import { MyProfile, UpdateMyProfile } from './components/my-profile';
 import UserForm from './components/user-form.component';
 
 export function UserClientRoutes(props) {
@@ -19,5 +19,6 @@ export {
     ForgotPassword,
     ResetPassword,
     MyProfile,
+    UpdateMyProfile,
     UserForm
 };
