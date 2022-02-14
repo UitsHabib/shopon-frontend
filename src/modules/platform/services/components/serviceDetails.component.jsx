@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { formatRelative } from 'date-fns';
 
@@ -7,6 +7,7 @@ import useService from '../hooks/useService';
 
 const ServiceDetails = () => {
 	const { id: serviceId } = useParams();
+	const history = useHistory();
 
 	const {
 		title,
@@ -17,7 +18,7 @@ const ServiceDetails = () => {
 	} = useService({ id: serviceId });
 
 	return (
-		<div className="d-flex flex-wrap justify-content-sm-center">
+		<div className="d-flex flex-column flex-wrap justify-content-sm-center">
 			<table className="table table-bordered table-striped w-50">
 				<thead>
 					<tr>
@@ -53,6 +54,13 @@ const ServiceDetails = () => {
 					</tr>
 				</tbody>
 			</table>
+			<button
+				type="button"
+				onClick={() => history.push('/platform/services')}
+				className="btn btn-primary w-25"
+			>
+				Go Back
+			</button>
 		</div>
 	);
 };
