@@ -91,7 +91,17 @@ const Permission = (props) => {
 
                         <div className="form-group">
                             <label className="form-label" htmlFor="type">Type</label>
-                            <Field className="form-control" type="type" id="type" name="type" />
+                            {/* <Field className="form-control" type="type" id="type" name="type" /> */}
+                            <div role="group" aria-labelledby="checkbox-group" name="type" >
+                                <label>
+                                    <Field type="checkbox" name="type" value="custom" />
+                                    Custom
+                                </label>
+                                <label>
+                                    <Field type="checkbox" name="type" value="standard" />
+                                    Standard
+                                </label>
+                            </div>
                             <div className="invalid-feedback d-block"><ErrorMessage name="type" />  </div>
                         </div>
 
