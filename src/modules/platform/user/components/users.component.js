@@ -4,6 +4,7 @@ import getColumns from "./admin.table.columns";
 import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import _ from "lodash";
+import { Link } from "react-router-dom";
 
 const Users = () => {
     const [users, setUsers] = useState([]);
@@ -17,7 +18,7 @@ const Users = () => {
 
     const columns = getColumns();
 
-    const handleSort = sortColumn => setSortColumn(sortColumn);
+    const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
     const sortUsers = (users) => {
         const sortedUsers = _.orderBy(
@@ -28,7 +29,7 @@ const Users = () => {
         return sortedUsers;
     };
 
-    const handleClickPage = activePage => setActivePage(activePage);
+    const handleClickPage = (activePage) => setActivePage(activePage);
 
     const paginateUsers = () => {
         const start = (activePage - 1) * pageCount;
@@ -38,7 +39,7 @@ const Users = () => {
 
     async function getUsers() {
         try {
-            const {data} = await axios.get(
+            const { data } = await axios.get(
                 "http://localhost:5000/api/users",
                 { withCredentials: "true" }
             );
@@ -56,7 +57,17 @@ const Users = () => {
     }, []);
 
     return (
-        <>
+        <div className="container">
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div></div>
+                <Link
+                    to="/platform/users/create"
+                    className="btn btn-primary m-2"
+                >
+                    Creat A new User{" "}
+                </Link>
+            </div>
+
             <Table
                 users={userList}
                 columns={columns}
@@ -69,7 +80,7 @@ const Users = () => {
                 activePage={activePage}
                 onClickPage={handleClickPage}
             />
-        </>
+        </div>
     );
 };
 

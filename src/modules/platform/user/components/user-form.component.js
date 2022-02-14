@@ -5,11 +5,7 @@ import axios from "axios";
 
 const UserForm = () => {
     const [apiError, setapiError] = useState(null);
-
-    const admin = {
-        email: "habiburrahman3089@gmail.com",
-        password: "P@ssword123",
-    };
+    const [role, setrole] = useState([]);
 
     const ApiSubmit = async (values) => {
         const newAdmin = {
@@ -44,24 +40,21 @@ const UserForm = () => {
         }
     };
 
-    // async function handleLogin(data) {
-    //     try {
-    //         const response = await axios.post(
-    //             "http://localhost:5000/api/login",
-    //             data,
-    //             { withCredentials: true }
-    //         );
-    //         localStorage.setItem("access_token", response.data.access_token);
-    //         console.log(response);
-    //         console.log("loged in ");
-    //     } catch (error) {
-    //         console.log(error);
-    //         alert("Error happened");
-    //     }
-    // }
-    // useEffect(() => {
-    //     handleLogin(admin);
-    // }, []);
+    const getrole = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:5000/api/roles",
+                { withCredentials: true }
+            );
+            console.log(response.data);
+            setrole(response.data);
+        } catch (e) {
+            console.log(e.response.data);
+        }
+    };
+    useEffect(() => {
+        getrole();
+    }, []);
 
     return (
         <div
@@ -208,11 +201,26 @@ const UserForm = () => {
                                         Role ID
                                     </label>
                                     <Field
-                                        type="role_id"
-                                        className="form-control"
+                                        type="select"
                                         id="role_id"
                                         name="role_id"
-                                    />
+                                        className="form-select"
+                                        as="select"
+                                    >
+                                        <option value="choose">
+                                            Choose...
+                                        </option>
+                                        {role.map((item) => {
+                                            return (
+                                                <option
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.title}
+                                                </option>
+                                            );
+                                        })}
+                                    </Field>
                                     {errors.role_id ? (
                                         <div className="invalid-feedback d-block">
                                             {errors.role_id}

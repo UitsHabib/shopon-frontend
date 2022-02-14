@@ -184,18 +184,22 @@ export const SignInSchema = Yup.object().shape({
         .min(2, "Too Short!")
         .email("must be a valid email")
         .max(50, "Too Long!")
-        .required("Required"),
+        .required("Email is Required"),
     password: Yup.string()
         .min(6, "Too Short!")
         .max(50, "Too Long!")
-        .required("Required"),
-    firstName: Yup.string().required("required"),
-    lastName: Yup.string().required("required"),
+        .required("password is Required"),
+    firstName: Yup.string().trim().required("first name is required"),
+    lastName: Yup.string().required("lastname is required"),
     confirmPassword: Yup.string()
-        .required("Required")
+        .required("Please ")
         .test("passwords-match", "Passwords must match", function (value) {
             return this.parent.password === value;
         }),
+
+    role_id: Yup.string()
+        .required("Please Select A role")
+        .notOneOf(["choose"], "Please Select A role"),
 });
 
 export const updateUserSchema = object().shape({
