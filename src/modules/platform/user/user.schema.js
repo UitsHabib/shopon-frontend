@@ -200,6 +200,9 @@ export const SignInSchema = Yup.object().shape({
     role_id: Yup.string()
         .required("Please Select A role")
         .notOneOf(["choose"], "Please Select A role"),
+    profile_id: Yup.string()
+        .required("Please Select A Profile")
+        .notOneOf(["choose"], "Please Select A Profile"),
 });
 
 export const updateUserSchema = object().shape({

@@ -6,6 +6,7 @@ import axios from "axios";
 const UserForm = () => {
     const [apiError, setapiError] = useState(null);
     const [role, setrole] = useState([]);
+    const [profile, setprofile] = useState([]);
 
     const ApiSubmit = async (values) => {
         const newAdmin = {
@@ -52,8 +53,21 @@ const UserForm = () => {
             console.log(e.response.data);
         }
     };
+    const getprofile = async () => {
+        try {
+            const response = await axios.get(
+                "http://localhost:5000/api/profiles",
+                { withCredentials: true }
+            );
+            console.log(response.data);
+            setprofile(response.data);
+        } catch (e) {
+            console.log(e.response.data);
+        }
+    };
     useEffect(() => {
         getrole();
+        getprofile();
     }, []);
 
     return (
@@ -70,6 +84,7 @@ const UserForm = () => {
                     lastName: "",
                     confirmPassword: "",
                     role_id: "",
+                    profile_id: "",
                 }}
                 onSubmit={(values) => {
                     // console.log(values);
@@ -188,6 +203,42 @@ const UserForm = () => {
                                     {errors.confirmPassword ? (
                                         <div className="invalid-feedback d-block">
                                             {errors.confirmPassword}
+                                        </div>
+                                    ) : null}
+                                </div>
+                            </div>
+                            <div className="row g-3">
+                                <div className="col">
+                                    <label
+                                        htmlFor="profile_id"
+                                        className="col-form-label"
+                                    >
+                                        Select Profile
+                                    </label>
+                                    <Field
+                                        type="select"
+                                        id="profile_id"
+                                        name="profile_id"
+                                        className="form-select"
+                                        as="select"
+                                    >
+                                        <option value="choose">
+                                            Choose...
+                                        </option>
+                                        {profile.map((item) => {
+                                            return (
+                                                <option
+                                                    key={item.id}
+                                                    value={item.id}
+                                                >
+                                                    {item.title}
+                                                </option>
+                                            );
+                                        })}
+                                    </Field>
+                                    {errors.profile_id ? (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.profile_id}
                                         </div>
                                     ) : null}
                                 </div>
