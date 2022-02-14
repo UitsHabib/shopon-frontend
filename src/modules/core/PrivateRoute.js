@@ -6,7 +6,7 @@ import getLoggedInUser from './service/get-logged-in-user';
 
 export default function PrivateRoute({ component: Component, ...rest }) {
 	const loggedInUser = getLoggedInUser();
-	// console.log(rest);
+	console.log(rest);
 
 	return (
 		<Route

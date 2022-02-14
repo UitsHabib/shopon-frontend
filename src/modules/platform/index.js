@@ -10,6 +10,7 @@ import {
 	ResetPassword,
 	MyProfile,
 	UserForm,
+	UpdateMyProfile,
 } from './user';
 
 import { PermissionClientRoutes } from './permission';
@@ -26,20 +27,21 @@ export function PlatformRoutes() {
 			<RoleClientRoutes path={path} />
 			<ProfileClientRoutes path={path} />
 			<ServicesClientRoutes path={path} />
-            <PermissionClientRoutes path={path} />
+			<PermissionClientRoutes path={path} />
 		</Route>
 	);
 }
 
 export {
-    Login,
-    Logout,
-    Dashboard,
-    ForgotPassword,
-    ResetPassword,
-    MyProfile,
-    UserForm,
-    Roles,
-    Profiles,
-    CreateProfile
+	Login,
+	Logout,
+	Dashboard,
+	ForgotPassword,
+	ResetPassword,
+	MyProfile,
+	UserForm,
+	Roles,
+	Profiles,
+	CreateProfile,
+	UpdateMyProfile,
 };

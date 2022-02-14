@@ -6,19 +6,20 @@ import Dashboard from './components/dashboard.component';
 import ForgotPassword from './components/forgot-password.component';
 import ResetPassword from './components/reset-password.component';
 import MyProfile from './components/my-profile/my-profile.component';
+import UpdateMyProfile from './components/my-profile/update-my-profile.component';
 import UserForm from './components/user-form.component';
 
 export function UserClientRoutes(props) {
-    // console.log('In UserClientRoutes', props.path);
-    return <UserRoutes path={props.path} />;
+	return <UserRoutes path={props.path} />;
 }
 
 export {
-    Login,
-    Logout,
-    Dashboard,
-    ForgotPassword,
-    ResetPassword,
-    MyProfile,
-    UserForm,
+	Login,
+	Logout,
+	Dashboard,
+	ForgotPassword,
+	ResetPassword,
+	MyProfile,
+	UpdateMyProfile,
+	UserForm,
 };
