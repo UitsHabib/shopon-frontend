@@ -1,4 +1,5 @@
 import React from 'react';
+import { formatDistance } from 'date-fns';
 
 const servicesMetadata = {
 	id: {
@@ -20,11 +21,13 @@ const servicesMetadata = {
 	},
 	created_at: {},
 	updated_at: {
-		header: 'last updated at'.toUpperCase(),
-		render: (time) => <p>{time}</p>,
+		header: 'last updated'.toUpperCase(),
+		render: (time) => (
+			<p>{formatDistance(Date.parse(time), new Date(), { addSuffix: true })}</p>
+		),
 		sort: true,
 	},
-	exclude: ['created_at', 'updated_at'],
+	exclude: ['created_at'],
 };
 
 export default servicesMetadata;

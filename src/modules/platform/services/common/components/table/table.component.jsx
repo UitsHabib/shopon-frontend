@@ -39,7 +39,7 @@ const Table = (props) => {
 	const data = getOrganizedData();
 
 	return (
-		<div className="flex flex-col">
+		<div className="d-flex flex-column">
 			<table className="table">
 				<TableHeader
 					columns={filteredColumns}

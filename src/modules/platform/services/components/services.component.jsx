@@ -24,7 +24,7 @@ const Services = () => {
 	const totalNoOfItems = meta?.total || 0;
 
 	return (
-		<div className="flex flex-col">
+		<div className="d-flex flex-column">
 			<h1>Services</h1>
 			<Table data={services} metadata={updatedServicesMetadata} />
 			<Pagination

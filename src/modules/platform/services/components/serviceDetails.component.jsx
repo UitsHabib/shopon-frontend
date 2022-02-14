@@ -1,12 +1,15 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+
+import { formatRelative } from 'date-fns';
+
 import useService from '../hooks/useService';
 
 const ServiceDetails = () => {
 	const { id: serviceId } = useParams();
+	const history = useHistory();
 
 	const {
-		id,
 		title,
 		created_by: createdBy,
 		created_at: createdAt,
@@ -15,21 +18,51 @@ const ServiceDetails = () => {
 	} = useService({ id: serviceId });
 
 	return (
-		<div>
-			<p className="alert alert-secondary text-xl font-bold">Id: {id}</p>
-			<p className="alert alert-secondary text-xl font-bold">Title: {title}</p>
-			<p className="alert alert-secondary text-xl font-bold">
-				Created By: {createdBy?.first_name}
-			</p>
-			<p className="alert alert-secondary text-xl font-bold">
-				Created At: {createdAt}
-			</p>
-			<p className="alert alert-secondary text-xl font-bold">
-				Updated By: {updatedBy?.first_name}
-			</p>
-			<p className="alert alert-secondary text-xl font-bold">
-				Updated At: {updatedAt}
-			</p>
+		<div className="container">
+			<div className="d-flex flex-column justify-content-sm-center">
+				<table className="table table-bordered table-striped p-2">
+					<thead>
+						<tr>
+							<th scope="row" colSpan="2" className="text-center">
+								{title}
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">Created By</th>
+							<td>{createdBy?.first_name}</td>
+						</tr>
+						<tr>
+							<th scope="row">Created At</th>
+							<td>
+								{createdAt
+									? formatRelative(Date.parse(createdAt), new Date())
+									: null}
+							</td>
+						</tr>
+						<tr>
+							<th scope="row">Updated By</th>
+							<td>{updatedBy?.first_name}</td>
+						</tr>
+						<tr>
+							<th scope="row">Updated At</th>
+							<td>
+								{createdAt
+									? formatRelative(Date.parse(updatedAt), new Date())
+									: null}
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<button
+					type="button"
+					onClick={() => history.push('/platform/services')}
+					className="btn btn-primary text-center m-auto p-2"
+				>
+					Go Back
+				</button>
+			</div>
 		</div>
 	);
 };
