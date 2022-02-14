@@ -11,20 +11,7 @@ function Roles() {
 	const [itemsPerPage, setItemsPerPage] = useState(5);
 	const [currentPage, setCurrentPage] = useState(1);
 
-	// const login = async () => {
-	//     try {
-	//         const response = await axios.post(
-	//             "http://localhost:5000/api/login",
-	//             {
-	//                 email: "habiburrahman3089@gmail.com",
-	//                 password: "P@ssword123",
-	//             },
-	//             { withCredentials: true }
-	//         );
-	//     } catch (error) {
-	//         console.log(error);
-	//     }
-	// };
+	const pageOptions = _.range(5, 25, 5);
 
 	const getRoles = async () => {
 		try {
@@ -44,6 +31,10 @@ function Roles() {
 		getRoles();
 	}, []);
 
+	const handleDelete = (id) => {
+		const newRoles = [...roles].filter((role) => id !== role.id);
+		setRoles(newRoles);
+	};
 	const handleSort = (sorters) => {
 		setSorters({ ...sorters });
 	};
@@ -60,9 +51,9 @@ function Roles() {
 
 	const paginateRoles = (rolesList) => {
 		const start = (currentPage - 1) * itemsPerPage;
-		console.log(rolesList);
+		// console.log(rolesList);
 		const paginatedRoles = rolesList.slice(start, start + itemsPerPage);
-		console.log(paginatedRoles);
+		// console.log(paginatedRoles);
 		return paginatedRoles;
 	};
 
@@ -100,8 +91,29 @@ function Roles() {
 									columns={roleColumns}
 									sorters={sorters}
 									onSort={handleSort}
+									onDelete={handleDelete}
 								/>
+
+								<div className="d-flex flew-row w-25">
+									<label className="mx-2">Show:</label>
+									<select
+										className="form-select form-select-sm"
+										aria-label=".form-select-sm example"
+										onChange={(e) => setItemsPerPage(e.target.value)}
+										value={itemsPerPage}
+									>
+										{pageOptions.map((option) => (
+											<option value={option} key={option}>
+												{option}
+											</option>
+										))}
+										{/* <option defaultValue={5}>5</option>
+										<option value={10}>10</option>
+										<option value={15}>15</option> */}
+									</select>
+								</div>
 							</div>
+
 							<Pagination
 								itemsPerPage={itemsPerPage}
 								totalItems={sortedRoles.length}

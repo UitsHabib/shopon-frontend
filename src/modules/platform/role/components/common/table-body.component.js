@@ -1,19 +1,53 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from 'react-modal';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 Modal.setAppElement('#app');
 
 const TableBody = (props) => {
-	const { items: rows, columns } = props;
+	const { items: rows, columns, onDelete } = props;
 	const [currentRole, setCurrentRole] = useState({});
 	const [isModal, setIsModal] = useState(false);
+	const [users, setUsers] = useState([]);
 
 	const handleClick = (row) => {
-		console.log(row.id);
+		// console.log(row.id);
 		setCurrentRole(row);
 		setIsModal(true);
 	};
+
+	const fetchUsers = async (id) => {
+		try {
+			const { data } = await axios.get(`http://localhost:5000/api/users`, {
+				withCredentials: true,
+			});
+			setUsers(data);
+		} catch (error) {
+			console.error('Error: ', error);
+		}
+	};
+
+	const deleteRole = async (id) => {
+		try {
+			const response = await axios.delete(
+				`http://localhost:5000/api/roles/${id}`,
+				{ withCredentials: true }
+			);
+			onDelete(id);
+			setIsModal(false);
+		} catch (error) {
+			console.error('Error: ', error);
+		}
+	};
+
+	const capitalizeKey = (string) => {
+		return string[0].toUpperCase() + string.slice(1).toLowerCase();
+	};
+
+	useEffect(() => {
+		fetchUsers();
+	}, []);
 
 	return (
 		<>
@@ -39,50 +73,81 @@ const TableBody = (props) => {
 					},
 				}}
 			>
-				<div className="">
-					<Link
-						className="btn btn-success"
-						to={`/platform/roles/update/${currentRole.id}`}
-					>
-						Update
-					</Link>
-
-					<ul className="list-group list-group-flush d-flex justify-content-center align-items-center">
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Title</span>
-							<p>: {currentRole.title}</p>
-						</li>
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Slug</span>
-							<p>: {currentRole.slug}</p>
-						</li>
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Type</span>
-							<p>: {currentRole.type}</p>
-						</li>
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Description</span>
-							<p>: {currentRole.description}</p>
-						</li>
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Created at</span>
-							<p>: {currentRole.created_at}</p>
-						</li>
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Updated at</span>
-							<p>: {currentRole.updated_at}</p>
-						</li>
-						<li className="list-group-item d-flex flex-row">
-							<span className="text-primary">Permission</span>
-							<p>
-								:
-								{currentRole.role_permissions &&
-									currentRole.role_permissions.map((data) => {
-										return <span> {data.permission.title}</span>;
-									})}
-							</p>
-						</li>
+				<div className="d-flex flex-column justify-content-center align-items-center">
+					<button className="btn align-self-end">
+						<i
+							className="bi bi-x-circle h3"
+							onClick={() => setIsModal(false)}
+						/>
+					</button>
+					<ul className="list-group list-group-flush w-75" style={{}}>
+						{Object.entries(currentRole).map(([key, value]) => {
+							if (key === 'created_by' || key === 'updated_by') {
+								let user = users.find((user) => user.id === value);
+								user = user.first_name + ' ' + user.last_name;
+								return (
+									<li
+										className="list-group-item d-flex flew-row align-items-baseline"
+										key={key}
+									>
+										<span className="text-primary h6 m-0 p-0 mx-1">
+											{capitalizeKey(key)}:
+										</span>
+										<span className="m-0 p-0"> {user}</span>
+									</li>
+								);
+							} else if (key === 'role_permissions') {
+								// console.log(value);
+								return (
+									<li
+										className="list-group-item d-flex flex-row align-items-baseline"
+										key={key}
+									>
+										<span className="text-primary h6 m-0 p-0 mx-1">
+											Permissions
+										</span>
+										:
+										{value.map((data) => {
+											return (
+												<span
+													key={data.id}
+													className="d-flex flex-row align-items-center "
+												>
+													{data.permission.title}
+												</span>
+											);
+										})}
+									</li>
+								);
+							}
+							return (
+								<li
+									className="list-group-item d-flex flew-row align-items-baseline"
+									key={key}
+								>
+									<span className="text-primary h6 m-0 p-0 mx-1">
+										{capitalizeKey(key)}:
+									</span>
+									<span className="m-0 p-0"> {value}</span>
+								</li>
+							);
+						})}
 					</ul>
+
+					<div className="mt-2">
+						<Link
+							className="btn btn-success"
+							to={`/platform/roles/update/${currentRole.id}`}
+						>
+							Update
+						</Link>
+						<button
+							className="btn btn-outline-danger mx-3"
+							onClick={() => deleteRole(currentRole.id)}
+						>
+							Delete
+						</button>
+					</div>
 				</div>
 			</Modal>
 			<tbody>

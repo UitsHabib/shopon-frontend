@@ -1,26 +1,21 @@
-import React from "react";
+import React from 'react';
 
-import TableBody from "./table-body.component";
-import TableHeader from "./table-header.component";
+import TableBody from './table-body.component';
+import TableHeader from './table-header.component';
 
 const Table = (props) => {
-    const { items, columns, sorters, onSort } = props;
+	const { items, columns, sorters, onSort, onDelete } = props;
 
-    return (
-        <>
-        <div className="border border-success my-5">
-
-            <table className="table table-hover">
-                <TableHeader
-                    columns={columns}
-                    sorters={sorters}
-                    onSort={onSort}
-                />
-                <TableBody items={items} columns={columns} />
-            </table>
-        </div>
-        </>
-    );
+	return (
+		<>
+			<div className="border border-success my-5">
+				<table className="table table-hover">
+					<TableHeader columns={columns} sorters={sorters} onSort={onSort} />
+					<TableBody items={items} columns={columns} onDelete={onDelete} />
+				</table>
+			</div>
+		</>
+	);
 };
 
 export default Table;
