@@ -7,10 +7,11 @@ const baseUrl = "http://localhost:5000";
 
 const PermissionUpdate = ({ history, location, match }) => {
     const [data, setData] = useState({});
+    console.log(data)
 
     const getPermission = useCallback(async () => {
         try{
-            const { data } = await axios.get(`${baseUrl}//api/permissions/${match.params.id}`);
+            const { data } = await axios.get(`${baseUrl}/api/permissions/${match.params.id}`, { withCredentials: true });
             setData(data);
         } catch(error) {
             console.log(error);
@@ -47,7 +48,7 @@ const PermissionUpdate = ({ history, location, match }) => {
 
     return (
         <>
-            <h1>Permission Update</h1>
+            <h1 className="text-center">Permission Update</h1>
             <PermissionForm initialValues={initialValues} onPermissionSubmit={handleUpdate} />
         </>
     );
