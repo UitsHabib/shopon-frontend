@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import axios from "axios";
 const api_endPoint = "http://localhost:5000/api";
 const Permission = (props) => {
-    // const [users, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
     const [permission, setPermission] = useState([]);
 
 
@@ -91,17 +91,7 @@ const Permission = (props) => {
 
                         <div className="form-group">
                             <label className="form-label" htmlFor="type">Type</label>
-                            {/* <Field className="form-control" type="type" id="type" name="type" /> */}
-                            <div role="group" aria-labelledby="checkbox-group" name="type" >
-                                <label>
-                                    <Field type="checkbox" name="type" value="custom" />
-                                    Custom
-                                </label>
-                                <label>
-                                    <Field type="checkbox" name="type" value="standard" />
-                                    Standard
-                                </label>
-                            </div>
+                            <Field className="form-control" type="type" id="type" name="type" />
                             <div className="invalid-feedback d-block"><ErrorMessage name="type" />  </div>
                         </div>
 
@@ -127,4 +117,3 @@ const Permission = (props) => {
 }
 
 export default Permission;
-

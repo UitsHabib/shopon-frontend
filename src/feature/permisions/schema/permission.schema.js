@@ -1,7 +1,7 @@
 import { boolean } from 'yup';
 import { string, object, array } from 'yup';
 
-const types = ['custom', 'standard'];
+const type = ['custom', 'standard'];
 
 const PermissionSchema = object().shape({
     title: string()
@@ -9,8 +9,8 @@ const PermissionSchema = object().shape({
         .max(50, "Permission title must be at most 255 characters long.")
         .required("Permission title is required."),
 
-    types: boolean()
-        .required("Permission title is required."),
+    type: string()
+        .oneOf(Object.values(type)),
 
 
     description: string().max(500, "Description must be at most 500 characters long.")
