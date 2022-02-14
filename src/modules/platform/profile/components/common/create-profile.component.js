@@ -9,7 +9,7 @@ const api_endpoint = "http://localhost:5000";
 const CreateProfile = () => {
     const { path } = useRouteMatch();
 	async function handleSubmit(data) {
-        console.log(path)
+        console.log(data)
 		try {
 			const response = await axios.post(
 				`${api_endpoint}/api/profiles`,
@@ -18,7 +18,7 @@ const CreateProfile = () => {
 			);
             window.location.href = "http://localhost:3000/platform/profiles";
 		} catch (error) {
-			console.log(error.response);
+			alert(error.response.data);
             // window.location.href = "http://localhost:3000/platform/profiles";
 			// alert("Error happened!");
 		}
