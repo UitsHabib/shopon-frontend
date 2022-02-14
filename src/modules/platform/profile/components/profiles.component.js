@@ -379,6 +379,9 @@ const Profiles = () => {
 													/>
 													Manager Permission
 												</label>
+                                                <div className="invalid-feedback d-block">
+													<ErrorMessage name="permissions" />
+												</div>
 											</div>
 											<br />
 											<button

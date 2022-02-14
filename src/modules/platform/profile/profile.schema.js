@@ -1,3 +1,4 @@
+import { array } from "yup";
 import { string, object } from "yup";
 
 const createSchema = object().shape({
@@ -14,6 +15,8 @@ const updateSchema = object().shape({
 		.required("This field must not be empty"),
 	description: string()
 		.required("This field must not be empty"),
+    permissions: array().min(1)
+        .required("This field must not be empty"),
 });
 
 export {
