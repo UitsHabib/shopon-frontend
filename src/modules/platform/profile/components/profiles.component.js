@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom";
 import getLoggedInUser from "../../../core/service/get-logged-in-user";
 import { updateSchema } from "../profile.schema";
+import moment from "moment";
 
 const api_endpoint = "http://localhost:5000";
 
@@ -175,7 +176,7 @@ const Profiles = () => {
 			label: "Created At",
 			path: "created_at",
 			content: (profile, key) => (
-				<td style={{ color: "#136CB2" }}> {profile[key]}</td>
+				<td style={{ color: "#136CB2" }}> {moment(profile[key]).format('lll')}</td>
 			),
 		},
 		{
@@ -191,7 +192,7 @@ const Profiles = () => {
 			label: "Updated At",
 			path: "updated_at",
 			content: (profile, key) => (
-				<td style={{ color: "#136CB2" }}> {profile[key]}</td>
+				<td style={{ color: "#136CB2" }}> {moment(profile[key]).format('lll')}</td>
 			),
 		},
 		{
