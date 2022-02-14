@@ -2,7 +2,7 @@ import React from 'react';
 import UserRoutes from './user.routes';
 import Login from './components/login.component';
 import Logout from './components/logout.component';
-import Dashboard from './components/dashboard.component';
+import Dashboard from './components/dashboard/dashboard.component';
 import ForgotPassword from './components/forgot-password.component';
 import ResetPassword from './components/reset-password.component';
 import MyProfile from './components/my-profile/my-profile.component';
