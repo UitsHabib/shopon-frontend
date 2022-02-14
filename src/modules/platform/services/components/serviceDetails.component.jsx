@@ -17,13 +17,13 @@ const ServiceDetails = () => {
 	} = useService({ id: serviceId });
 
 	return (
-		<div className="d-flex flex-wrap justify-content-xl-center">
+		<div className="d-flex flex-wrap justify-content-sm-center">
 			<table className="table table-bordered table-striped w-50">
 				<thead>
 					<tr>
-						<td colSpan="2" className="text-center">
+						<th scope="row" colSpan="2" className="text-center">
 							{title}
-						</td>
+						</th>
 					</tr>
 				</thead>
 				<tbody>
