@@ -9,7 +9,7 @@ const PermissionSchema = object().shape({
         .max(50, "Permission title must be at most 255 characters long.")
         .required("Permission title is required."),
 
-    type: boolean()
+    types: boolean()
         .required("Permission title is required."),
 
 
