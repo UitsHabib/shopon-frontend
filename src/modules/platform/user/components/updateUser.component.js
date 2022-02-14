@@ -110,11 +110,10 @@ const UpdateUser = (props) => {
             </button>
             <br />
             <div className="mx-5 text-center">
-                <h3>Updating user {usersID}</h3>
+                <h3>Update User</h3>
             </div>
-            <hr />
             {user && profiles && roles ? (
-                <div className="card bg-light " style={{ margin: "auto", maxWidth: "45rem" }}>
+                <div className="card bg-light " style={{ margin: "30px auto", maxWidth: "45rem" }}>
                     <Formik
                         initialValues={{
                             profile_id      : removeNull(profiles.find((profile) => profile.id === user.profile_id).title ),
@@ -136,32 +135,7 @@ const UpdateUser = (props) => {
                                 onSubmit={formikProps.handleSubmit}
                                 className="px-4 py-3"
                             >
-                                <div className="form-group">
-                                    <label
-                                        className="form-label"
-                                        htmlFor="profile_id"
-                                    >
-                                        Profile ID
-                                        <span className="text-danger">*</span>
-                                    </label>
-                                    <Field
-                                        className="form-control"
-                                        as="select"
-                                        id="profile_id"
-                                        name="profile_id"
-                                    >
-                                        {
-                                            profiles ?
-                                            profiles.map((profile , index)=>{
-                                                return <option key={index} >{profile.title}</option>;
-                                            })
-                                            : ""
-                                        }
-                                    </Field>
-                                    <div className="invalid-feedback d-block">
-                                        <ErrorMessage name="profile_id" />
-                                    </div>
-                                </div>
+                                
                                 <div className="form-group">
                                     <label
                                         className="form-label"
@@ -264,9 +238,36 @@ const UpdateUser = (props) => {
                                 <div className="form-group">
                                     <label
                                         className="form-label"
+                                        htmlFor="profile_id"
+                                    >
+                                        Select Profile
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        as="select"
+                                        id="profile_id"
+                                        name="profile_id"
+                                    >
+                                        {
+                                            profiles ?
+                                            profiles.map((profile , index)=>{
+                                                return <option key={index} >{profile.title}</option>;
+                                            })
+                                            : ""
+                                        }
+                                    </Field>
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="profile_id" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
                                         htmlFor="role_id"
                                     >
-                                        Role ID
+                                        Select Role
                                         <span className="text-danger">*</span>
                                     </label>
                                     <Field
