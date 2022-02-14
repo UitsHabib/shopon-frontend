@@ -11,7 +11,7 @@ import UpdateUser from './components/updateUser.component';
 
 function UserRoutes() {
     const { path } = useRouteMatch();
-
+    
     return (
         <Switch>
             <PrivateRoute exact path={path} component={UserManagement} />

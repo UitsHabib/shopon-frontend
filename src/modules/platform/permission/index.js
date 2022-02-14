@@ -1,5 +1,8 @@
-import Permissions from "./components/permissions.component.js";
+import PermissionRoutes from "./permission.routes";
 
-export {
-    Permissions
+export const PermissionClientRoutes = (props) => {
+    return (
+        <PermissionRoutes path={props.path} />
+    );
 }
+ 
