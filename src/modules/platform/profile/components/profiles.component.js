@@ -426,7 +426,7 @@ const Profiles = () => {
 								<div className="container">
 									<h1>Delete Account</h1>
 									<p>
-										Are you sure you want to delete your
+										Are you sure you want to delete this
 										account?
 									</p>
 

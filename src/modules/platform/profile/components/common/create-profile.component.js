@@ -23,6 +23,10 @@ const CreateProfile = () => {
 			// alert("Error happened!");
 		}
 	}
+
+    const handleCancel = () => {
+        window.location.href = "http://localhost:3000/platform/profiles"
+    }
 	return (
 		<div>
 			<div
@@ -110,6 +114,10 @@ const CreateProfile = () => {
 
 							<button className="btn btn-primary" type="submit">
 								Add new profile
+							</button>
+                            {" "}
+                            <button className="btn btn-danger" type="button" onClick={handleCancel}>
+								Cancel
 							</button>
 						</Form>
 					)}
