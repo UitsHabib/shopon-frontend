@@ -34,23 +34,22 @@ const Profiles = () => {
 	}, []);
 
 	//update profile section
-	const [isOpen, setIsOpen] = useState(false);
+	const [isUpdate, setIsUpdate] = useState(false);
 	const [update, setUpdate] = useState(null);
 
 	const handleUpdate = (data) => {
-        console.log(path)
 		let permissions = [];
 		data.profile_permissions.map((pt) =>
 			permissions.push(pt.permission.id.toString())
 		);
 		setUpdate({ ...data, permissions });
-		setIsOpen((prev) => !prev);
+		setIsUpdate((prev) => !prev);
 	};
 
 	//update profile data from database
 	const handleClose = () => {
 		setUpdate(null);
-		setIsOpen((prev) => !prev);
+		setIsUpdate((prev) => !prev);
 	};
 
 	async function updateProfile({ id, title, description, permissions }) {
@@ -112,8 +111,10 @@ const Profiles = () => {
 		data.profile_permissions.map((pt) =>
 			permissions.push(pt.permission.title)
 		);
+        const created_at = moment(data.created_at).format('lll');
+        const updated_at = moment(data.updated_at).format('lll');
 		// console.log(permissions);
-		setDetailInfo({ ...data, permissions });
+		setDetailInfo({ ...data, permissions, created_at, updated_at });
 		setIsDetail((prev) => !prev);
 	};
 
@@ -278,10 +279,10 @@ const Profiles = () => {
 						onClickPage={handleClickPage}
 					></Pagination>
 				</div>
-				{isOpen ? (
+				{isUpdate ? (
 					<div
 						className="modal"
-						style={{ display: isOpen ? "block" : "none" }}
+						style={{ display: isUpdate ? "block" : "none" }}
 					>
 						<div className="modal-dialog">
 							<div
