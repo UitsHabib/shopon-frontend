@@ -5,16 +5,17 @@ import { Link, useHistory } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 import getLoggedInUser from "../../../../../core/service/get-logged-in-user";
-import { updateMyProfileSchema } from "../my-profile.schema";
+import { updateMyProfileSchema } from "../my-profille.schema"
+
 const UpdateMyProfile = (props) => {
     const history = useHistory();
     const { path } = useRouteMatch();
     
-    const [roles, setRoles] = useState(["Role 1", "Role 2", "Role 3", "Role 4", "Role 5"]);
+    //const [roles, setRoles] = useState(["Role 1", "Role 2", "Role 3", "Role 4", "Role 5"]);
 
     const [currentUser, setCurrentUser] = useState(getLoggedInUser());
-    currentUser.role_id = ["Role 1", "Role 2"];
-    console.log(currentUser.role_id);
+    //currentUser.role_id = ["Role 1", "Role 2"];
+    //console.log(currentUser.role_id);
 
     const api = "http://localhost:5000/api";
 
@@ -32,7 +33,7 @@ const UpdateMyProfile = (props) => {
                 newProfile,
                 { withCredentials: true }
             );
-            console.log(data);
+            //console.log(data);
             localStorage.setItem("loggedInUser", JSON.stringify(data));
             history.push("/my-profile");
             
@@ -41,17 +42,17 @@ const UpdateMyProfile = (props) => {
         }
     }
 
-    async function getRoles() {
-        try {
-            const { data } = await axios.get(`${api}/roles`, {
-                withCredentials: true,
-            });
-            console.log(data);
-            //setRoles(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    // async function getRoles() {
+    //     try {
+    //         const { data } = await axios.get(`${api}/roles`, {
+    //             withCredentials: true,
+    //         });
+    //         //console.log(data);
+    //         //setRoles(data);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
     // useEffect(() => {
     //     getRoles();
@@ -64,7 +65,7 @@ const UpdateMyProfile = (props) => {
                 style={{ width: "30rem", height: "auto" }}
             >
                 <h5 className=" mt-4 d-flex flex-wrap justify-content-center">
-                    Update User Details
+                    Update Your Profile
                 </h5>
 
                 <Formik
@@ -75,17 +76,14 @@ const UpdateMyProfile = (props) => {
                         last_name: currentUser.last_name,
                         email: currentUser.email,
                         phone: currentUser.phone ? currentUser.phone : "",
-                        role_id: currentUser.role_id ? currentUser.role_id : [1],
-                        status:
-                            currentUser.status === "active"
-                                ? "Active"
-                                : "Not Active",
                     }}
+
                     onSubmit={(values, actions) => {
-                        console.log(values);
+                        //console.log(values);
                         updateMyProfile(values);
                         actions.setSubmitting(false);
                     }}
+                    
                     validationSchema={updateMyProfileSchema}
                 >
                     {(formikprops) => {
@@ -184,7 +182,7 @@ const UpdateMyProfile = (props) => {
                                         </div>
                                     </div>
 
-                                    <div className="form-group mb-3">
+                                    {/* <div className="form-group mb-3">
                                         <label
                                             htmlFor="role_id"
                                             className="form-label"
@@ -218,28 +216,28 @@ const UpdateMyProfile = (props) => {
                                             htmlFor="status"
                                             className="form-label"
                                         >
-                                            Status
+                                            Active Status
                                         </label>
                                         <Field
                                             name="status"
-                                            value="Active"
+                                            value="On"
                                             className="mx-2 leading-tight"
                                             type="radio"
                                         />
-                                        <span className="text-sm">Active</span>
+                                        <span className="text-sm">On</span>
                                         <Field
                                             name="status"
-                                            value="Not Active"
+                                            value="Off"
                                             className="mx-2 leading-tight"
                                             type="radio"
                                         />
                                         <span className="text-sm">
-                                            Not Active
+                                           Off
                                         </span>
                                         <div className="invalid-feedback d-block">
                                             <ErrorMessage name="status" />
                                         </div>
-                                    </div>
+                                    </div> */}
 
                                     <div className="d-flex flex-wrap justify-content-between">
                                         <button

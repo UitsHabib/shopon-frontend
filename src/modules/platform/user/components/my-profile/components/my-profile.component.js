@@ -6,6 +6,7 @@ const MyProfile = (props) => {
     const [currentUser, setCurrentUser] = useState(getLoggedInUser());
     const { path } = useRouteMatch()
     console.log(currentUser);
+    
     return (
         <div className="d-flex flex-wrap justify-content-around">
             <div className="card" style={{ width: "75%" }}>
@@ -16,7 +17,8 @@ const MyProfile = (props) => {
                         alt="Profile Image"
                         style={{height: "15rem", width: "15rem"}}
                     />
-                    <Link to="/update-my-profile" className="btn btn-primary" style={{height: "auto", width: "15rem"}}>
+                    
+                    <Link to="/update-my-profile" title="Click here to update your profile" className="btn btn-primary" style={{height: "auto", width: "15rem"}}>
                         Update Profile
                     </Link>
                 </div>
