@@ -382,7 +382,7 @@ const Profiles = () => {
 																	name="permissions"
 																	value={permission.id.toString()}
 																/>
-																{permission.title}
+																{" "}{permission.title}
 															</label>
 															<br />
 														</React.Fragment>

@@ -109,7 +109,7 @@ const CreateProfile = () => {
                                     <React.Fragment key={permission.id}>
 									<label>
 										<Field type="checkbox" name="permissions" value={permission.id.toString()} />
-										{permission.title}
+										{" "}{permission.title}
 									</label>
                                     <br />
                                     </React.Fragment>
