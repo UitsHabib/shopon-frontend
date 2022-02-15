@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import { createSchema } from '../../profile.schema';
 import { useRouteMatch } from 'react-router-dom';
+import CheckboxGroup from '../../../permission/components/checkboxGroup.component';
 
 const api_endpoint = 'http://localhost:5000';
 
 const CreateProfile = () => {
 	const { path } = useRouteMatch();
+
+	//fetch permission data from database
+	const [permissions, setPermissions] = useState([]);
+
+	const getPermissions = async () => {
+		try {
+			const { data } = await axios.get(`${api_endpoint}/api/permissions`, {
+				withCredentials: true,
+			});
+			// console.log(data);
+			setPermissions(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		getPermissions();
+	}, []);
+
+	//create or post profile data into database
 	async function handleSubmit(data) {
 		console.log(data);
 		try {
@@ -17,8 +39,6 @@ const CreateProfile = () => {
 			window.location.href = 'http://localhost:3000/platform/profiles';
 		} catch (error) {
 			alert(error.response.data);
-			// window.location.href = "http://localhost:3000/platform/profiles";
-			// alert("Error happened!");
 		}
 	}
 
@@ -82,21 +102,22 @@ const CreateProfile = () => {
 									<ErrorMessage name="description" />
 								</div>
 							</div>
-							<div id="checkbox-group">Permissions</div>
-							<div role="group" aria-labelledby="checkbox-group">
-								<label>
-									<Field type="checkbox" name="permissions" value="1" />
-									System Admin Permission
-								</label>
-								<br />
-								<label>
-									<Field type="checkbox" name="permissions" value="2" />
-									Manager Permission
-								</label>
+
+							<div id="checkbox-group">Permissions <span className="text-danger">*</span></div>
+							<div role="group" aria-labelledby="checkbox-group" style={{textAlign: 'left'}}>
+								{permissions.map((permission) => (
+                                    <React.Fragment key={permission.id}>
+									<label>
+										<Field type="checkbox" name="permissions" value={permission.id.toString()} />
+										{permission.title}
+									</label>
+                                    <br />
+                                    </React.Fragment>
+								))}
 							</div>
 							<br />
 							<button className="btn btn-primary" type="submit">
-								Add new profile
+								Add Profile
 							</button>{' '}
 							<button
 								className="btn btn-danger"

@@ -10,6 +10,7 @@ import { useRouteMatch } from 'react-router-dom';
 import getLoggedInUser from '../../../core/service/get-logged-in-user';
 import { updateSchema } from '../profile.schema';
 import moment from 'moment';
+import { getPermissions } from '../../permission/components/permissions.component';
 
 const api_endpoint = 'http://localhost:5000';
 
@@ -31,6 +32,25 @@ const Profiles = () => {
 
 	useEffect(() => {
 		getProfiles();
+	}, []);
+
+	//fetch permission data from database
+	const [permissions, setPermissions] = useState([]);
+
+	const getPermissions = async () => {
+		try {
+			const { data } = await axios.get(`${api_endpoint}/api/permissions`, {
+				withCredentials: true,
+			});
+			// console.log(data);
+			setPermissions(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		getPermissions();
 	}, []);
 
 	//update profile section
@@ -241,7 +261,7 @@ const Profiles = () => {
 					>
 						<Link style={{ textDecoration: 'none' }} to={`${path}/create`}>
 							<button type="button" className="btn btn-warning">
-								Create new profile
+								Create Profile
 							</button>
 						</Link>
 					</span>
@@ -276,14 +296,25 @@ const Profiles = () => {
 						className="modal"
 						style={{ display: isUpdate ? 'block' : 'none' }}
 					>
-						<div className="modal-dialog">
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								handleClose();
+							}}
+						>
 							<div
 								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
 								style={{
 									textAlign: 'center',
-									width: '100%',
+									width: '80%',
 									marginLeft: '10%',
-									marginTop: '25%',
+									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
 									borderRadius: '10px',
@@ -336,19 +367,29 @@ const Profiles = () => {
 													<ErrorMessage name="description" />
 												</div>
 											</div>
-											<div id="checkbox-group">Permissions</div>
-											<div role="group" aria-labelledby="checkbox-group">
-												<label>
-													<Field type="checkbox" name="permissions" value="1" />
-													System Admin Permission
-												</label>
-												<br />
-												<label>
-													<Field type="checkbox" name="permissions" value="2" />
-													Manager Permission
-												</label>
-												<div className="invalid-feedback d-block">
-													<ErrorMessage name="permissions" />
+											<div id="checkbox-group">Permissions <span className="text-danger">*</span></div>
+											<div
+												role="group"
+												aria-labelledby="checkbox-group"
+												style={{ textAlign: 'left' }}
+											>
+												<div>
+													{permissions.map((permission) => (
+														<React.Fragment key={permission.id}>
+															<label>
+																<Field
+																	type="checkbox"
+																	name="permissions"
+																	value={permission.id.toString()}
+																/>
+																{permission.title}
+															</label>
+															<br />
+														</React.Fragment>
+													))}
+													<div className="invalid-feedback d-block">
+														<ErrorMessage name="permissions" />
+													</div>
 												</div>
 											</div>
 											<br />
@@ -381,14 +422,25 @@ const Profiles = () => {
 						className="modal"
 						style={{ display: isDelete ? 'block' : 'none' }}
 					>
-						<div className="modal-dialog">
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								handleCancel();
+							}}
+						>
 							<div
 								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
 								style={{
 									textAlign: 'center',
-									width: '100%',
-									marginLeft: '10%',
-									marginTop: '25%',
+									width: '50%',
+									marginLeft: '25%',
+									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
 									borderRadius: '10px',
@@ -402,17 +454,17 @@ const Profiles = () => {
 									<div className="clearfix">
 										<button
 											type="button"
-											className="btn btn-warning"
-											onClick={handleCancel}
-										>
-											Cancel
-										</button>{' '}
-										<button
-											type="button"
 											className="btn btn-danger"
 											onClick={deleteProfile}
 										>
 											Delete
+										</button>{' '}
+										<button
+											type="button"
+											className="btn btn-warning"
+											onClick={handleCancel}
+										>
+											Cancel
 										</button>
 									</div>
 								</div>
@@ -428,14 +480,26 @@ const Profiles = () => {
 						className="modal"
 						style={{ display: isDetail ? 'block' : 'none' }}
 					>
-						<div className="modal-dialog">
+						{/* <div className="modal-dialog"> */}
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								handleOff();
+							}}
+						>
 							<div
 								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
 								style={{
 									// textAlign: "center",
-									width: '100%',
+									width: '80%',
 									marginLeft: '10%',
-									marginTop: '25%',
+									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
 									borderRadius: '10px',
@@ -443,7 +507,16 @@ const Profiles = () => {
 								}}
 							>
 								<div className="container">
-									<h1>Details</h1>
+									<button
+										type="button"
+										className="btn-close pull-right"
+										onClick={handleOff}
+										aria-label="Close"
+									></button>
+
+									<span>
+										<h1>Details</h1>
+									</span>
 									<p>Here is profile details</p>
 									<hr />
 									<div className="form-group">
@@ -480,21 +553,12 @@ const Profiles = () => {
 											<br />
 										</label>
 									</div>
-
-									<div className="clearfix">
-										<button
-											type="button"
-											className="btn btn-warning"
-											onClick={handleOff}
-										>
-											Cancel
-										</button>
-									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				) : (
+					// </div>
 					<div />
 				)}
 			</div>
