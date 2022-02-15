@@ -1,2 +1,2 @@
-import ShopDummy from './ShopDummy';
-export { ShopDummy };
+import Shops from './shops';
+export { Shops };

@@ -1,0 +1,272 @@
+{
+	"shop_categories": [
+		"All Shops",
+		"Clothing",
+		"Shoes",
+		"Computer",
+		"Tools",
+		"Home",
+		"Outdoor",
+		"Grocery",
+		"Kids",
+		"Garden",
+		"Health",
+		"Games",
+		"Electronics",
+		"Jewelry",
+		"Books"
+	],
+
+	"shops": [
+		{
+			"shop_id": 1,
+			"shop_name": "Yolanda",
+			"shop_type": "Music"
+		},
+		{
+			"shop_id": 2,
+			"shop_name": "Conroy",
+			"shop_type": "Garden"
+		},
+		{
+			"shop_id": 3,
+			"shop_name": "Biddie",
+			"shop_type": "Sports"
+		},
+		{
+			"shop_id": 4,
+			"shop_name": "Nita",
+			"shop_type": "Computers"
+		},
+		{
+			"shop_id": 5,
+			"shop_name": "Griffy",
+			"shop_type": "Games"
+		},
+		{
+			"shop_id": 6,
+			"shop_name": "Ozzie",
+			"shop_type": "Music"
+		},
+		{
+			"shop_id": 7,
+			"shop_name": "Lida",
+			"shop_type": "Movies"
+		},
+		{
+			"shop_id": 8,
+			"shop_name": "Marvin",
+			"shop_type": "Outdoors"
+		},
+		{
+			"shop_id": 9,
+			"shop_name": "Calhoun",
+			"shop_type": "Books"
+		},
+		{
+			"shop_id": 10,
+			"shop_name": "Emlynn",
+			"shop_type": "Garden"
+		},
+		{
+			"shop_id": 11,
+			"shop_name": "Christan",
+			"shop_type": "Industrial"
+		},
+		{
+			"shop_id": 12,
+			"shop_name": "Dominick",
+			"shop_type": "Home"
+		},
+		{
+			"shop_id": 13,
+			"shop_name": "Austina",
+			"shop_type": "Computers"
+		},
+		{
+			"shop_id": 14,
+			"shop_name": "Teriann",
+			"shop_type": "Games"
+		},
+		{
+			"shop_id": 15,
+			"shop_name": "Massimo",
+			"shop_type": "Outdoors"
+		},
+		{
+			"shop_id": 16,
+			"shop_name": "Iona",
+			"shop_type": "Toys"
+		},
+		{
+			"shop_id": 17,
+			"shop_name": "Barnabe",
+			"shop_type": "Baby"
+		},
+		{
+			"shop_id": 18,
+			"shop_name": "Carmina",
+			"shop_type": "Beauty"
+		},
+		{
+			"shop_id": 19,
+			"shop_name": "Gill",
+			"shop_type": "Toys"
+		},
+		{
+			"shop_id": 20,
+			"shop_name": "Darleen",
+			"shop_type": "Outdoors"
+		},
+		{
+			"shop_id": 21,
+			"shop_name": "Whitney",
+			"shop_type": "Beauty"
+		},
+		{
+			"shop_id": 22,
+			"shop_name": "Benetta",
+			"shop_type": "Electronics"
+		},
+		{
+			"shop_id": 23,
+			"shop_name": "Anabella",
+			"shop_type": "Baby"
+		},
+		{
+			"shop_id": 24,
+			"shop_name": "Nancee",
+			"shop_type": "Games"
+		},
+		{
+			"shop_id": 25,
+			"shop_name": "Pen",
+			"shop_type": "Shoes"
+		},
+		{
+			"shop_id": 26,
+			"shop_name": "Kip",
+			"shop_type": "Clothing"
+		},
+		{
+			"shop_id": 27,
+			"shop_name": "Guy",
+			"shop_type": "Music"
+		},
+		{
+			"shop_id": 28,
+			"shop_name": "Stevie",
+			"shop_type": "Automotive"
+		},
+		{
+			"shop_id": 29,
+			"shop_name": "Matti",
+			"shop_type": "Baby"
+		},
+		{
+			"shop_id": 30,
+			"shop_name": "Marcia",
+			"shop_type": "Kids"
+		},
+		{
+			"shop_id": 31,
+			"shop_name": "Halsy",
+			"shop_type": "Books"
+		},
+		{
+			"shop_id": 32,
+			"shop_name": "Ambros",
+			"shop_type": "Baby"
+		},
+		{
+			"shop_id": 33,
+			"shop_name": "Uri",
+			"shop_type": "Toys"
+		},
+		{
+			"shop_id": 34,
+			"shop_name": "Nobie",
+			"shop_type": "Kids"
+		},
+		{
+			"shop_id": 35,
+			"shop_name": "Brendis",
+			"shop_type": "Beauty"
+		},
+		{
+			"shop_id": 36,
+			"shop_name": "Cyb",
+			"shop_type": "Automotive"
+		},
+		{
+			"shop_id": 37,
+			"shop_name": "Natala",
+			"shop_type": "Tools"
+		},
+		{
+			"shop_id": 38,
+			"shop_name": "Easter",
+			"shop_type": "Computers"
+		},
+		{
+			"shop_id": 39,
+			"shop_name": "Garret",
+			"shop_type": "Toys"
+		},
+		{
+			"shop_id": 40,
+			"shop_name": "Yolane",
+			"shop_type": "Health"
+		},
+		{
+			"shop_id": 41,
+			"shop_name": "Billie",
+			"shop_type": "Clothing"
+		},
+		{
+			"shop_id": 42,
+			"shop_name": "Darren",
+			"shop_type": "Music"
+		},
+		{
+			"shop_id": 43,
+			"shop_name": "Graig",
+			"shop_type": "Clothing"
+		},
+		{
+			"shop_id": 44,
+			"shop_name": "Ariadne",
+			"shop_type": "Garden"
+		},
+		{
+			"shop_id": 45,
+			"shop_name": "Garey",
+			"shop_type": "Baby"
+		},
+		{
+			"shop_id": 46,
+			"shop_name": "Guillema",
+			"shop_type": "Music"
+		},
+		{
+			"shop_id": 47,
+			"shop_name": "Roger",
+			"shop_type": "Jewelry"
+		},
+		{
+			"shop_id": 48,
+			"shop_name": "Maye",
+			"shop_type": "Computers"
+		},
+		{
+			"shop_id": 49,
+			"shop_name": "Kennie",
+			"shop_type": "Jewelry"
+		},
+		{
+			"shop_id": 50,
+			"shop_name": "Clifford",
+			"shop_type": "Jewelry"
+		}
+	]
+}
