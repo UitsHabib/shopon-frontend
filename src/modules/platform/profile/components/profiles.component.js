@@ -312,8 +312,8 @@ const Profiles = () => {
 								}}
 								style={{
 									textAlign: 'center',
-									width: '80%',
-									marginLeft: '10%',
+									width: '60%',
+									marginLeft: '25%',
 									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
@@ -340,6 +340,12 @@ const Profiles = () => {
 										// onSubmit={formikProps.handleSubmit}
 										>
 											<div className="form-group">
+												<button
+													type="button"
+													className="btn-close pull-right"
+													onClick={handleClose}
+													aria-label="Close"
+												></button>
 												<label className="form-label" htmlFor="title">
 													Title <span className="text-danger">*</span>
 												</label>
@@ -367,7 +373,9 @@ const Profiles = () => {
 													<ErrorMessage name="description" />
 												</div>
 											</div>
-											<div id="checkbox-group">Permissions <span className="text-danger">*</span></div>
+											<div id="checkbox-group">
+												Permissions <span className="text-danger">*</span>
+											</div>
 											<div
 												role="group"
 												aria-labelledby="checkbox-group"
@@ -381,8 +389,8 @@ const Profiles = () => {
 																	type="checkbox"
 																	name="permissions"
 																	value={permission.id.toString()}
-																/>
-																{" "}{permission.title}
+																/>{' '}
+																{permission.title}
 															</label>
 															<br />
 														</React.Fragment>
@@ -394,15 +402,21 @@ const Profiles = () => {
 											</div>
 											<br />
 											<button
-												className="btn btn-primary"
+												className="btn btn-primary pull-right"
 												type="submit"
 												onClick={updateProfile}
 											>
-												Update
+												Save changes
 											</button>{' '}
 											<button
 												type="button"
-												className="btn btn-danger"
+												className="btn btn-light pull-right"
+												style={{
+													border: '1px solid gray',
+													backgroundColor: 'gray',
+													color: 'white',
+													marginRight: '10px',
+												}}
 												onClick={handleClose}
 											>
 												Cancel
@@ -448,23 +462,37 @@ const Profiles = () => {
 								}}
 							>
 								<div className="container">
+									<button
+										type="button"
+										className="btn-close pull-right"
+										onClick={handleCancel}
+										aria-label="Close"
+									></button>
 									<h1>Delete Account</h1>
+									<hr />
 									<p>Are you sure you want to delete this account?</p>
+									<br />
 
 									<div className="clearfix">
+										<button
+											type="button"
+											className="btn btn-light"
+											style={{
+												border: '1px solid gray',
+												backgroundColor: 'gray',
+												color: 'white',
+												marginRight: '10px',
+											}}
+											onClick={handleCancel}
+										>
+											Cancel
+										</button>
 										<button
 											type="button"
 											className="btn btn-danger"
 											onClick={deleteProfile}
 										>
 											Delete
-										</button>{' '}
-										<button
-											type="button"
-											className="btn btn-warning"
-											onClick={handleCancel}
-										>
-											Cancel
 										</button>
 									</div>
 								</div>
@@ -553,6 +581,19 @@ const Profiles = () => {
 											<br />
 										</label>
 									</div>
+									<button
+										type="button"
+										className="btn btn-light pull-right"
+										style={{
+											border: '1px solid gray',
+											backgroundColor: 'gray',
+											color: 'white',
+											marginRight: '10px',
+										}}
+										onClick={handleOff}
+									>
+										Close
+									</button>
 								</div>
 							</div>
 						</div>
