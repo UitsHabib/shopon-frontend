@@ -7,10 +7,8 @@ import Pagination from './common/pagination.component';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import getLoggedInUser from '../../../core/service/get-logged-in-user';
 import { updateSchema } from '../profile.schema';
 import moment from 'moment';
-import { getPermissions } from '../../permission/components/permissions.component';
 
 const api_endpoint = 'http://localhost:5000';
 
