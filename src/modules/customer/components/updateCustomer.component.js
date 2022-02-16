@@ -105,11 +105,17 @@ function UpdateCustomer({ updateProfile, isUpdate, item, closeModal }) {
 													Gender
 												</label>
 												<Field
-													type="text"
-													className="form-control"
+													type="select"
+													className="form-select"
 													id="gender"
 													name="gender"
-												/>
+													as="select"
+												>
+													<option value="choose">Choose...</option>
+													<option value="Male">Male</option>
+													<option value="Female">Female</option>
+												</Field>
+
 												{errors.gender ? (
 													<div className="invalid-feedback d-block">
 														{errors.gender}

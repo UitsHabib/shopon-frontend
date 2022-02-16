@@ -1,2 +1,2 @@
-import CustomerDummy from './CustomerDummy';
-export { CustomerDummy };
+import Customer from './customer';
+export { Customer };

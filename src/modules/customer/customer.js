@@ -9,7 +9,7 @@ import _ from 'lodash';
 import ConfirmDelete from './components/confirmdelete.component';
 import UpdateCustomer from './components/updateCustomer.component';
 
-const CustomerDummy = () => {
+const Customer = () => {
 	const [customer, setcustomer] = useState([]);
 
 	const { path } = useRouteMatch();
@@ -220,4 +220,4 @@ const CustomerDummy = () => {
 	);
 };
 
-export default CustomerDummy;
+export default Customer;
