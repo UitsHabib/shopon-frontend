@@ -13,8 +13,8 @@ const Shops = (props) => {
 
 	const [shops, setShops] = useState([]);
 
-	//const [shopCategories, setShopCategories] = useState([]);
-	//const [selectedCategory, setSelectedCategory] = useState('All Shops');
+	const [shopCategories, setShopCategories] = useState([]);
+	const [selectedCategory, setSelectedCategory] = useState('All Shops');
 	const [sortColumn, setSortColumn] = useState({
 		path: 'shop_id',
 		order: 'asc',
@@ -32,7 +32,7 @@ const Shops = (props) => {
 		try {
 			const { data } = await axios.get('shop-data.json');
 			setShops(data.shops);
-			//setShopCategories(data.shop_categories);
+			setShopCategories(data.shop_categories);
 		} catch (error) {
 			console.log(error);
 		}
@@ -40,13 +40,38 @@ const Shops = (props) => {
 
     async function deleteShopData(targetShop) {
 		// try {
-		// 	await axios.delete(`${api}/:${shop.shop_id}`, shop);
+		// 	await axios.delete(`${api}/:${targetShop.shop_id}`);
 		// } catch (error) {
 		// 	console.log(error);
 		// }
         const newShopList = shops.filter(shop => shop.shop_id !== targetShop.shop_id);
         setShops(newShopList);
 	}
+
+    async function updateShop(targetShop) {
+		// try {
+		// 	const { data } = await axios.patch(`${api}/:${targetShop.shop_id}`, targetShop);
+		// } catch (error) {
+		// 	console.log(error);
+		// }
+        const newShopList = [...shops];
+        let newShop = newShopList.find(shop => shop.shop_id === targetShop.shop_id);
+        newShop.shop_name = targetShop.shop_name;
+        newShop.shop_type = targetShop.shop_type;
+        newShop.shop_owner = targetShop.shop_owner;
+
+        setShops(newShopList);
+	}
+
+    async function addNewShop(shop) {
+            // try {
+            //     const { data } = await axios.post(`${api}`, shop);
+            //     setShops((prev) => [...prev, shop]);
+            // } catch (error) {
+            //     console.log(error);
+            // }
+            setShops((prev) => [...prev, shop]);
+    }
 
 	useEffect(() => {
 		getShopData();
@@ -75,9 +100,9 @@ const Shops = (props) => {
 		setActivePage(activePage);
 	}
 
-	// function handleClickFilter(selectedCategory) {
-	// 	setSelectedCategory(selectedCategory);
-	// }
+	function handleClickFilter(selectedCategory) {
+		setSelectedCategory(selectedCategory);
+	}
 
 	function sortShops(shops) {
 		const sortedShops = _.orderBy(shops, [sortColumn.path], [sortColumn.order]);
@@ -90,17 +115,18 @@ const Shops = (props) => {
 		return paginatedShops;
 	}
 
-	// function filterShops() {
-	// 	const filteredshops = shops.filter((shop) => {
-	// 		if (shopCategories === 'All Genres') return true;
+	function filterShops(shops) {
+		const filteredshops = shops.filter((shop) => {
+			if (selectedCategory === 'All Shops') return true;
 
-	// 		if (shop.shop_type.includes(shopCategories)) return true;
-	// 		return false;
-	// 	});
-	// 	return filteredshops;
-	// }
+			if (shop.shop_type.includes(selectedCategory)) return true;
+			return false;
+		});
+		return filteredshops;
+	}
 
-	const paginatedShops = paginateShops(shops);
+    const filteredshops = filterShops(shops);
+	const paginatedShops = paginateShops(filteredshops);
 	const sortedShops = sortShops(paginatedShops);
 
 	const columns = [
@@ -122,12 +148,24 @@ const Shops = (props) => {
 			sorting: true,
 			content: (shop, key) => <td>{shop[key]}</td>,
 		},
+        {
+			label: 'Shop Owner',
+			path: 'shop_owner',
+			sorting: true,
+			content: (shop, key) => <td>{shop[key]}</td>,
+		},
+        {
+			label: 'Created At',
+			path: 'date_created',
+			sorting: true,
+			content: (shop, key) => <td>{shop[key]}</td>,
+		},
 		{
 			label: 'Action',
 			content: (targetShop) => (
 				<>
 					<Dropdown>
-						<Dropdown.Toggle variant="success" id="dropdown-basic">
+						<Dropdown.Toggle variant="outline-success" id="dropdown-basic">
 							<i
 								className="bi bi-pencil-square"
 							></i>
@@ -157,12 +195,14 @@ const Shops = (props) => {
 				columns={columns}
 				onSort={handleSort}
 				sortColumn={sortColumn}
-				totalItems={shops.length}
+				totalItems={filteredshops.length}
 				pageCount={shopsPerPage}
 				activePage={activePage}
 				onClickPage={handleClickPage}
-				//selectedCategory={selectedCategory}
-				//onClickFilter={handleClickFilter}
+                addNewShop={addNewShop}
+                shopCategories={shopCategories}
+				selectedCategory={selectedCategory}
+				onClickFilter={handleClickFilter}
 			/>
 			{showDetail ? (
 				<ModalForShops
@@ -176,9 +216,12 @@ const Shops = (props) => {
 			{updateDetail ? (
 				<ModalForShops
 					type="update"
+                    totalItems={shops.length}
 					targetShop={targetShop}
 					updateDetail={updateDetail}
 					setUpdateDetail={setUpdateDetail}
+                    shopCategories={shopCategories}
+                    updateShop={updateShop}
 				/>
 			) : null}
 

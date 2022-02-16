@@ -1,25 +1,29 @@
-const Filter = ({ items, selectedCategory, onClickFilter }) => {
-    return (
-        <div>
-            <ul className="list-group">
-                {items.map((item, index) => {
-                    return (
-                        <li
-                            key={index}
-                            onClick={() => onClickFilter(item)}
-                            className={
-                                selectedCategory === item
-                                    ? "list-group-item active"
-                                    : "list-group-item"
-                            }
-                        >
-                            {item}
-                        </li>
-                    );
-                })}
-            </ul>
-        </div>
-    );
+import { Dropdown, DropdownButton } from 'react-bootstrap';
+
+const Filter = ({ shopCategories, selectedCategory, onClickFilter }) => {
+	return (
+		<Dropdown>
+			<Dropdown.Toggle variant="outline-success" id="dropdown-basic">
+				Select Category
+			</Dropdown.Toggle>
+			<Dropdown.Menu>
+				{shopCategories.map((item, index) => {
+					return (
+						<>
+							<Dropdown.Item
+								key={index}
+								variant="success"
+								active={selectedCategory === item}
+								onClick={() => onClickFilter(item)}
+							>
+								{item}
+							</Dropdown.Item>
+						</>
+					);
+				})}
+			</Dropdown.Menu>
+		</Dropdown>
+	);
 };
 
 export default Filter;
