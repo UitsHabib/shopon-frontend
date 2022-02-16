@@ -1,8 +1,8 @@
-import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import Navbar from "./components/navbar.component";
+import React from 'react';
+import { Route, Redirect } from 'react-router-dom';
+import Navbar from './components/navbar.component';
 
-import getLoggedInUser from "./service/get-logged-in-user";
+import getLoggedInUser from './service/get-logged-in-user';
 
 export default function PublicRoute({ component: Component, ...rest }) {
     const loggedInUser = getLoggedInUser();
@@ -17,12 +17,8 @@ export default function PublicRoute({ component: Component, ...rest }) {
                         <Redirect
                             push
                             to={{
-                                pathname: props.location.state
-                                    ? props.location.state.from.pathname
-                                    : "/",
-                                search: props.location.state
-                                    ? props.location.state.from.search
-                                    : "",
+                                pathname: props.location.state ? props.location.state.from.pathname : '/',
+                                search: props.location.state ? props.location.state.from.search : '',
                                 state: { from: props.location },
                             }}
                         />
