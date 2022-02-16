@@ -16,7 +16,7 @@ import {
 	UpdateMyProfile,
 } from '../platform';
 import { CustomerDummy } from '../customer';
-import { ShopDummy } from '../shop';
+import { Shops } from '../shop';
 import { ComplaintDummy } from '../complaint';
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
 			<Route path="/forgot-password" component={ForgotPassword} />
 			<Route path="/platform" component={PlatformRoutes} />
 			<Route path="/customer" component={CustomerDummy} />
-			<Route path="/shop" component={ShopDummy} />
+			<PrivateRoute path="/shop" component={Shops} />
 			<Route path="/complaint" component={ComplaintDummy} />
 			{/* // TODO :  */}
 			{/* <Route path="/role" component={RoleRoutes}/> */}
