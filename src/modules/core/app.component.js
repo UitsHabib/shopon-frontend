@@ -29,11 +29,6 @@ function App() {
 			<Route path="/reset-password" component={ResetPassword} />
 			<Route path="/forgot-password" component={ForgotPassword} />
 			<Route path="/platform" component={PlatformRoutes} />
-			<Route path="/customer" component={CustomerDummy} />
-			<Route path="/shop" component={ShopDummy} />
-			<Route path="/complaint" component={ComplaintDummy} />
-			{/* // TODO :  */}
-			{/* <Route path="/role" component={RoleRoutes}/> */}
 			<PrivateRoute path="/my-profile" component={MyProfile} />
 			<PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
 			<PrivateRoute path="/service-list" component={ServiceList} />
