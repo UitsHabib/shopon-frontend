@@ -41,12 +41,15 @@ const PermissionUpdate = ({ history, location, match }) => {
                 { withCredentials: true }
             );
             history.push({pathname: "/platform/permissions"})
-            toast('Permission Updated Successfully', {
+            toast.success('Permission Updated Successfully', {
                 backgroundColor: '#8329C5',
                 color: '#ffffff',
             })
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 

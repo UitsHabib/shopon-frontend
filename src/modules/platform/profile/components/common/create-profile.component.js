@@ -16,12 +16,12 @@ const CreateProfile = () => {
 				withCredentials: true,
 			});
 			window.location.href = 'http://localhost:3000/platform/profiles';
-			toast('Profile Created Successfully', {
+			toast.success('Profile Created Successfully', {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
 			})
 		} catch (error) {
-			toast(error, {
+			toast.warning(error.response.data, {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
 			})

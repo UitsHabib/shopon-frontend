@@ -23,8 +23,11 @@ const Login = (props) => {
 				color: '#ffffff',
 			})
 		} catch (error) {
-			console.log(error);
-			alert('Error happened!');
+			console.log(error.response.data)
+			toast.error(error.response.data, {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 		}
 	}
 

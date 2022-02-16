@@ -15,12 +15,15 @@ const PermissionCreate = ({ history }) => {
                 { withCredentials: true }
             );
             history.push({pathname: "/platform/permissions"})
-            toast('Permission Created Successfully', {
+            toast.success('Permission Created Successfully', {
                 backgroundColor: '#8329C5',
                 color: '#ffffff',
             })
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 

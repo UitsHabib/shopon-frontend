@@ -25,7 +25,10 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
                 color: '#ffffff',
             })
         } catch (error) {
-            console.log(error);
+            toast.warning(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 

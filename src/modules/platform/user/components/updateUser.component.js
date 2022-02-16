@@ -35,15 +35,19 @@ const UpdateUser = (props) => {
 
             await axios.patch(`http://localhost:5000/api/users/${usersID}`,updatedUser,{ withCredentials: true });
             
-            alert(`User ${user.first_name} ${user.last_name} updated`);
-            props.history.push("/platform/users");
-            toast('User Updated Successfully', {
+            // alert(`User ${user.first_name} ${user.last_name} updated`);
+            toast.success(`User ${user.first_name} ${user.last_name} updated`, {
                 backgroundColor: '#8329C5',
                 color: '#ffffff',
             })
+            props.history.push("/platform/users");
 
             // props.history.push(`${props.history.state?.prevPath}`);
         } catch (error) {
+            toast.warning(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
             console.log(error.response.data);
         }
     }
