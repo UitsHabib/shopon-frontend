@@ -28,6 +28,7 @@ function App() {
 			<PrivateRoute exact path="/" component={Dashboard} />
 			<Route path="/reset-password" component={ResetPassword} />
 			<Route path="/forgot-password" component={ForgotPassword} />
+            
 			<Route path="/platform" component={PlatformRoutes} />
 			<Route path="/customer" component={CustomerDummy} />
 			<PrivateRoute path="/shop" component={Shops} />
