@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useHistory, Link } from 'react-router-dom';
 import { loginSchema } from '../user.schema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {toast} from "react-toastify";
 
 const Login = (props) => {
 	const history = useHistory();
@@ -17,6 +18,10 @@ const Login = (props) => {
 			//   window.location.href = '/';
 
 			history.push('/');
+			toast.success('Logged in Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 		} catch (error) {
 			console.log(error);
 			alert('Error happened!');
