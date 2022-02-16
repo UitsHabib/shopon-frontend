@@ -3,6 +3,7 @@ import axios from "axios";
 import Table from "./common/table.component";
 import TableBody from "./common/tableBody.component";
 import TableHead from "./common/tableHead.component";
+import {toast} from "react-toastify";
 
 const baseUrl = "http://localhost:5000";
 
@@ -19,8 +20,15 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
                 (permission) => permission.id !== response.data.id
             );
             setPermissions(data);
+            toast('Permission Deleted Successfully', {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         } catch (error) {
-            console.log(error);
+            toast.warning(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 

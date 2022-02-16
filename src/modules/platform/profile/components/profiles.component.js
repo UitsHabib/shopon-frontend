@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
 import { updateSchema } from '../profile.schema';
 import moment from 'moment';
+import {toast} from "react-toastify";
 
 const api_endpoint = 'http://localhost:5000';
 
@@ -107,6 +108,10 @@ const Profiles = () => {
 			);
 			setProfiles([...profiles]);
 			// const response = await promise;
+			toast('Profile Updated Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 			window.location.href = `${path}`;
 		} catch (error) {
 			console.log('abuj', error);
@@ -139,6 +144,10 @@ const Profiles = () => {
 				{ withCredentials: true }
 			);
 			setProfiles(newProfiles);
+			toast('Profile Deleted Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 			window.location.href = `${path}`;
 		} catch (error) {
 			console.error('Error: ', error);

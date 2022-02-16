@@ -9,6 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/js/src/dropdown"
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./style/style.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 import App from './modules/core/app.component';
 

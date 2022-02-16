@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 import { updateUserSchema } from "../user.schema";
+import {toast} from "react-toastify";
 
 const api_endPoint = "http://localhost:5000/api";
 
@@ -34,11 +35,19 @@ const UpdateUser = (props) => {
 
             await axios.patch(`http://localhost:5000/api/users/${usersID}`,updatedUser,{ withCredentials: true });
             
-            alert(`User ${user.first_name} ${user.last_name} updated`);
+            // alert(`User ${user.first_name} ${user.last_name} updated`);
+            toast.success(`User ${user.first_name} ${user.last_name} updated`, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
             props.history.push("/platform/users");
 
             // props.history.push(`${props.history.state?.prevPath}`);
         } catch (error) {
+            toast.warning(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
             console.log(error.response.data);
         }
     }

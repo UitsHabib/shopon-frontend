@@ -3,6 +3,7 @@ import axios from 'axios';
 import { useHistory, Link } from 'react-router-dom';
 import { loginSchema } from '../user.schema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
+import {toast} from "react-toastify";
 
 const Login = (props) => {
     // console.log(props.location.state);
@@ -13,12 +14,20 @@ const Login = (props) => {
             localStorage.setItem('loggedInUser', JSON.stringify(response.data));
             //   window.location.href = '/';
             props.location.state && props.location.state.from.pathname ? history.push(props.location.state.from.pathname) : history.push('/');
-        } catch (error) {
-            console.log(error);
-            alert('Error happened!');
-        }
-    }
-
+           
+			toast.success('Logged in Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
+		} catch (error) {
+			console.log(error.response.data)
+			toast.error(error.response.data, {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
+		}
+	}
+  
     return (
         <>
             {props.location.state && props.location.state.inactive ? (
@@ -28,6 +37,7 @@ const Login = (props) => {
                     </div>
                 </div>
             ) : null}
+			
 
             <div className="d-flex flex-wrap justify-content-center mt-5">
                 <div className="card" style={{ width: ' 25rem ', height: 'auto' }}>

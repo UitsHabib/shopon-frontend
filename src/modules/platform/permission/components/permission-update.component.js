@@ -2,6 +2,7 @@ import axios from "axios";
 import _ from "lodash";
 import { useEffect, useState, useCallback } from "react";
 import PermissionForm from "./permission-form.component";
+import {toast} from "react-toastify";
 
 const baseUrl = "http://localhost:5000";
 
@@ -40,9 +41,15 @@ const PermissionUpdate = ({ history, location, match }) => {
                 { withCredentials: true }
             );
             history.push({pathname: "/platform/permissions"})
-            alert(response.status)
+            toast.success('Permission Updated Successfully', {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { createSchema } from '../../profile.schema';
 import { useRouteMatch } from 'react-router-dom';
 import CheckboxGroup from '../../../permission/components/checkboxGroup.component';
+import {toast} from "react-toastify";
 
 const api_endpoint = 'http://localhost:5000';
 
@@ -37,8 +38,18 @@ const CreateProfile = () => {
 				withCredentials: true,
 			});
 			window.location.href = 'http://localhost:3000/platform/profiles';
+			toast.success('Profile Created Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 		} catch (error) {
-			alert(error.response.data);
+			toast.warning(error.response.data, {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
+			// alert(error.response);
+			// window.location.href = "http://localhost:3000/platform/profiles";
+			// alert("Error happened!");
 		}
 	}
 
