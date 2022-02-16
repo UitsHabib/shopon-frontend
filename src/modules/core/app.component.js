@@ -29,11 +29,14 @@ function App() {
 			<Route path="/reset-password" component={ResetPassword} />
 			<Route path="/forgot-password" component={ForgotPassword} />
 			<Route path="/platform" component={PlatformRoutes} />
+<<<<<<< HEAD
 			<Route path="/customer" component={CustomerDummy} />
 			<PrivateRoute path="/shop" component={Shops} />
 			<Route path="/complaint" component={ComplaintDummy} />
 			{/* // TODO :  */}
 			{/* <Route path="/role" component={RoleRoutes}/> */}
+=======
+>>>>>>> 78d65ad0371b83c5e937951777f07b99038a1af6
 			<PrivateRoute path="/my-profile" component={MyProfile} />
 			<PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
 			<PrivateRoute path="/service-list" component={ServiceList} />

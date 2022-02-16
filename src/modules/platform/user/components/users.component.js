@@ -64,7 +64,7 @@ const Users = (props) => {
 			<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 				<div></div>
 				<Link to="/platform/users/create" className="btn btn-primary m-2">
-					Creat A new User{' '}
+					Create User{' '}
 				</Link>
 			</div>
 
