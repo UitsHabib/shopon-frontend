@@ -268,7 +268,7 @@ const UserForm = (props) => {
 								</div>
 
 								<button className="btn btn-primary m-2" type="submit">
-									Register
+									Create
 								</button>
 							</Form>
 						);
