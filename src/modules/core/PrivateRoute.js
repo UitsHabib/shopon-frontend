@@ -1,12 +1,13 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import Navbar from './components/navbar.component';
+import Breadcrumbs from './components/breadcrumb.component';
 
 import getLoggedInUser from './service/get-logged-in-user';
 
 export default function PrivateRoute({ component: Component, ...rest }) {
 	const loggedInUser = getLoggedInUser();
-	console.log(rest);
+	// console.log(rest);
 
 	return (
 		<Route
@@ -15,6 +16,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
 				return loggedInUser ? (
 					<>
 						<Navbar path={rest.path} />
+						<Breadcrumbs />
 						<Component {...props} />
 					</>
 				) : (
