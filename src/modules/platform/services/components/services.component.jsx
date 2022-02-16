@@ -1,23 +1,22 @@
 import React, { useState } from 'react';
-import { Link, useRouteMatch  } from 'react-router-dom';
+import { Button } from 'react-bootstrap';
 import useServices from '../hooks/useServices';
 
 import { Table, Pagination } from '../common/components';
+import ServiceDetails from './serviceDetails.component';
 
 import servicesMetadata from './services.metadata';
 
 const Services = () => {
 	const [paginate, updatePage] = useState({ currentPage: 1, itemsPerPage: 2 });
 	const { services, meta } = useServices(paginate);
-	const { path } = useRouteMatch();
+	const [serviceDetail, setServiceDetail] = useState();
 
 	const updatedServicesMetadata = {
 		...servicesMetadata,
 		action: {
-			render: (_, { id }) => (
-				<Link to={`${path}/${id}`} className="btn btn-primary">
-					Details
-				</Link>
+			render: (_, service) => (
+				<Button onClick={() => setServiceDetail(service)}>Details</Button>
 			),
 		},
 	};
@@ -35,6 +34,12 @@ const Services = () => {
 					updatePage((prevPaginate) => ({ ...prevPaginate, currentPage: page }))
 				}
 			/>
+			{serviceDetail ? (
+				<ServiceDetails
+					service={serviceDetail}
+					onHide={() => setServiceDetail(null)}
+				/>
+			) : null}
 		</div>
 	);
 };
