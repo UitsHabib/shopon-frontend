@@ -6,16 +6,8 @@ import axios from 'axios';
 Modal.setAppElement('#app');
 
 const TableBody = (props) => {
-	const { items: rows, columns, onDelete } = props;
-	const [currentRole, setCurrentRole] = useState({});
-	const [isModal, setIsModal] = useState(false);
+	const { items: rows, columns, isModal, clickedRow, onCloseModal } = props;
 	const [users, setUsers] = useState([]);
-
-	const handleClick = (row) => {
-		// console.log(row.id);
-		setCurrentRole(row);
-		setIsModal(true);
-	};
 
 	const fetchUsers = async (id) => {
 		try {
@@ -23,19 +15,6 @@ const TableBody = (props) => {
 				withCredentials: true,
 			});
 			setUsers(data);
-		} catch (error) {
-			console.error('Error: ', error);
-		}
-	};
-
-	const deleteRole = async (id) => {
-		try {
-			const response = await axios.delete(
-				`http://localhost:5000/api/roles/${id}`,
-				{ withCredentials: true }
-			);
-			onDelete(id);
-			setIsModal(false);
 		} catch (error) {
 			console.error('Error: ', error);
 		}
@@ -53,7 +32,7 @@ const TableBody = (props) => {
 		<>
 			<Modal
 				isOpen={isModal}
-				onRequestClose={() => setIsModal(false)}
+				onRequestClose={() => onCloseModal()}
 				style={{
 					overlay: {
 						position: 'fixed',
@@ -75,13 +54,10 @@ const TableBody = (props) => {
 			>
 				<div className="d-flex flex-column justify-content-center align-items-center">
 					<button className="btn align-self-end">
-						<i
-							className="bi bi-x-circle h3"
-							onClick={() => setIsModal(false)}
-						/>
+						<i className="bi bi-x-circle h3" onClick={() => onCloseModal()} />
 					</button>
 					<ul className="list-group list-group-flush w-75" style={{}}>
-						{Object.entries(currentRole).map(([key, value]) => {
+						{Object.entries(clickedRow).map(([key, value]) => {
 							if (key === 'created_by' || key === 'updated_by') {
 								let user = users.find((user) => user.id === value);
 								user = user.first_name + ' ' + user.last_name;
@@ -97,7 +73,6 @@ const TableBody = (props) => {
 									</li>
 								);
 							} else if (key === 'role_permissions') {
-								// console.log(value);
 								return (
 									<li
 										className="list-group-item d-flex flex-row align-items-baseline"
@@ -134,26 +109,26 @@ const TableBody = (props) => {
 						})}
 					</ul>
 
-					<div className="mt-2">
+					{/* <div className="mt-2">
 						<Link
 							className="btn btn-success"
-							to={`/platform/roles/update/${currentRole.id}`}
+							to={`/platform/roles/update/${clickedRow.id}`}
 						>
 							Update
 						</Link>
 						<button
 							className="btn btn-outline-danger mx-3"
-							onClick={() => deleteRole(currentRole.id)}
+							onClick={() => deleteRow(clickedRow.id)}
 						>
 							Delete
 						</button>
-					</div>
+					</div> */}
 				</div>
 			</Modal>
 			<tbody>
 				{rows.map((row) => {
 					return (
-						<tr key={row.id} onClick={() => handleClick(row)}>
+						<tr key={row.id}>
 							{columns.map((data) => (
 								<React.Fragment key={row.id + data.key}>
 									{data.content(row, data.key)}
