@@ -24,6 +24,7 @@ const ShowShops = (props) => {
 	} = props;
 
 	const now = new Date();
+
 	const dateString = moment(now).format('DD-MM-YYYY');
 
 	const [addNewShopShow, setAddNewShopShow] = useState(false);
@@ -39,6 +40,7 @@ const ShowShops = (props) => {
 				<Button className="my-3" variant="success" onClick={handleAddNewShop}>
 					Add New Shop
 				</Button>
+
 				{addNewShopShow && (
 					<>
 						<Modal show={handleAddNewShop} onHide={handleAddNewShop}>
@@ -55,7 +57,6 @@ const ShowShops = (props) => {
 										date_created: dateString,
 									}}
 									onSubmit={(values, actions) => {
-										//console.log(values);
 										setAddNewShopShow(!addNewShopShow);
 										addNewShop(values);
 										actions.setSubmitting(false);
@@ -175,8 +176,9 @@ const ShowShops = (props) => {
 					</>
 				)}
 			</div>
+
 			<div className="d-flex flex-wrap flex-column align-items-center">
-				<div className="card" style={{ width: '75%' }}>
+				<div className="card" style={{ width: '100%', height: '100%' }}>
 					<div className="card-body">
 						<div className="d-flex flex-wrap flex-column align-items-center">
 							<div className="d-flex flex-wrap justify-content-between">
@@ -187,6 +189,7 @@ const ShowShops = (props) => {
 										onClickFilter={onClickFilter}
 									/>
 								</div>
+
 								<div className="mx-4">
 									<Table
 										items={items}
@@ -194,6 +197,7 @@ const ShowShops = (props) => {
 										onSort={onSort}
 										sortColumn={sortColumn}
 									/>
+                                    
 									<Pagination
 										totalItems={totalItems}
 										pageCount={pageCount}

@@ -38,40 +38,44 @@ const Shops = (props) => {
 		}
 	}
 
-    async function deleteShopData(targetShop) {
+	async function deleteShopData(targetShop) {
 		// try {
 		// 	await axios.delete(`${api}/:${targetShop.shop_id}`);
 		// } catch (error) {
 		// 	console.log(error);
 		// }
-        const newShopList = shops.filter(shop => shop.shop_id !== targetShop.shop_id);
-        setShops(newShopList);
+		const newShopList = shops.filter(
+			(shop) => shop.shop_id !== targetShop.shop_id
+		);
+		setShops(newShopList);
 	}
 
-    async function updateShop(targetShop) {
+	async function updateShop(targetShop) {
 		// try {
 		// 	const { data } = await axios.patch(`${api}/:${targetShop.shop_id}`, targetShop);
 		// } catch (error) {
 		// 	console.log(error);
 		// }
-        const newShopList = [...shops];
-        let newShop = newShopList.find(shop => shop.shop_id === targetShop.shop_id);
-        newShop.shop_name = targetShop.shop_name;
-        newShop.shop_type = targetShop.shop_type;
-        newShop.shop_owner = targetShop.shop_owner;
+		const newShopList = [...shops];
+		let newShop = newShopList.find(
+			(shop) => shop.shop_id === targetShop.shop_id
+		);
+		newShop.shop_name = targetShop.shop_name;
+		newShop.shop_type = targetShop.shop_type;
+		newShop.shop_owner = targetShop.shop_owner;
 
-        setShops(newShopList);
+		setShops(newShopList);
 	}
 
-    async function addNewShop(shop) {
-            // try {
-            //     const { data } = await axios.post(`${api}`, shop);
-            //     setShops((prev) => [...prev, shop]);
-            // } catch (error) {
-            //     console.log(error);
-            // }
-            setShops((prev) => [...prev, shop]);
-    }
+	async function addNewShop(shop) {
+		// try {
+		//     const { data } = await axios.post(`${api}`, shop);
+		//     setShops((prev) => [...prev, shop]);
+		// } catch (error) {
+		//     console.log(error);
+		// }
+		setShops((prev) => [...prev, shop]);
+	}
 
 	useEffect(() => {
 		getShopData();
@@ -125,7 +129,7 @@ const Shops = (props) => {
 		return filteredshops;
 	}
 
-    const filteredshops = filterShops(shops);
+	const filteredshops = filterShops(shops);
 	const paginatedShops = paginateShops(filteredshops);
 	const sortedShops = sortShops(paginatedShops);
 
@@ -148,13 +152,13 @@ const Shops = (props) => {
 			sorting: true,
 			content: (shop, key) => <td>{shop[key]}</td>,
 		},
-        {
+		{
 			label: 'Shop Owner',
 			path: 'shop_owner',
 			sorting: true,
 			content: (shop, key) => <td>{shop[key]}</td>,
 		},
-        {
+		{
 			label: 'Created At',
 			path: 'date_created',
 			sorting: true,
@@ -163,27 +167,23 @@ const Shops = (props) => {
 		{
 			label: 'Action',
 			content: (targetShop) => (
-				<>
-					<Dropdown>
-						<Dropdown.Toggle variant="outline-success" id="dropdown-basic">
-							<i
-								className="bi bi-pencil-square"
-							></i>
-						</Dropdown.Toggle>
+				<Dropdown>
+					<Dropdown.Toggle variant="outline-success" id="dropdown-basic">
+						<i className="bi bi-pencil-square"></i>
+					</Dropdown.Toggle>
 
-						<Dropdown.Menu>
-							<Dropdown.Item onClick={() => showShopDropdown(targetShop)}>
-								Shop Details
-							</Dropdown.Item>
-							<Dropdown.Item onClick={() => updateShopDropdown(targetShop)}>
-								Update
-							</Dropdown.Item>
-							<Dropdown.Item onClick={() => deleteShopDropdown(targetShop)}>
-								Delete
-							</Dropdown.Item>
-						</Dropdown.Menu>
-					</Dropdown>
-				</>
+					<Dropdown.Menu>
+						<Dropdown.Item onClick={() => showShopDropdown(targetShop)}>
+							Shop Details
+						</Dropdown.Item>
+						<Dropdown.Item onClick={() => updateShopDropdown(targetShop)}>
+							Update
+						</Dropdown.Item>
+						<Dropdown.Item onClick={() => deleteShopDropdown(targetShop)}>
+							Delete
+						</Dropdown.Item>
+					</Dropdown.Menu>
+				</Dropdown>
 			),
 		},
 	];
@@ -199,11 +199,12 @@ const Shops = (props) => {
 				pageCount={shopsPerPage}
 				activePage={activePage}
 				onClickPage={handleClickPage}
-                addNewShop={addNewShop}
-                shopCategories={shopCategories}
+				addNewShop={addNewShop}
+				shopCategories={shopCategories}
 				selectedCategory={selectedCategory}
 				onClickFilter={handleClickFilter}
 			/>
+            
 			{showDetail ? (
 				<ModalForShops
 					type="show"
@@ -216,12 +217,12 @@ const Shops = (props) => {
 			{updateDetail ? (
 				<ModalForShops
 					type="update"
-                    totalItems={shops.length}
+					totalItems={shops.length}
 					targetShop={targetShop}
 					updateDetail={updateDetail}
 					setUpdateDetail={setUpdateDetail}
-                    shopCategories={shopCategories}
-                    updateShop={updateShop}
+					shopCategories={shopCategories}
+					updateShop={updateShop}
 				/>
 			) : null}
 
@@ -231,7 +232,7 @@ const Shops = (props) => {
 					targetShop={targetShop}
 					deleteDetail={deleteDetail}
 					setDeleteDetail={setDeleteDetail}
-                    deleteShopData={deleteShopData}
+					deleteShopData={deleteShopData}
 				/>
 			) : null}
 		</>

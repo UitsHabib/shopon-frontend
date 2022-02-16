@@ -1,13 +1,12 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import moment from 'moment';
-import { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { addNewShopSchema } from '../shop.schema';
 
 export function ModalForShops(props) {
 	const {
+        type,
 		targetShop,
-		type,
 		showDetail,
 		setShowDetail,
 		updateDetail,
@@ -15,23 +14,20 @@ export function ModalForShops(props) {
 		deleteDetail,
 		setDeleteDetail,
 		deleteShopData,
-        updateShop,
-        shopCategories,
+		updateShop,
+		shopCategories,
 	} = props;
 
-    
-	const now = new Date();
-	const dateString = moment(now).format('DD-MM-YYYY');
-
 	const handleShowDetail = () => setShowDetail(!showDetail);
+
 	const handleUpdateDetail = () => setUpdateDetail(!updateDetail);
+
 	const handleDeleteDetail = () => {
 		deleteShopData(targetShop);
 		setDeleteDetail(!deleteDetail);
 	};
-	const handleDeleteDetailClose = () => {
-		setDeleteDetail(!deleteDetail);
-	};
+
+	const handleDeleteDetailClose = () => setDeleteDetail(!deleteDetail);
 
 	return (
 		<>
@@ -52,10 +48,10 @@ export function ModalForShops(props) {
 								<li className="list-group-item">
 									Category: {targetShop.shop_type}
 								</li>
-                                <li className="list-group-item">
+								<li className="list-group-item">
 									Shop Owner: {targetShop.shop_owner}
 								</li>
-                                <li className="list-group-item">
+								<li className="list-group-item">
 									Created At: {targetShop.date_created}
 								</li>
 							</ul>
@@ -68,6 +64,7 @@ export function ModalForShops(props) {
 					</Modal>
 				</>
 			)}
+
 			{type === 'update' && (
 				<>
 					<Modal show={updateDetail} onHide={handleUpdateDetail}>
@@ -75,7 +72,7 @@ export function ModalForShops(props) {
 							<Modal.Title>Update Shop Details</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
-                        <Modal.Body>
+							<Modal.Body>
 								<Formik
 									initialValues={{
 										shop_id: targetShop.shop_id,
@@ -205,6 +202,7 @@ export function ModalForShops(props) {
 					</Modal>
 				</>
 			)}
+
 			{type === 'delete' && (
 				<>
 					<Modal show={deleteDetail} onHide={handleDeleteDetail}>
@@ -212,7 +210,7 @@ export function ModalForShops(props) {
 							<Modal.Title>Delete Shop</Modal.Title>
 						</Modal.Header>
 						<Modal.Body>
-                        <ul className="list-group">
+							<ul className="list-group">
 								<li className="list-group-item">
 									Shop ID: {targetShop.shop_id}
 								</li>
@@ -222,10 +220,10 @@ export function ModalForShops(props) {
 								<li className="list-group-item">
 									Category: {targetShop.shop_type}
 								</li>
-                                <li className="list-group-item">
+								<li className="list-group-item">
 									Shop Owner: {targetShop.shop_owner}
 								</li>
-                                <li className="list-group-item">
+								<li className="list-group-item">
 									Created At: {targetShop.date_created}
 								</li>
 							</ul>
