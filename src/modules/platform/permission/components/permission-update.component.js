@@ -49,7 +49,11 @@ const PermissionUpdate = ({ history, location, match }) => {
     return (
         <>
             <h1 className="text-center">Permission Update</h1>
-            <PermissionForm initialValues={initialValues} onPermissionSubmit={handleUpdate} />
+            <PermissionForm 
+                initialValues={initialValues} 
+                onPermissionSubmit={handleUpdate} 
+                buttonName="Update"
+            />
         </>
     );
 };

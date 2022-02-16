@@ -23,7 +23,11 @@ const PermissionCreate = ({ history }) => {
     return (
         <>
             <h1 className="text-center">Permission Create</h1>
-            <PermissionForm initialValues={initialValues} onPermissionSubmit={handleCreate} />
+            <PermissionForm 
+                initialValues={initialValues} 
+                onPermissionSubmit={handleCreate} 
+                buttonName="Save"
+            />
         </>
     );
 };

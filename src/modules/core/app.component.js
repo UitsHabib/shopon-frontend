@@ -13,7 +13,6 @@ import {
 	ResetPassword,
 	PlatformRoutes,
 	MyProfile,
-	Permissions,
 	UpdateMyProfile,
 } from '../platform';
 

@@ -6,7 +6,7 @@ import CheckboxGroup from "./checkboxGroup.component";
 
 const baseUrl = "http://localhost:5000";
 
-const PermissionForm = ({ onPermissionSubmit, initialValues }) => {
+const PermissionForm = ({ onPermissionSubmit, initialValues, buttonName }) => {
     const [services, setServices] = useState([]);
 
     const getServices = async () => {
@@ -65,7 +65,7 @@ const PermissionForm = ({ onPermissionSubmit, initialValues }) => {
                                 <ErrorMessage name="services" />
                             </div>
 
-                            <button type="submit">Submit</button>
+                            <button className="btn btn-primary" type="submit">{buttonName}</button>
                         </Form>
                     )}
                 </Formik>
