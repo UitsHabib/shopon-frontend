@@ -18,6 +18,31 @@ const Profiles = () => {
 	const { path } = useRouteMatch();
 	const [profiles, setProfiles] = useState([]);
 
+	//fetch user data from database
+    const [users, setUsers] = useState([]);
+
+	async function getUsers() {
+		try {
+			const promise = axios
+				.get(`${api_endpoint}/api/users`, { withCredentials: true })
+				.then((res) => setUsers(res.data));
+			const response = await promise;
+		} catch (error) {
+			console.log('abuj', error);
+		}
+	}
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
+    const handleUser = (id) => {
+        const selectedUser = users.filter(user => user.id === id);
+        const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`
+        // console.log(fullName)
+        return fullName;
+    }
+
 	//fetch profile data from database
 	async function getProfiles() {
 		try {
@@ -186,9 +211,7 @@ const Profiles = () => {
 			label: 'Created By',
 			path: 'created_by',
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}>{`${getLoggedInUser().first_name} ${
-					getLoggedInUser().last_name
-				}`}</td>
+				<td style={{ color: '#136CB2' }}> {handleUser(profile[key])}</td>
 			),
 		},
 		{
@@ -205,9 +228,7 @@ const Profiles = () => {
 			label: 'Updated By',
 			path: 'updated_by',
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}>{`${getLoggedInUser().first_name} ${
-					getLoggedInUser().last_name
-				}`}</td>
+				<td style={{ color: '#136CB2' }}> {handleUser(profile[key])}</td>
 			),
 		},
 		{
@@ -260,7 +281,7 @@ const Profiles = () => {
 						}}
 					>
 						<Link style={{ textDecoration: 'none' }} to={`${path}/create`}>
-							<button type="button" className="btn btn-warning">
+							<button type="button" className="btn btn-warning pull-right">
 								Create Profile
 							</button>
 						</Link>
@@ -313,7 +334,7 @@ const Profiles = () => {
 								style={{
 									textAlign: 'center',
 									width: '60%',
-									marginLeft: '25%',
+									marginLeft: '20%',
 									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
