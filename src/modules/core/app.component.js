@@ -16,23 +16,27 @@ import {
 	Permissions,
 	UpdateMyProfile,
 } from '../platform';
+import {ToastContainer} from "react-toastify";
 
 function App() {
 	return (
-		<Switch>
-			<PublicRoute path="/login" component={Login} />
-			<PrivateRoute path="/logout" component={Logout} />
-			<PrivateRoute exact path="/" component={Dashboard} />
-			<Route path="/reset-password" component={ResetPassword} />
-			<Route path="/forgot-password" component={ForgotPassword} />
-			<Route path="/platform" component={PlatformRoutes} />
-			{/* // TODO :  */}
-			{/* <Route path="/role" component={RoleRoutes}/> */}
-			<PrivateRoute path="/my-profile" component={MyProfile} />
-			<PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
-			<PrivateRoute path="/service-list" component={ServiceList} />
-			<Route component={NoMatch} />
-		</Switch>
+		<>
+			<ToastContainer/>
+			<Switch>
+				<PublicRoute path="/login" component={Login} />
+				<PrivateRoute path="/logout" component={Logout} />
+				<PrivateRoute exact path="/" component={Dashboard} />
+				<Route path="/reset-password" component={ResetPassword} />
+				<Route path="/forgot-password" component={ForgotPassword} />
+				<Route path="/platform" component={PlatformRoutes} />
+				{/* // TODO :  */}
+				{/* <Route path="/role" component={RoleRoutes}/> */}
+				<PrivateRoute path="/my-profile" component={MyProfile} />
+				<PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
+				<PrivateRoute path="/service-list" component={ServiceList} />
+				<Route component={NoMatch} />
+			</Switch>
+		</>
 	);
 }
 

@@ -16,6 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "font-awesome/css/font-awesome.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import "./style/style.css";
+import 'react-toastify/dist/ReactToastify.css';
 
 ReactDOM.render(
     <BrowserRouter>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 import { updateUserSchema } from "../user.schema";
+import {toast} from "react-toastify";
 
 const api_endPoint = "http://localhost:5000/api";
 
@@ -36,6 +37,10 @@ const UpdateUser = (props) => {
             
             alert(`User ${user.first_name} ${user.last_name} updated`);
             props.history.push("/platform/users");
+            toast('User Updated Successfully', {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
 
             // props.history.push(`${props.history.state?.prevPath}`);
         } catch (error) {
