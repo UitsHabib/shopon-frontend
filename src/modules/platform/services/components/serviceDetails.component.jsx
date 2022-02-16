@@ -1,33 +1,30 @@
 import React from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { Modal, Button } from 'react-bootstrap';
 
 import { formatRelative } from 'date-fns';
 
-import useService from '../hooks/useService';
-
-const ServiceDetails = () => {
-	const { id: serviceId } = useParams();
-	const history = useHistory();
-
+const ServiceDetails = ({ service, onHide }) => {
 	const {
 		title,
 		created_by: createdBy,
 		created_at: createdAt,
 		updated_at: updatedAt,
 		updated_by: updatedBy,
-	} = useService({ id: serviceId });
+	} = service;
 
 	return (
-		<div className="container">
-			<div className="d-flex flex-column justify-content-sm-center">
+		<Modal
+			show={true}
+			onHide={onHide}
+			size="lg"
+			aria-labelledby="contained-modal-title-vcenter"
+			centered
+		>
+			<Modal.Header closeButton>
+				<Modal.Title id="contained-modal-title-vcenter">{title}</Modal.Title>
+			</Modal.Header>
+			<Modal.Body>
 				<table className="table table-bordered table-striped p-2">
-					<thead>
-						<tr>
-							<th scope="row" colSpan="2" className="text-center">
-								{title}
-							</th>
-						</tr>
-					</thead>
 					<tbody>
 						<tr>
 							<th scope="row">Created By</th>
@@ -55,15 +52,13 @@ const ServiceDetails = () => {
 						</tr>
 					</tbody>
 				</table>
-				<button
-					type="button"
-					onClick={() => history.push('/platform/services')}
-					className="btn btn-primary text-center m-auto p-2"
-				>
-					Go Back
-				</button>
-			</div>
-		</div>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button type="button" onClick={onHide}>
+					Close
+				</Button>
+			</Modal.Footer>
+		</Modal>
 	);
 };
 
