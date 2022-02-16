@@ -3,18 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-<<<<<<< HEAD
-    "awesome-phonenumber": "2.49.0",
-    "axios": "^0.21.4",
-    "bootstrap": "^5.1.1",
-=======
     "@fortawesome/fontawesome-free": "^5.1.0-9",
     "@fortawesome/fontawesome-svg-core": "^1.3.0-beta3",
     "awesome-phonenumber": "2.49.0",
     "axios": "^0.21.1",
-    "bootstrap": "5.1.1",
+    "bootstrap": "^5.1.1",
     "bootstrap-icons": "^1.8.1",
->>>>>>> f9a70b47650531c8de274f3f736d18d098e3f7de
     "date-fns": "^2.22.1",
     "date-fns-tz": "^1.1.4",
     "font-awesome": "^4.7.0",
@@ -22,22 +16,15 @@
     "formik": "^2.2.6",
     "json-server": "^0.17.0",
     "lodash": "^4.17.21",
-<<<<<<< HEAD
-    "react": "^17.0.2",
-    "react-bootstrap": "^2.0.0-rc.0",
-    "react-dom": "^17.0.2",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "5.0.0",
-=======
     "moment": "^2.29.1",
-    "react-modal": "^3.14.4",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-rc.0",
+    "react-bootstrap-dropdown-menu": "^1.1.23",
     "react-dom": "^17.0.2",
+    "react-modal": "^3.14.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "5.0.0",
     "sass": "^1.49.7",
->>>>>>> f9a70b47650531c8de274f3f736d18d098e3f7de
     "web-vitals": "^2.1.4",
     "xregexp": "^5.0.2",
     "yup": "^0.32.9"

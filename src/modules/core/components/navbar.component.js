@@ -17,34 +17,6 @@ const Navbar = (props) => {
 						<span className="h4">ShopOn</span>
 					</Link>
 
-<<<<<<< HEAD
-                    <Link className="navbar-brand" to="/platform">
-                        Platform
-                    </Link>
-
-                    <Link className="navbar-brand" to="/permission">
-                        Permission
-                    </Link>
-
-                </div>
-
-                {!getLoggedInUser() && (
-                    <Link className="navbar-brand" to="/login">
-                        Login
-                    </Link>
-                )}
-
-                {getLoggedInUser() && (
-                    <div className="d-flex flex-wrap justify-content-end mt-3">
-                        <div>
-                            <p className="navbar-brand">
-                                {`${getLoggedInUser().first_name} ${getLoggedInUser().last_name}`}
-                            </p>
-                        </div>
-
-                        <Link className="navbar-brand" to="/logout">
-                            Log Out
-=======
 					{/* <Link
                         className="btn btn-outline-success"
                         to="/service-list"
@@ -54,7 +26,6 @@ const Navbar = (props) => {
 					{/* {getLoggedInUser() && (
                         <Link className="navbar-brand" to="/platform">
                             Platform
->>>>>>> f9a70b47650531c8de274f3f736d18d098e3f7de
                         </Link>
                     )} */}
 				</div>
@@ -71,9 +42,8 @@ const Navbar = (props) => {
 							<i className="bi bi-person-circle mx-1" />
 							<Link to="/my-profile">
 								{' '}
-								{`${getLoggedInUser().first_name} ${
-									getLoggedInUser().last_name
-								}`}
+								{`${getLoggedInUser().first_name} ${getLoggedInUser().last_name
+									}`}
 							</Link>
 						</span>
 
