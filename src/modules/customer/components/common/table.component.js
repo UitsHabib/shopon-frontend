@@ -3,7 +3,7 @@ import TableHeader from './table-header.component';
 
 const Table = ({ items, columns, onSort, sortColumn }) => {
 	return (
-		<table className="table">
+		<table className="table table-responsive">
 			<TableHeader
 				columns={columns}
 				onSort={onSort}
