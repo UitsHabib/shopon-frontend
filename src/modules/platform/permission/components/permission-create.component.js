@@ -1,5 +1,6 @@
 import axios from "axios";
 import PermissionForm from "./permission-form.component";
+import {toast} from "react-toastify";
 
 const baseUrl = "http://localhost:5000";
 
@@ -14,16 +15,26 @@ const PermissionCreate = ({ history }) => {
                 { withCredentials: true }
             );
             history.push({pathname: "/platform/permissions"})
-            alert(response.status)
+            toast.success('Permission Created Successfully', {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         } catch (error) {
-            console.log(error);
+            toast.error(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 
     return (
         <>
             <h1 className="text-center">Permission Create</h1>
-            <PermissionForm initialValues={initialValues} onPermissionSubmit={handleCreate} />
+            <PermissionForm 
+                initialValues={initialValues} 
+                onPermissionSubmit={handleCreate} 
+                buttonName="Save"
+            />
         </>
     );
 };

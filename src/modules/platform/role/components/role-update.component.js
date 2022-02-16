@@ -6,6 +6,7 @@ import _ from 'lodash';
 import axios from 'axios';
 
 import roleSchema from '../role.schema';
+import {toast} from "react-toastify";
 
 const RoleUpdate = () => {
 	const { id } = useRouteMatch().params;
@@ -56,6 +57,10 @@ const RoleUpdate = () => {
 			setLoading(true);
 			// fetchRole();
 			history.push('/platform/roles');
+			toast('Role Updated Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 			// console.log(data);
 		} catch (error) {
 			console.error('Error: ', error);

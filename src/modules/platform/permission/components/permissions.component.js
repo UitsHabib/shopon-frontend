@@ -10,7 +10,7 @@ const Permissions = () => {
     const [permissions, setPermissions] = useState([]);
     const [sorting, setSorting] = useState({ path: "id", order: "asc" });
     const [activePage, setActivePage] = useState(1);
-    const [count, setCount] = useState(1);
+    const [count, setCount] = useState(3);
 
     const getPermissions = async () => {
         try {

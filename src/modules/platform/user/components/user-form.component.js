@@ -2,6 +2,7 @@ import { SignInSchema } from '../user.schema';
 import { Formik, Field, Form } from 'formik';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import {toast} from "react-toastify";
 
 const UserForm = (props) => {
 	const [apiError, setapiError] = useState(null);
@@ -28,10 +29,17 @@ const UserForm = (props) => {
 			);
 			console.log(response);
 			if (response) {
-				alert('User added');
+				toast('User Added Successfully', {
+					backgroundColor: '#8329C5',
+					color: '#ffffff',
+				})
 			}
 		} catch (e) {
 			console.log(e.response.data);
+			toast.warn(e.response.data,{
+				backgroundColor: '#ce0d0d',
+				color: '#ffffff',
+			})
 			if (e.response.data === 'Already registered with this email address.') {
 				setapiError(e.response.data);
 			}
@@ -233,7 +241,7 @@ const UserForm = (props) => {
 								<div className="row g-3">
 									<div className="col">
 										<label htmlFor="role_id" className="col-form-label">
-											Role ID
+											Select Role
 										</label>
 										<Field
 											type="select"
@@ -260,7 +268,7 @@ const UserForm = (props) => {
 								</div>
 
 								<button className="btn btn-primary m-2" type="submit">
-									Register
+									Create
 								</button>
 							</Form>
 						);

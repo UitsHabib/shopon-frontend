@@ -1,5 +1,5 @@
-import TableBody from "./table-body.component";
-import TableHeader from "./table-header.component";
+import TableBody from './table-body.component';
+import TableHeader from './table-header.component';
 
 const Table = ({ items, columns, onSort, sortColumn }) => {
 	return (
@@ -9,10 +9,7 @@ const Table = ({ items, columns, onSort, sortColumn }) => {
 				onSort={onSort}
 				sortColumn={sortColumn}
 			></TableHeader>
-			<TableBody
-				items={items}
-				columns={columns}
-			></TableBody>
+			<TableBody items={items} columns={columns}></TableBody>
 		</table>
 	);
 };

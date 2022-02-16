@@ -1,5 +1,8 @@
 import { getUserById } from '../common/services';
-import extractUserIds from './extractUserIds';
+
+const extractUserIds = (service) => {
+	return [service.created_by, service.updated_by];
+};
 
 const replaceUserIdWithProfile = async (service) => {
 	const userIds = extractUserIds(service);

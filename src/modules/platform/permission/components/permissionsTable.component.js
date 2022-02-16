@@ -1,8 +1,10 @@
 import { Link, useRouteMatch } from "react-router-dom";
+import { Dropdown } from "react-bootstrap";
 import axios from "axios";
 import Table from "./common/table.component";
 import TableBody from "./common/tableBody.component";
 import TableHead from "./common/tableHead.component";
+import {toast} from "react-toastify";
 
 const baseUrl = "http://localhost:5000";
 
@@ -19,8 +21,15 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
                 (permission) => permission.id !== response.data.id
             );
             setPermissions(data);
+            toast('Permission Deleted Successfully', {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         } catch (error) {
-            console.log(error);
+            toast.warning(error.response.data, {
+                backgroundColor: '#8329C5',
+                color: '#ffffff',
+            })
         }
     };
 
@@ -72,15 +81,23 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
             path: "",
             content: (data) => (
                 <td>
-                    <Link to={{ pathname: `${path}/update/${data.id}`, data: data }}>
-                        <i className="fas fa-edit" />
-                    </Link>
-                    <button type="button" onClick={() => handleDelete(data.id)}>
-                        <i className="fas fa-trash-alt" />
-                    </button>
-                    <Link to={{ pathname: `${path}/${data.id}`, data: data }}>
-                        Show All
-                    </Link>
+                    <Dropdown>
+						<Dropdown.Toggle variant="secondary" id="dropdown-basic">
+							<i className="bi bi-pencil-square"></i>
+						</Dropdown.Toggle>
+
+						<Dropdown.Menu>
+                            <Link className="dropdown-item" to={{ pathname: `${path}/${data.id}`, data: data }}>
+                                Details
+                            </Link>
+                            <Link className="dropdown-item" to={{ pathname: `${path}/update/${data.id}`, data: data }}>
+                                Edit
+                            </Link>
+							<Dropdown.Item onClick={() => handleDelete(data.id)}>
+								Delete
+							</Dropdown.Item>
+						</Dropdown.Menu>
+					</Dropdown>
                 </td>
             ),
         },
@@ -88,7 +105,11 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
 
     return (
         <>
-            <Link className="btn btn-success mb-2" to={{ pathname: `${path}/create`}}>
+            <Link 
+                className="btn btn-success mb-2" 
+                style={{ float: "right" }} 
+                to={{ pathname: `${path}/create`}}
+            >
                 Add Permission
             </Link>
             <Table>

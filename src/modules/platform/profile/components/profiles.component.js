@@ -7,15 +7,40 @@ import Pagination from './common/pagination.component';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { Link } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
-import getLoggedInUser from '../../../core/service/get-logged-in-user';
 import { updateSchema } from '../profile.schema';
 import moment from 'moment';
+import {toast} from "react-toastify";
 
 const api_endpoint = 'http://localhost:5000';
 
 const Profiles = () => {
 	const { path } = useRouteMatch();
 	const [profiles, setProfiles] = useState([]);
+
+	//fetch user data from database
+    const [users, setUsers] = useState([]);
+
+	async function getUsers() {
+		try {
+			const promise = axios
+				.get(`${api_endpoint}/api/users`, { withCredentials: true })
+				.then((res) => setUsers(res.data));
+			const response = await promise;
+		} catch (error) {
+			console.log('abuj', error);
+		}
+	}
+
+	useEffect(() => {
+		getUsers();
+	}, []);
+
+    const handleUser = (id) => {
+        const selectedUser = users.filter(user => user.id === id);
+        const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`
+        // console.log(fullName)
+        return fullName;
+    }
 
 	//fetch profile data from database
 	async function getProfiles() {
@@ -31,6 +56,25 @@ const Profiles = () => {
 
 	useEffect(() => {
 		getProfiles();
+	}, []);
+
+	//fetch permission data from database
+	const [permissions, setPermissions] = useState([]);
+
+	const getPermissions = async () => {
+		try {
+			const { data } = await axios.get(`${api_endpoint}/api/permissions`, {
+				withCredentials: true,
+			});
+			// console.log(data);
+			setPermissions(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		getPermissions();
 	}, []);
 
 	//update profile section
@@ -64,6 +108,10 @@ const Profiles = () => {
 			);
 			setProfiles([...profiles]);
 			// const response = await promise;
+			toast('Profile Updated Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 			window.location.href = `${path}`;
 		} catch (error) {
 			console.log('abuj', error);
@@ -96,6 +144,10 @@ const Profiles = () => {
 				{ withCredentials: true }
 			);
 			setProfiles(newProfiles);
+			toast('Profile Deleted Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 			window.location.href = `${path}`;
 		} catch (error) {
 			console.error('Error: ', error);
@@ -166,9 +218,7 @@ const Profiles = () => {
 			label: 'Created By',
 			path: 'created_by',
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}>{`${getLoggedInUser().first_name} ${
-					getLoggedInUser().last_name
-				}`}</td>
+				<td style={{ color: '#136CB2' }}> {handleUser(profile[key])}</td>
 			),
 		},
 		{
@@ -185,9 +235,7 @@ const Profiles = () => {
 			label: 'Updated By',
 			path: 'updated_by',
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}>{`${getLoggedInUser().first_name} ${
-					getLoggedInUser().last_name
-				}`}</td>
+				<td style={{ color: '#136CB2' }}> {handleUser(profile[key])}</td>
 			),
 		},
 		{
@@ -240,8 +288,8 @@ const Profiles = () => {
 						}}
 					>
 						<Link style={{ textDecoration: 'none' }} to={`${path}/create`}>
-							<button type="button" className="btn btn-warning">
-								Create new profile
+							<button type="button" className="btn btn-warning pull-right">
+								Create Profile
 							</button>
 						</Link>
 					</span>
@@ -276,14 +324,25 @@ const Profiles = () => {
 						className="modal"
 						style={{ display: isUpdate ? 'block' : 'none' }}
 					>
-						<div className="modal-dialog">
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								handleClose();
+							}}
+						>
 							<div
 								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
 								style={{
 									textAlign: 'center',
-									width: '100%',
-									marginLeft: '10%',
-									marginTop: '25%',
+									width: '60%',
+									marginLeft: '20%',
+									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
 									borderRadius: '10px',
@@ -309,6 +368,12 @@ const Profiles = () => {
 										// onSubmit={formikProps.handleSubmit}
 										>
 											<div className="form-group">
+												<button
+													type="button"
+													className="btn-close pull-right"
+													onClick={handleClose}
+													aria-label="Close"
+												></button>
 												<label className="form-label" htmlFor="title">
 													Title <span className="text-danger">*</span>
 												</label>
@@ -336,32 +401,50 @@ const Profiles = () => {
 													<ErrorMessage name="description" />
 												</div>
 											</div>
-											<div id="checkbox-group">Permissions</div>
-											<div role="group" aria-labelledby="checkbox-group">
-												<label>
-													<Field type="checkbox" name="permissions" value="1" />
-													System Admin Permission
-												</label>
-												<br />
-												<label>
-													<Field type="checkbox" name="permissions" value="2" />
-													Manager Permission
-												</label>
-												<div className="invalid-feedback d-block">
-													<ErrorMessage name="permissions" />
+											<div id="checkbox-group">
+												Permissions <span className="text-danger">*</span>
+											</div>
+											<div
+												role="group"
+												aria-labelledby="checkbox-group"
+												style={{ textAlign: 'left' }}
+											>
+												<div>
+													{permissions.map((permission) => (
+														<React.Fragment key={permission.id}>
+															<label>
+																<Field
+																	type="checkbox"
+																	name="permissions"
+																	value={permission.id.toString()}
+																/>{' '}
+																{permission.title}
+															</label>
+															<br />
+														</React.Fragment>
+													))}
+													<div className="invalid-feedback d-block">
+														<ErrorMessage name="permissions" />
+													</div>
 												</div>
 											</div>
 											<br />
 											<button
-												className="btn btn-primary"
+												className="btn btn-primary pull-right"
 												type="submit"
 												onClick={updateProfile}
 											>
-												Update
+												Save changes
 											</button>{' '}
 											<button
 												type="button"
-												className="btn btn-danger"
+												className="btn btn-light pull-right"
+												style={{
+													border: '1px solid gray',
+													backgroundColor: 'gray',
+													color: 'white',
+													marginRight: '10px',
+												}}
 												onClick={handleClose}
 											>
 												Cancel
@@ -381,14 +464,25 @@ const Profiles = () => {
 						className="modal"
 						style={{ display: isDelete ? 'block' : 'none' }}
 					>
-						<div className="modal-dialog">
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								handleCancel();
+							}}
+						>
 							<div
 								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
 								style={{
 									textAlign: 'center',
-									width: '100%',
-									marginLeft: '10%',
-									marginTop: '25%',
+									width: '50%',
+									marginLeft: '25%',
+									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
 									borderRadius: '10px',
@@ -396,17 +490,31 @@ const Profiles = () => {
 								}}
 							>
 								<div className="container">
+									<button
+										type="button"
+										className="btn-close pull-right"
+										onClick={handleCancel}
+										aria-label="Close"
+									></button>
 									<h1>Delete Account</h1>
+									<hr />
 									<p>Are you sure you want to delete this account?</p>
+									<br />
 
 									<div className="clearfix">
 										<button
 											type="button"
-											className="btn btn-warning"
+											className="btn btn-light"
+											style={{
+												border: '1px solid gray',
+												backgroundColor: 'gray',
+												color: 'white',
+												marginRight: '10px',
+											}}
 											onClick={handleCancel}
 										>
 											Cancel
-										</button>{' '}
+										</button>
 										<button
 											type="button"
 											className="btn btn-danger"
@@ -428,14 +536,26 @@ const Profiles = () => {
 						className="modal"
 						style={{ display: isDetail ? 'block' : 'none' }}
 					>
-						<div className="modal-dialog">
+						{/* <div className="modal-dialog"> */}
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								handleOff();
+							}}
+						>
 							<div
 								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
 								style={{
 									// textAlign: "center",
-									width: '100%',
+									width: '80%',
 									marginLeft: '10%',
-									marginTop: '25%',
+									marginTop: '10%',
 									border: '1px solid gray',
 									boxShadow: '1px 1px 10px gray',
 									borderRadius: '10px',
@@ -443,7 +563,16 @@ const Profiles = () => {
 								}}
 							>
 								<div className="container">
-									<h1>Details</h1>
+									<button
+										type="button"
+										className="btn-close pull-right"
+										onClick={handleOff}
+										aria-label="Close"
+									></button>
+
+									<span>
+										<h1>Details</h1>
+									</span>
 									<p>Here is profile details</p>
 									<hr />
 									<div className="form-group">
@@ -480,21 +609,25 @@ const Profiles = () => {
 											<br />
 										</label>
 									</div>
-
-									<div className="clearfix">
-										<button
-											type="button"
-											className="btn btn-warning"
-											onClick={handleOff}
-										>
-											Cancel
-										</button>
-									</div>
+									<button
+										type="button"
+										className="btn btn-light pull-right"
+										style={{
+											border: '1px solid gray',
+											backgroundColor: 'gray',
+											color: 'white',
+											marginRight: '10px',
+										}}
+										onClick={handleOff}
+									>
+										Close
+									</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				) : (
+					// </div>
 					<div />
 				)}
 			</div>
