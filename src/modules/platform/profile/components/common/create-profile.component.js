@@ -1,43 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import axios from 'axios';
 import { createSchema } from '../../profile.schema';
-import { useRouteMatch } from 'react-router-dom';
-import CheckboxGroup from '../../../permission/components/checkboxGroup.component';
 import {toast} from "react-toastify";
-
-const api_endpoint = 'http://localhost:5000';
+import { createProfile, getPermissions } from '../../profile.actions';
+import { useHistory } from 'react-router-dom';
 
 const CreateProfile = () => {
-	const { path } = useRouteMatch();
+    const history = useHistory();
+    const [permissions, setPermissions] = useState([]);
 
 	//fetch permission data from database
-	const [permissions, setPermissions] = useState([]);
-
-	const getPermissions = async () => {
+	async function getPermissionList() {
 		try {
-			const { data } = await axios.get(`${api_endpoint}/api/permissions`, {
-				withCredentials: true,
-			});
-			// console.log(data);
+			const { data } = await getPermissions();
 			setPermissions(data);
-		} catch (error) {
-			console.log(error);
+		} catch {
+			console.log("error while getting permissions");
 		}
-	};
+	}
 
-	useEffect(() => {
-		getPermissions();
-	}, []);
-
-	//create or post profile data into database
+	//create profile into database
 	async function handleSubmit(data) {
-		console.log(data);
 		try {
-			const response = await axios.post(`${api_endpoint}/api/profiles`, data, {
-				withCredentials: true,
-			});
-			window.location.href = 'http://localhost:3000/platform/profiles';
+			await createProfile(data);
+			history.push('/platform/profiles');
 			toast.success('Profile Created Successfully', {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
@@ -47,15 +33,17 @@ const CreateProfile = () => {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
 			})
-			// alert(error.response);
-			// window.location.href = "http://localhost:3000/platform/profiles";
-			// alert("Error happened!");
 		}
 	}
 
+    useEffect(() => {
+		getPermissionList();
+	}, []);
+
 	const handleCancel = () => {
-		window.location.href = 'http://localhost:3000/platform/profiles';
+        history.push('/platform/profiles');
 	};
+    
 	return (
 		<div>
 			<div
