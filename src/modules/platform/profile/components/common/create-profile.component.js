@@ -3,7 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import { createSchema } from '../../profile.schema';
 import { useRouteMatch } from 'react-router-dom';
-import CheckboxGroup from '../../../permission/components/checkboxGroup.component';
+import CheckboxGroup from '../../../permission/components/checkbox-group.component';
 import {toast} from "react-toastify";
 
 const api_endpoint = 'http://localhost:5000';

@@ -1,27 +1,24 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { Field, Form, Formik, ErrorMessage } from "formik";
+
+import { getServices } from "../permission.actions";
 import PermissionSchema from "../permission.schema";
-import CheckboxGroup from "./checkboxGroup.component";
+import CheckboxGroup from "./checkbox-group.component";
 
-const baseUrl = "http://localhost:5000";
-
-const PermissionForm = ({ onPermissionSubmit, initialValues, buttonName }) => {
+const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
     const [services, setServices] = useState([]);
 
-    const getServices = async () => {
+    const getserviceData = async () => {
         try {
-            const response = await axios.get(`${baseUrl}/api/services`, {
-                withCredentials: true,
-            });
-            setServices(response.data.services);
+            const { data } = await getServices();
+            setServices(data.services);
         } catch (error) {
             console.log(error);
         }
     };
 
     useEffect(() => {
-        getServices();
+        getserviceData();
     }, []);
 
     return (
@@ -31,7 +28,7 @@ const PermissionForm = ({ onPermissionSubmit, initialValues, buttonName }) => {
                     enableReinitialize
                     initialValues={initialValues}
                     onSubmit={async (values, action) => {
-                        await onPermissionSubmit(values);
+                        await onSubmit(values);
                         action.resetForm();
                         action.setSubmitting(false);
                     }}

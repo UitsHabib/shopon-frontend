@@ -1,37 +1,13 @@
 import { Link, useRouteMatch } from "react-router-dom";
 import { Dropdown } from "react-bootstrap";
-import axios from "axios";
+
 import Table from "./common/table.component";
 import TableBody from "./common/tableBody.component";
 import TableHead from "./common/tableHead.component";
-import {toast} from "react-toastify";
 
-const baseUrl = "http://localhost:5000";
 
-const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
+const PermissionsTable = ({ permissions, sorting, onClickSort, onClickDeleteButton }) => {
     const { path } = useRouteMatch();
-
-    const handleDelete = async (id) => {
-        try {
-            const response = await axios.delete(
-                `${baseUrl}/api/permissions/${id}`,
-                { withCredentials: true }
-            );
-            const data = permissions.filter(
-                (permission) => permission.id !== response.data.id
-            );
-            setPermissions(data);
-            toast('Permission Deleted Successfully', {
-                backgroundColor: '#8329C5',
-                color: '#ffffff',
-            })
-        } catch (error) {
-            toast.warning(error.response.data, {
-                backgroundColor: '#8329C5',
-                color: '#ffffff',
-            })
-        }
-    };
 
     const columns = [
         {
@@ -93,7 +69,7 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
                             <Link className="dropdown-item" to={{ pathname: `${path}/update/${data.id}`, data: data }}>
                                 Edit
                             </Link>
-							<Dropdown.Item onClick={() => handleDelete(data.id)}>
+							<Dropdown.Item onClick={() => onClickDeleteButton(data.id)}>
 								Delete
 							</Dropdown.Item>
 						</Dropdown.Menu>
@@ -116,7 +92,7 @@ const PermissionsTable = ({ permissions, setPermissions, sorting, onSort }) => {
                 <TableHead
                     columns={columns}
                     sorting={sorting}
-                    onSort={onSort}
+                    onClickSort={onClickSort}
                 />
                 <TableBody items={permissions} columns={columns} />
             </Table>
