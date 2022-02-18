@@ -1,6 +1,6 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import moment from 'moment';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import Filter from './common/filtering.component';
 import Pagination from './common/pagination.component';
@@ -14,20 +14,20 @@ const ShowShops = (props) => {
 		onSort,
 		sortColumn,
 		totalItems,
+        totalShops,
 		pageCount,
 		activePage,
 		onClickPage,
-		addNewShop,
+		onClickAddNewShop,
 		shopCategories,
 		selectedCategory,
 		onClickFilter,
 	} = props;
 
+    const [addNewShopShow, setAddNewShopShow] = useState(false);
+
 	const now = new Date();
-
 	const dateString = moment(now).format('DD-MM-YYYY');
-
-	const [addNewShopShow, setAddNewShopShow] = useState(false);
 
 	function handleAddNewShop() {
 		setAddNewShopShow(!addNewShopShow);
@@ -50,7 +50,7 @@ const ShowShops = (props) => {
 							<Modal.Body>
 								<Formik
 									initialValues={{
-										shop_id: totalItems + 1,
+										shop_id: totalShops + 1,
 										shop_name: '',
 										shop_type: '',
 										shop_owner: '',
@@ -58,7 +58,7 @@ const ShowShops = (props) => {
 									}}
 									onSubmit={(values, actions) => {
 										setAddNewShopShow(!addNewShopShow);
-										addNewShop(values);
+										onClickAddNewShop(values);
 										actions.setSubmitting(false);
 									}}
 									validationSchema={addNewShopSchema}
@@ -109,11 +109,11 @@ const ShowShops = (props) => {
 															as="select"
 														>
 															<option>Click Here to Select</option>
-															{shopCategories.map((shopCategory) => {
+															{shopCategories.map((shopCategory, index) => {
 																return (
-																	<>
+																	<React.Fragment key={index}>
 																		<option>{shopCategory}</option>
-																	</>
+																	</React.Fragment>
 																);
 															})}
 														</Field>

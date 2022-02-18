@@ -1,5 +1,4 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import moment from 'moment';
 import { Button, Modal } from 'react-bootstrap';
 import { addNewShopSchema } from '../shop.schema';
 
@@ -7,33 +6,33 @@ export function ModalForShops(props) {
 	const {
         type,
 		targetShop,
-		showDetail,
-		setShowDetail,
-		updateDetail,
-		setUpdateDetail,
-		deleteDetail,
-		setDeleteDetail,
-		deleteShopData,
-		updateShop,
+		showDetailModal,
+		setShowDetailModal,
+		updateDetailModal,
+		setUpdateDetailModal,
+		deleteDetailModal,
+		setDeleteDetailModal,
+		onClickDeleteShop,
+		onClickUpdateShop,
 		shopCategories,
 	} = props;
 
-	const handleShowDetail = () => setShowDetail(!showDetail);
+	const handleShowDetail = () => setShowDetailModal(!showDetailModal);
 
-	const handleUpdateDetail = () => setUpdateDetail(!updateDetail);
+	const handleUpdateDetail = () => setUpdateDetailModal(!updateDetailModal);
 
 	const handleDeleteDetail = () => {
-		deleteShopData(targetShop);
-		setDeleteDetail(!deleteDetail);
+		onClickDeleteShop(targetShop);
+		setDeleteDetailModal(!deleteDetailModal);
 	};
 
-	const handleDeleteDetailClose = () => setDeleteDetail(!deleteDetail);
+	const handleDeleteDetailClose = () => setDeleteDetailModal(!deleteDetailModal);
 
 	return (
 		<>
 			{type === 'show' && (
 				<>
-					<Modal show={showDetail} onHide={handleShowDetail}>
+					<Modal show={showDetailModal} onHide={handleShowDetail}>
 						<Modal.Header closeButton>
 							<Modal.Title>Shop Details</Modal.Title>
 						</Modal.Header>
@@ -67,7 +66,7 @@ export function ModalForShops(props) {
 
 			{type === 'update' && (
 				<>
-					<Modal show={updateDetail} onHide={handleUpdateDetail}>
+					<Modal show={updateDetailModal} onHide={handleUpdateDetail}>
 						<Modal.Header closeButton>
 							<Modal.Title>Update Shop Details</Modal.Title>
 						</Modal.Header>
@@ -84,7 +83,7 @@ export function ModalForShops(props) {
 									onSubmit={(values, actions) => {
 										//console.log(values);
 										handleUpdateDetail();
-										updateShop(values);
+										onClickUpdateShop(values);
 										actions.setSubmitting(false);
 									}}
 									validationSchema={addNewShopSchema}
@@ -205,7 +204,7 @@ export function ModalForShops(props) {
 
 			{type === 'delete' && (
 				<>
-					<Modal show={deleteDetail} onHide={handleDeleteDetail}>
+					<Modal show={deleteDetailModal} onHide={handleDeleteDetail}>
 						<Modal.Header closeButton>
 							<Modal.Title>Delete Shop</Modal.Title>
 						</Modal.Header>
