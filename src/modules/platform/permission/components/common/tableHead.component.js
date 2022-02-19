@@ -1,15 +1,15 @@
-const TableHead = ({ columns, sorting, onSort }) => {
+const TableHead = ({ columns, sorting, onClickSort }) => {
     const handleSort = ({ path, sort }) => {
         if (!sort) return null;
 
         if (sorting.path === path) {
             if (sorting.order === "asc") {
-                onSort({ path, order: "desc" });
+                onClickSort({ path, order: "desc" });
             } else {
-                onSort({ path, order: "asc" });
+                onClickSort({ path, order: "asc" });
             }
         } else {
-            onSort({ path, order: "asc" });
+            onClickSort({ path, order: "asc" });
         }
     };
     
