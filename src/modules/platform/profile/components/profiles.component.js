@@ -1,86 +1,139 @@
-import React, { useEffect, useState } from 'react';
-import Table from './common/table.component';
-import axios from 'axios';
-import _ from 'lodash';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import Pagination from './common/pagination.component';
-import Dropdown from 'react-bootstrap/Dropdown';
-import { Link } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom';
-import { updateSchema } from '../profile.schema';
-import moment from 'moment';
-import {toast} from "react-toastify";
-
-const api_endpoint = 'http://localhost:5000';
+import React, { useEffect, useState } from "react";
+import Table from "./common/table.component";
+import _ from "lodash";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import Pagination from "./common/pagination.component";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Link } from "react-router-dom";
+import { useRouteMatch } from "react-router-dom";
+import { updateSchema } from "../profile.schema";
+import moment from "moment";
+import { toast } from "react-toastify";
+import {
+	deleteProfile,
+	getPermissions,
+	getProfiles,
+	getUsers,
+	updateProfile,
+} from "../profile.actions";
 
 const Profiles = () => {
 	const { path } = useRouteMatch();
 	const [profiles, setProfiles] = useState([]);
-
-	//fetch user data from database
-    const [users, setUsers] = useState([]);
-
-	async function getUsers() {
-		try {
-			const promise = axios
-				.get(`${api_endpoint}/api/users`, { withCredentials: true })
-				.then((res) => setUsers(res.data));
-			const response = await promise;
-		} catch (error) {
-			console.log('abuj', error);
-		}
-	}
-
-	useEffect(() => {
-		getUsers();
-	}, []);
-
-    const handleUser = (id) => {
-        const selectedUser = users.filter(user => user.id === id);
-        const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`
-        // console.log(fullName)
-        return fullName;
-    }
-
-	//fetch profile data from database
-	async function getProfiles() {
-		try {
-			const promise = axios
-				.get(`${api_endpoint}/api/profiles`, { withCredentials: true })
-				.then((res) => setProfiles(res.data));
-			const response = await promise;
-		} catch (error) {
-			console.log('abuj', error);
-		}
-	}
-
-	useEffect(() => {
-		getProfiles();
-	}, []);
-
-	//fetch permission data from database
+	const [users, setUsers] = useState([]);
 	const [permissions, setPermissions] = useState([]);
-
-	const getPermissions = async () => {
-		try {
-			const { data } = await axios.get(`${api_endpoint}/api/permissions`, {
-				withCredentials: true,
-			});
-			// console.log(data);
-			setPermissions(data);
-		} catch (error) {
-			console.log(error);
-		}
-	};
-
-	useEffect(() => {
-		getPermissions();
-	}, []);
-
-	//update profile section
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [update, setUpdate] = useState(null);
+	const [isDelete, setIsDelete] = useState(false);
+	const [deleteInfo, setDeleteInfo] = useState(null);
+	const [isDetail, setIsDetail] = useState(false);
+	const [detailInfo, setDetailInfo] = useState(null);
+	const [activePage, setActivePage] = useState(1);
+	const [pageCount, setPageCount] = useState(5);
+	const [sortColumn, setSortColumn] = useState({ path: "id", order: "asc" });
+	const [needToFetchProfile, setNeedToFetchProfile] = useState(true);
 
+	//fetch user data from database
+	async function getUserList() {
+		try {
+			const { data } = await getUsers();
+			setUsers(data);
+		} catch {
+			console.log("error while getting users");
+		}
+	}
+
+	//fetch profile data from database
+	async function getProfileList() {
+		try {
+			const { data } = await getProfiles();
+			setProfiles(data);
+		} catch {
+			console.log("error while getting profiles");
+		}
+	}
+
+	//fetch permission data from database
+	async function getPermissionList() {
+		try {
+			const { data } = await getPermissions();
+			setPermissions(data);
+		} catch {
+			console.log("error while getting permissions");
+		}
+	}
+
+	//update profile data in database
+	async function updateProfileList({ id, title, description, permissions }) {
+		try {
+			const allProfiles = [...profiles];
+			const profile = allProfiles.find((pf) => pf.id === id);
+			profile.title = title;
+			profile.description = description;
+			await updateProfile(id, title, description, permissions);
+			setProfiles(allProfiles);
+			toast.success(`Successfully updated`);
+			setNeedToFetchProfile(!needToFetchProfile);
+			handleUpdateModal();
+		} catch {
+			console.log("error while updating profiles");
+		}
+	}
+
+	//delete profile data from database
+	async function deleteProfileList() {
+		try {
+			const { id } = deleteInfo;
+			const allProfiles = [...profiles];
+			const newProfiles = allProfiles.filter((pf) => id !== pf.id);
+			await deleteProfile(id);
+			setProfiles(newProfiles);
+			toast.success(`Successfully deleted`);
+			setNeedToFetchProfile(!needToFetchProfile);
+			handleDeleteModal();
+		} catch (error) {
+			console.error("Error: ", error);
+		}
+	}
+
+	useEffect(() => {
+		getUserList();
+	}, []);
+
+	useEffect(() => {
+		getProfileList();
+	}, [needToFetchProfile]);
+
+	useEffect(() => {
+		getPermissionList();
+	}, []);
+
+	const handleUser = (id) => {
+		const selectedUser = users.filter((user) => user.id === id);
+        if(selectedUser[0]) {
+            const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`;
+            return fullName;
+        }
+        else return "User Deleted";
+	};
+
+	//detail profile section
+	const handleDetail = (data) => {
+		let permissions = [];
+		data.profile_permissions.map((pt) =>
+			permissions.push(pt.permission.title)
+		);
+		const created_at = moment(data.created_at).format("lll");
+		const updated_at = moment(data.updated_at).format("lll");
+		setDetailInfo({ ...data, permissions, created_at, updated_at });
+		setIsDetail((prev) => !prev);
+	};
+
+	const handleDetailModal = () => {
+		setIsDetail((prev) => !prev);
+	};
+
+	//update profile section
 	const handleUpdate = (data) => {
 		let permissions = [];
 		data.profile_permissions.map((pt) =>
@@ -90,95 +143,20 @@ const Profiles = () => {
 		setIsUpdate((prev) => !prev);
 	};
 
-	//update profile data from database
-	const handleClose = () => {
-		setUpdate(null);
+	const handleUpdateModal = () => {
 		setIsUpdate((prev) => !prev);
+		setUpdate(null);
 	};
 
-	async function updateProfile({ id, title, description, permissions }) {
-		const profile = profiles.find((pf) => pf.id === id);
-		profile.title = title;
-		profile.description = description;
-		try {
-			await axios.patch(
-				`${api_endpoint}/api/profiles/${id}`,
-				{ title, description, permissions },
-				{ withCredentials: true }
-			);
-			setProfiles([...profiles]);
-			// const response = await promise;
-			toast('Profile Updated Successfully', {
-				backgroundColor: '#8329C5',
-				color: '#ffffff',
-			})
-			window.location.href = `${path}`;
-		} catch (error) {
-			console.log('abuj', error);
-		}
-	}
-
 	//delete profile section
-	const [isDelete, setIsDelete] = useState(false);
-	const [deleteInfo, setDeleteInfo] = useState(null);
-
 	const handleDelete = (data) => {
-		// console.log(data)
 		setDeleteInfo(data);
 		setIsDelete((prev) => !prev);
 	};
 
-	const handleCancel = (data) => {
+	const handleDeleteModal = (data) => {
 		setIsDelete((prev) => !prev);
 	};
-
-	//delete profile data from database
-	async function deleteProfile() {
-		try {
-			const { id } = deleteInfo;
-			console.log(id);
-			const allProfiles = [...profiles];
-			const newProfiles = allProfiles.filter((pf) => id !== pf.id);
-			const response = await axios.delete(
-				`${api_endpoint}/api/profiles/${id}`,
-				{ withCredentials: true }
-			);
-			setProfiles(newProfiles);
-			toast('Profile Deleted Successfully', {
-				backgroundColor: '#8329C5',
-				color: '#ffffff',
-			})
-			window.location.href = `${path}`;
-		} catch (error) {
-			console.error('Error: ', error);
-		}
-	}
-
-	//detail profile section
-	const [isDetail, setIsDetail] = useState(false);
-	const [detailInfo, setDetailInfo] = useState(null);
-
-	const handleDetail = (data) => {
-		let permissions = [];
-		data.profile_permissions.map((pt) => permissions.push(pt.permission.title));
-		const created_at = moment(data.created_at).format('lll');
-		const updated_at = moment(data.updated_at).format('lll');
-		// console.log(permissions);
-		setDetailInfo({ ...data, permissions, created_at, updated_at });
-		setIsDetail((prev) => !prev);
-	};
-
-	const handleOff = () => {
-		setIsDetail((prev) => !prev);
-	};
-
-	const [sortColumn, setSortColumn] = useState({
-		path: 'id',
-		order: 'asc',
-	});
-
-	const [activePage, setActivePage] = useState(1);
-	const [pageCount, setPageCount] = useState(5);
 
 	const handleSort = (sortColumn) => {
 		setSortColumn(sortColumn);
@@ -207,65 +185,80 @@ const Profiles = () => {
 	const sortedProfiles = sortProfiles(paginatedProfiles);
 	const columns = [
 		{
-			label: 'Title',
-			path: 'title',
+			label: "Title",
+			path: "title",
 			sorting: true,
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}> {profile[key]}</td>
+				<td style={{ color: "#136CB2" }}> {profile[key]}</td>
 			),
 		},
 		{
-			label: 'Created By',
-			path: 'created_by',
+			label: "Created By",
+			path: "created_by",
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}> {handleUser(profile[key])}</td>
-			),
-		},
-		{
-			label: 'Created At',
-			path: 'created_at',
-			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}>
-					{' '}
-					{moment(profile[key]).format('lll')}
+				<td style={{ color: "#136CB2" }}>
+					{" "}
+					{handleUser(profile[key])}
 				</td>
 			),
 		},
 		{
-			label: 'Updated By',
-			path: 'updated_by',
+			label: "Created At",
+			path: "created_at",
 			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}> {handleUser(profile[key])}</td>
-			),
-		},
-		{
-			label: 'Updated At',
-			path: 'updated_at',
-			content: (profile, key) => (
-				<td style={{ color: '#136CB2' }}>
-					{' '}
-					{moment(profile[key]).format('lll')}
+				<td style={{ color: "#136CB2" }}>
+					{" "}
+					{moment(profile[key]).format("lll")}
 				</td>
 			),
 		},
 		{
-			label: 'Action',
-			path: 'action',
+			label: "Updated By",
+			path: "updated_by",
+			content: (profile, key) => (
+				<td style={{ color: "#136CB2" }}>
+					{" "}
+					{handleUser(profile[key])}
+				</td>
+			),
+		},
+		{
+			label: "Updated At",
+			path: "updated_at",
+			content: (profile, key) => (
+				<td style={{ color: "#136CB2" }}>
+					{" "}
+					{moment(profile[key]).format("lll")}
+				</td>
+			),
+		},
+		{
+			label: "Action",
+			path: "action",
 			content: (profile, key) => (
 				<td>
 					<Dropdown>
-						<Dropdown.Toggle variant="secondary" id="dropdown-basic">
+						<Dropdown.Toggle
+							variant="secondary"
+							id="dropdown-basic"
+						>
 							<i className="bi bi-pencil-square"></i>
 						</Dropdown.Toggle>
 
 						<Dropdown.Menu>
-							<Dropdown.Item onClick={() => handleDetail(profile)}>
+							<Dropdown.Item
+								onClick={() => handleDetail(profile)}
+							>
 								Details
 							</Dropdown.Item>
-							<Dropdown.Item onClick={() => handleUpdate(profile)}>
+							<Dropdown.Item
+								onClick={() => handleUpdate(profile)}
+							>
 								Edit
 							</Dropdown.Item>
-							<Dropdown.Item onClick={() => handleDelete(profile)}>
+							<Dropdown.Item
+								onClick={() => handleDelete(profile)}
+							>
 								Delete
 							</Dropdown.Item>
 						</Dropdown.Menu>
@@ -279,30 +272,36 @@ const Profiles = () => {
 		<>
 			<div>
 				<nav className="navbar navbar-light bg-light">
-					<h1 className="navbar-brand" style={{ marginLeft: '20px' }}>
+					<h1 className="navbar-brand" style={{ marginLeft: "20px" }}>
 						Profile List
 					</h1>
 					<span
 						style={{
-							marginRight: '20px',
+							marginRight: "20px",
 						}}
 					>
-						<Link style={{ textDecoration: 'none' }} to={`${path}/create`}>
-							<button type="button" className="btn btn-warning pull-right">
+						<Link
+							style={{ textDecoration: "none" }}
+							to={`${path}/create`}
+						>
+							<button
+								type="button"
+								className="btn btn-warning pull-right"
+							>
 								Create Profile
 							</button>
 						</Link>
 					</span>
 				</nav>
 			</div>
-			<div style={{ display: 'flex' }}>
+			<div style={{ display: "flex" }}>
 				<div
 					className="list-container"
 					style={{
-						width: '100%',
-						marginLeft: '10px',
-						marginRight: '10px',
-						paddingRight: '10px',
+						width: "100%",
+						marginLeft: "10px",
+						marginRight: "10px",
+						paddingRight: "10px",
 					}}
 				>
 					<Table
@@ -322,14 +321,14 @@ const Profiles = () => {
 				{isUpdate ? (
 					<div
 						className="modal"
-						style={{ display: isUpdate ? 'block' : 'none' }}
+						style={{ display: isUpdate ? "block" : "none" }}
 					>
 						<div
 							className="modal-backdrop"
-							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-								handleClose();
+								handleUpdateModal();
 							}}
 						>
 							<div
@@ -339,14 +338,14 @@ const Profiles = () => {
 									e.stopPropagation();
 								}}
 								style={{
-									textAlign: 'center',
-									width: '60%',
-									marginLeft: '20%',
-									marginTop: '10%',
-									border: '1px solid gray',
-									boxShadow: '1px 1px 10px gray',
-									borderRadius: '10px',
-									padding: '20px',
+									textAlign: "center",
+									width: "60%",
+									marginLeft: "20%",
+									marginTop: "10%",
+									border: "1px solid gray",
+									boxShadow: "1px 1px 10px gray",
+									borderRadius: "10px",
+									padding: "20px",
 								}}
 							>
 								<Formik
@@ -359,7 +358,7 @@ const Profiles = () => {
 									validationSchema={updateSchema}
 									onSubmit={(values, actions) => {
 										console.log(values);
-										updateProfile(values);
+										updateProfileList(values);
 										actions.setSubmitting(false);
 									}}
 								>
@@ -371,11 +370,17 @@ const Profiles = () => {
 												<button
 													type="button"
 													className="btn-close pull-right"
-													onClick={handleClose}
+													onClick={handleUpdateModal}
 													aria-label="Close"
 												></button>
-												<label className="form-label" htmlFor="title">
-													Title <span className="text-danger">*</span>
+												<label
+													className="form-label"
+													htmlFor="title"
+												>
+													Title{" "}
+													<span className="text-danger">
+														*
+													</span>
 												</label>
 												<Field
 													id="title"
@@ -388,8 +393,14 @@ const Profiles = () => {
 												</div>
 											</div>
 											<div className="form-group">
-												<label className="form-label" htmlFor="description">
-													Description <span className="text-danger">*</span>
+												<label
+													className="form-label"
+													htmlFor="description"
+												>
+													Description{" "}
+													<span className="text-danger">
+														*
+													</span>
 												</label>
 												<Field
 													id="description"
@@ -402,27 +413,38 @@ const Profiles = () => {
 												</div>
 											</div>
 											<div id="checkbox-group">
-												Permissions <span className="text-danger">*</span>
+												Permissions{" "}
+												<span className="text-danger">
+													*
+												</span>
 											</div>
 											<div
 												role="group"
 												aria-labelledby="checkbox-group"
-												style={{ textAlign: 'left' }}
+												style={{ textAlign: "left" }}
 											>
 												<div>
-													{permissions.map((permission) => (
-														<React.Fragment key={permission.id}>
-															<label>
-																<Field
-																	type="checkbox"
-																	name="permissions"
-																	value={permission.id.toString()}
-																/>{' '}
-																{permission.title}
-															</label>
-															<br />
-														</React.Fragment>
-													))}
+													{permissions.map(
+														(permission) => (
+															<React.Fragment
+																key={
+																	permission.id
+																}
+															>
+																<label>
+																	<Field
+																		type="checkbox"
+																		name="permissions"
+																		value={permission.id.toString()}
+																	/>{" "}
+																	{
+																		permission.title
+																	}
+																</label>
+																<br />
+															</React.Fragment>
+														)
+													)}
 													<div className="invalid-feedback d-block">
 														<ErrorMessage name="permissions" />
 													</div>
@@ -432,20 +454,20 @@ const Profiles = () => {
 											<button
 												className="btn btn-primary pull-right"
 												type="submit"
-												onClick={updateProfile}
+												onClick={updateProfileList}
 											>
 												Save changes
-											</button>{' '}
+											</button>{" "}
 											<button
 												type="button"
 												className="btn btn-light pull-right"
 												style={{
-													border: '1px solid gray',
-													backgroundColor: 'gray',
-													color: 'white',
-													marginRight: '10px',
+													border: "1px solid gray",
+													backgroundColor: "gray",
+													color: "white",
+													marginRight: "10px",
 												}}
-												onClick={handleClose}
+												onClick={handleUpdateModal}
 											>
 												Cancel
 											</button>
@@ -462,14 +484,14 @@ const Profiles = () => {
 				{isDelete ? (
 					<div
 						className="modal"
-						style={{ display: isDelete ? 'block' : 'none' }}
+						style={{ display: isDelete ? "block" : "none" }}
 					>
 						<div
 							className="modal-backdrop"
-							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-								handleCancel();
+								handleDeleteModal();
 							}}
 						>
 							<div
@@ -479,26 +501,29 @@ const Profiles = () => {
 									e.stopPropagation();
 								}}
 								style={{
-									textAlign: 'center',
-									width: '50%',
-									marginLeft: '25%',
-									marginTop: '10%',
-									border: '1px solid gray',
-									boxShadow: '1px 1px 10px gray',
-									borderRadius: '10px',
-									padding: '20px',
+									textAlign: "center",
+									width: "50%",
+									marginLeft: "25%",
+									marginTop: "10%",
+									border: "1px solid gray",
+									boxShadow: "1px 1px 10px gray",
+									borderRadius: "10px",
+									padding: "20px",
 								}}
 							>
 								<div className="container">
 									<button
 										type="button"
 										className="btn-close pull-right"
-										onClick={handleCancel}
+										onClick={handleDeleteModal}
 										aria-label="Close"
 									></button>
 									<h1>Delete Account</h1>
 									<hr />
-									<p>Are you sure you want to delete this account?</p>
+									<p>
+										Are you sure you want to delete this
+										account?
+									</p>
 									<br />
 
 									<div className="clearfix">
@@ -506,19 +531,19 @@ const Profiles = () => {
 											type="button"
 											className="btn btn-light"
 											style={{
-												border: '1px solid gray',
-												backgroundColor: 'gray',
-												color: 'white',
-												marginRight: '10px',
+												border: "1px solid gray",
+												backgroundColor: "gray",
+												color: "white",
+												marginRight: "10px",
 											}}
-											onClick={handleCancel}
+											onClick={handleDeleteModal}
 										>
 											Cancel
 										</button>
 										<button
 											type="button"
 											className="btn btn-danger"
-											onClick={deleteProfile}
+											onClick={deleteProfileList}
 										>
 											Delete
 										</button>
@@ -534,15 +559,14 @@ const Profiles = () => {
 				{isDetail ? (
 					<div
 						className="modal"
-						style={{ display: isDetail ? 'block' : 'none' }}
+						style={{ display: isDetail ? "block" : "none" }}
 					>
-						{/* <div className="modal-dialog"> */}
 						<div
 							className="modal-backdrop"
-							style={{ backgroundColor: 'rgba(0, 0, 0, 0.1)' }}
+							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-								handleOff();
+								handleDetailModal();
 							}}
 						>
 							<div
@@ -552,21 +576,20 @@ const Profiles = () => {
 									e.stopPropagation();
 								}}
 								style={{
-									// textAlign: "center",
-									width: '80%',
-									marginLeft: '10%',
-									marginTop: '10%',
-									border: '1px solid gray',
-									boxShadow: '1px 1px 10px gray',
-									borderRadius: '10px',
-									padding: '20px',
+									width: "80%",
+									marginLeft: "10%",
+									marginTop: "10%",
+									border: "1px solid gray",
+									boxShadow: "1px 1px 10px gray",
+									borderRadius: "10px",
+									padding: "20px",
 								}}
 							>
 								<div className="container">
 									<button
 										type="button"
 										className="btn-close pull-right"
-										onClick={handleOff}
+										onClick={handleDetailModal}
 										aria-label="Close"
 									></button>
 
@@ -577,35 +600,45 @@ const Profiles = () => {
 									<hr />
 									<div className="form-group">
 										<label>
-											<strong>Title:</strong> {detailInfo.title}
+											<strong>Title:</strong>{" "}
+											{detailInfo.title}
 											<br />
 											<br />
-											<strong>Slug:</strong> {detailInfo.slug}
+											<strong>Slug:</strong>{" "}
+											{detailInfo.slug}
 											<br />
 											<br />
-											<strong>Type:</strong> {detailInfo.type}
+											<strong>Type:</strong>{" "}
+											{detailInfo.type}
 											<br />
 											<br />
-											<strong>Description:</strong> {detailInfo.description}
+											<strong>Description:</strong>{" "}
+											{detailInfo.description}
 											<br />
 											<br />
-											<strong>Created At:</strong> {detailInfo.created_at}
+											<strong>Created At:</strong>{" "}
+											{detailInfo.created_at}
 											<br />
 											<br />
-											<strong>Updated At:</strong> {detailInfo.updated_at}
+											<strong>Updated At:</strong>{" "}
+											{detailInfo.updated_at}
 											<br />
 											<br />
-											<strong>Profile Permissions:</strong>
-											{detailInfo.permissions.map((item) => (
-												<p
-													key={item}
-													style={{
-														marginLeft: '50px',
-													}}
-												>
-													{item}
-												</p>
-											))}
+											<strong>
+												Profile Permissions:
+											</strong>
+											{detailInfo.permissions.map(
+												(item) => (
+													<p
+														key={item}
+														style={{
+															marginLeft: "50px",
+														}}
+													>
+														{item}
+													</p>
+												)
+											)}
 											<br />
 										</label>
 									</div>
@@ -613,12 +646,12 @@ const Profiles = () => {
 										type="button"
 										className="btn btn-light pull-right"
 										style={{
-											border: '1px solid gray',
-											backgroundColor: 'gray',
-											color: 'white',
-											marginRight: '10px',
+											border: "1px solid gray",
+											backgroundColor: "gray",
+											color: "white",
+											marginRight: "10px",
 										}}
-										onClick={handleOff}
+										onClick={handleDetailModal}
 									>
 										Close
 									</button>
@@ -627,7 +660,6 @@ const Profiles = () => {
 						</div>
 					</div>
 				) : (
-					// </div>
 					<div />
 				)}
 			</div>
