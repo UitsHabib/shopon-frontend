@@ -5,7 +5,6 @@ import getLoggedInUser from '../../../../core/service/get-logged-in-user';
 const MyProfile = (props) => {
 	const [currentUser, setCurrentUser] = useState(getLoggedInUser());
 	const { path } = useRouteMatch();
-	console.log(currentUser);
 
 	return (
 		<div className="d-flex flex-wrap justify-content-around">

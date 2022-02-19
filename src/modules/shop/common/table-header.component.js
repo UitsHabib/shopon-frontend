@@ -1,5 +1,4 @@
 const TableHeader = ({ columns, onSort, sortColumn }) => {
-    //sortColumn = { path: id, order: desc/asc }
     function handleSort({ path, sorting }) {
         if (!sorting) return;
 

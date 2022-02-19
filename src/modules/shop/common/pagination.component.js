@@ -1,6 +1,7 @@
 import _ from "lodash";
 
 const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
+    
     const totalPages = Math.ceil(totalItems / pageCount);
     const pages = _.range(1, totalPages + 1, 1);
 

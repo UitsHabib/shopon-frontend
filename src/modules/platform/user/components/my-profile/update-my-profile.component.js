@@ -1,61 +1,35 @@
-import axios from 'axios';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
+import { toast } from 'react-toastify';
 
 import getLoggedInUser from '../../../../core/service/get-logged-in-user';
 import { updateMyProfileSchema } from '../../user.schema';
+import { updateMyProfile } from './my-profile.action';
 
 const UpdateMyProfile = (props) => {
 	const history = useHistory();
 	const { path } = useRouteMatch();
 
-	//const [roles, setRoles] = useState(["Role 1", "Role 2", "Role 3", "Role 4", "Role 5"]);
-
 	const [currentUser, setCurrentUser] = useState(getLoggedInUser());
-	//currentUser.role_id = ["Role 1", "Role 2"];
-	//console.log(currentUser.role_id);
-
-	const api = 'http://localhost:5000/api';
-
-	async function updateMyProfile(newMyProfile) {
-		const newProfile = {
-			first_name: newMyProfile.first_name,
-			last_name: newMyProfile.last_name,
-			status: newMyProfile.status,
-			phone: newMyProfile.phone,
-		};
-
+    
+	async function handleUpdateMyProfile(newMyProfile) {
 		try {
-			const { data } = await axios.patch(
-				`${api}/users/${currentUser.id}`,
-				newProfile,
-				{ withCredentials: true }
-			);
-			//console.log(data);
+			const { data } = await updateMyProfile(newMyProfile);
 			localStorage.setItem('loggedInUser', JSON.stringify(data));
 			history.push('/my-profile');
+            toast.success('Profile Updated Successfully', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 		} catch (error) {
-			alert('Error Happend!');
+			toast.error('Profile Updatation Failed', {
+				backgroundColor: '#8329C5',
+				color: '#ffffff',
+			})
 		}
 	}
-
-	// async function getRoles() {
-	//     try {
-	//         const { data } = await axios.get(`${api}/roles`, {
-	//             withCredentials: true,
-	//         });
-	//         //console.log(data);
-	//         //setRoles(data);
-	//     } catch (error) {
-	//         console.log(error);
-	//     }
-	// }
-
-	// useEffect(() => {
-	//     getRoles();
-	// }, []);
 
 	return (
 		<div className="d-flex flex-wrap justify-content-center">
@@ -74,8 +48,7 @@ const UpdateMyProfile = (props) => {
 						phone: currentUser.phone ? currentUser.phone : '',
 					}}
 					onSubmit={(values, actions) => {
-						//console.log(values);
-						updateMyProfile(values);
+						handleUpdateMyProfile(values);
 						actions.setSubmitting(false);
 					}}
 					validationSchema={updateMyProfileSchema}
@@ -160,63 +133,6 @@ const UpdateMyProfile = (props) => {
 											<ErrorMessage name="phone" />
 										</div>
 									</div>
-
-									{/* <div className="form-group mb-3">
-                                        <label
-                                            htmlFor="role_id"
-                                            className="form-label"
-                                        >
-                                            Roles 
-                                        </label>
-                                        <br />
-                                        {roles.map((role, index) => {
-                                            return (
-                                                <React.Fragment key={index}>
-                                                    <Field
-                                                        type="checkbox"
-                                                        value={role}
-                                                        className="mx-2 leading-tight"
-                                                        id="role_id"
-                                                        name="role_id"
-                                                    />
-                                                    <span className="text-sm">
-                                                        {role}
-                                                    </span>
-                                                    <div className="invalid-feedback d-block">
-                                                        <ErrorMessage name="role_id" />
-                                                    </div>
-                                                </React.Fragment>
-                                            );
-                                        })}
-                                    </div>
-
-                                    <div className="form-group mb-3">
-                                        <label
-                                            htmlFor="status"
-                                            className="form-label"
-                                        >
-                                            Active Status
-                                        </label>
-                                        <Field
-                                            name="status"
-                                            value="On"
-                                            className="mx-2 leading-tight"
-                                            type="radio"
-                                        />
-                                        <span className="text-sm">On</span>
-                                        <Field
-                                            name="status"
-                                            value="Off"
-                                            className="mx-2 leading-tight"
-                                            type="radio"
-                                        />
-                                        <span className="text-sm">
-                                           Off
-                                        </span>
-                                        <div className="invalid-feedback d-block">
-                                            <ErrorMessage name="status" />
-                                        </div>
-                                    </div> */}
 
 									<div className="d-flex flex-wrap justify-content-between">
 										<button type="submit" className="btn btn-primary">
