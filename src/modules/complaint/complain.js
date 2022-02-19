@@ -51,7 +51,7 @@ const Complain = () => {
 			label: "Complain Description",
 			path: "complain",
 			sorting: true,
-			content: (complain, key) => <td style={{ width: "500px" }}>{complain[key]}</td>,
+			content: (complain, key) => <td style={{ width: "560px" }}>{complain[key]}</td>,
 		},
 		{
 			label: "Shop Name",

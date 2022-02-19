@@ -220,11 +220,11 @@ const ModalComplain = (props) => {
                                                         </div>
                                                     </div>
                                                     <div className="d-flex flex-wrap justify-content-between">
-                                                        <button type="submit" className="btn btn-success">
+                                                        <button type="submit" className="btn btn-dark">
                                                             Save Changes
                                                         </button>
                                                         <Button
-                                                            variant="warning"
+                                                            variant="danger"
                                                             onClick={handleUpdateDetail}
                                                         >
                                                             Close
@@ -273,10 +273,10 @@ const ModalComplain = (props) => {
                             </ul>
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button variant="danger" onClick={handleDeleteDetail}>
+                            <Button variant="dark" onClick={handleDeleteDetail}>
                                 Delete
                             </Button>
-                            <Button variant="warning" onClick={handleDeleteDetailClose}>
+                            <Button variant="danger" onClick={handleDeleteDetailClose}>
                                 Close
                             </Button>
                         </Modal.Footer>
