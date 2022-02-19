@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react';
 import ShowComplain from './component/show-complains.component'
 import ModalComplain from './component/common/modalComplain.component';
 import { getComplainData } from './component/complain.action';
+import { toast } from 'react-toastify';
 
 const Complain = () => {
 	const { path } = useRouteMatch;
@@ -125,6 +126,7 @@ const Complain = () => {
 		const newComplainList = complains.filter(
 			(complain) => complain.id !== targetComplain.id
 		)
+		toast.success(`Successfully deleted`);
 		setComplains(newComplainList);
 	}
 
