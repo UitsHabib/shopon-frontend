@@ -244,35 +244,12 @@ const ModalComplain = (props) => {
             {type === 'delete' && (
                 <>
                     <Modal show={deleteDetail} onHide={handleDeleteDetail}>
-                        <Modal.Header closeButton>
-                            <Modal.Title>Delete Complain</Modal.Title>
-                        </Modal.Header>
                         <Modal.Body>
-                            <ul className="list-group">
-                                <li className="list-group-item">
-                                    User ID: {targetComplain.id}
-                                </li>
-                                <li className="list-group-item">
-                                    User Name: {targetComplain.user_name}
-                                </li>
-                                <li className="list-group-item">
-                                    User Image: {targetComplain.userUrl}
-                                </li>
-                                <li className="list-group-item">
-                                    Complain: {targetComplain.complain}
-                                </li>
-                                <li className="list-group-item">
-                                    Shop Name: {targetComplain.shop_name}
-                                </li>
-                                <li className="list-group-item">
-                                    Category: {targetComplain.shop_type}
-                                </li>
-                                <li className="list-group-item">
-                                    Created At: {targetComplain.date_created}
-                                </li>
-                            </ul>
+                            <div className="modal-body d-flex justify-content-center">
+                                <h2>Are you sure you want to delete?</h2>
+                            </div>
                         </Modal.Body>
-                        <Modal.Footer>
+                        <Modal.Footer className='d-flex justify-content-center'>
                             <Button variant="dark" onClick={handleDeleteDetail}>
                                 Delete
                             </Button>

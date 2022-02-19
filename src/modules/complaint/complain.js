@@ -102,7 +102,6 @@ const Complain = () => {
 			console.log(data);
 			setComplains(data.complains);
 			setShopCategories(data.shop_categories);
-			console.log(shopCategories);
 		} catch (error) {
 			console.log("Ekhane errpor")
 			console.log(error);
@@ -119,6 +118,7 @@ const Complain = () => {
 		newComplain.shop_name = targetComplain.shop_name;
 		newComplain.shop_type = targetComplain.shop_type;
 
+		toast.success(`Successfully Updated`);
 		setComplains(newComplainList);
 	}
 
@@ -132,6 +132,7 @@ const Complain = () => {
 
 	async function addNewComplain(complain) {
 		setComplains((prev) => [...prev, complain]);
+		toast.success(`Successfully Added`);
 	}
 
 	function showShopDropdown(targetComplain) {
