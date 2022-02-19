@@ -9,6 +9,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.1.1",
     "bootstrap-icons": "^1.8.1",
+    "concurrently": "^7.0.0",
     "date-fns": "^2.22.1",
     "date-fns-tz": "^1.1.4",
     "font-awesome": "^4.7.0",
@@ -34,7 +35,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "json-server": "json-server --watch src/Database/db.json --host 127.0.0.1 --port 3003",
+    "json-server": "json-server --watch src/modules/complaint/db/complains-data.json --host 127.0.0.1 --port 3003",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

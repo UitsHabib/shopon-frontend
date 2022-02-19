@@ -1,2 +1,2 @@
-import ComplaintDummy from './ComplaintDummy';
-export { ComplaintDummy };
+import Complain from './complain';
+export { Complain };

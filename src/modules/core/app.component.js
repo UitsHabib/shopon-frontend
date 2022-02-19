@@ -8,8 +8,8 @@ import ServiceList from './components/service-list.component';
 import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes, MyProfile, Permissions, UpdateMyProfile } from '../platform';
 import { Customer } from '../customer';
 import { Shops } from '../shop';
-import { ComplaintDummy } from '../complaint';
 import { ToastContainer } from 'react-toastify';
+import { Complain } from '../complaint';
 
 function App() {
     return (
@@ -24,7 +24,7 @@ function App() {
                 <Route path="/platform" component={PlatformRoutes} />
                 <PrivateRoute path="/customer" component={Customer} />
                 <PrivateRoute path="/shop" component={Shops} />
-                <Route path="/complaint" component={ComplaintDummy} />
+                <PrivateRoute path="/complaint" component={Complain} />
 
                 <PrivateRoute path="/my-profile" component={MyProfile} />
                 <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
