@@ -4,7 +4,7 @@ import { Dropdown } from 'react-bootstrap';
 const Filter = ({ shopCategories, selectedCategory, onClickFilter }) => {
     return (
         <Dropdown>
-            <Dropdown.Toggle variant="outline-success" id="dropdown-basic">
+            <Dropdown.Toggle variant="outline-dark" id="dropdown-basic">
                 Select Category
             </Dropdown.Toggle>
             <Dropdown.Menu>

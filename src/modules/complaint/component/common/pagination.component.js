@@ -6,7 +6,7 @@ const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
 
     if (totalItems <= pageCount) return null;
     return (
-        <nav aria-label="Page navigation example">
+        <nav aria-label="Page navigation example" className="d-flex justify-content-center" >
             <ul className="pagination">
                 <li
                     onClick={() =>
@@ -14,7 +14,11 @@ const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
                     }
                     className="page-item"
                 >
-                    <a className="page-link">Previous</a>
+                    <li className="page-item">
+                        <a className="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
                 </li>
                 {pages.map((page, index) => {
                     return (
@@ -40,7 +44,11 @@ const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
                     }
                     className="page-item"
                 >
-                    <a className="page-link">Next</a>
+                    <li className="page-item">
+                        <a className="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
                 </li>
             </ul>
         </nav>

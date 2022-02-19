@@ -36,7 +36,7 @@ const ShowComplain = (props) => {
 		<>
 			<div className="d-flex flex-wrap justify-content-between">
 				<h5 className="my-3 p-2">Complain Table</h5>
-				<Button className="my-3 mt-2" variant="success" onClick={handleAddNewComplain}>
+				<Button className="my-3 mt-2" variant="dark" onClick={handleAddNewComplain}>
 					Add New Complain
 				</Button>
 
