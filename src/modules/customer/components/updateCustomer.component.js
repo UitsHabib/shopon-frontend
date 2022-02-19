@@ -1,5 +1,7 @@
 import { Formik, Field, Form } from "formik";
 import { SignInSchema } from "../customer.schema";
+import { toast } from "react-toastify";
+
 function UpdateCustomer({ onUpdateProfile, isUpdate, item, onCloseModal }) {
     console.log(item);
     return (
@@ -39,8 +41,13 @@ function UpdateCustomer({ onUpdateProfile, isUpdate, item, onCloseModal }) {
                                 ip_address: item.ip_address,
                             }}
                             onSubmit={(values) => {
-                                // console.log(values);
+                                toast("Customer Updated", {
+                                    backgroundColor: "#8329C5",
+                                    color: "#ffffff",
+                                });
+                                console.log(values);
                                 onUpdateProfile(values);
+
                                 // alert(JSON.stringify(values, null, 2));
                             }}
                             validationSchema={SignInSchema}
