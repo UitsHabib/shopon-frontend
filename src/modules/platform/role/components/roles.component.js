@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 import Modal from 'react-modal';
+import moment from 'moment';
 
 import Table from './common/table.component';
 import Pagination from './common/pagination.component';
@@ -38,7 +39,9 @@ function Roles() {
     {
       label: 'Created At',
       key: 'created_at',
-      content: (role, key) => <td scope="row">{role[key]}</td>,
+      content: (role, key) => (
+        <td scope="row">{moment(role[key]).format('lll')}</td>
+      ),
     },
     {
       label: 'Action',
