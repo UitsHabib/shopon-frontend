@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from "react-redux";
+
 import Table from '../../../core/components/table.component';
 import Pagination from '../../../core/components/pagination.component';
 import _ from 'lodash';
@@ -10,8 +12,8 @@ import { toast } from 'react-toastify';
 
 const Users = (props) => {
     const { path } = useRouteMatch();
+    const dispatch = useDispatch();
 
-    const [users, setUsers] = useState([]);
     const [sortColumn, setSortColumn] = useState({
         path: 'profile_id',
         order: 'asc',
@@ -79,6 +81,8 @@ const Users = (props) => {
         },
     ];
 
+    const users = useSelector(state => state.userReducer.users);
+
     const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
     const sortUsers = (users) => {
@@ -104,17 +108,8 @@ const Users = (props) => {
         return paginatedUsers;
     };
 
-    async function getUserList() {
-        try {
-            const { data } = await getUsers();
-            setUsers(data);
-        } catch {
-            console.log('error while getting users');
-        }
-    }
-
     useEffect(() => {
-        getUserList();
+        dispatch(getUsers());
     }, [needToFetchUser]);
 
     const paginatedUsers = paginateUsers();
