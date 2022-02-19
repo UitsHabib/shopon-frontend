@@ -1,16 +1,15 @@
-import axios from "axios";
-import { Field, Form, Formik, ErrorMessage } from "formik";
+import {toast} from "react-toastify";
 import { useEffect, useState } from "react";
+import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
 import { updateUserSchema } from "../user.schema";
-import {toast} from "react-toastify";
-
-const api_endPoint = "http://localhost:5000/api";
+import { getProfiles, getRoles, getUser, updateUser } from "../user.actions";
 
 const UpdateUser = (props) => {
-    const usersID = props.location.state.data;
     const { path } = useRouteMatch();
+    const usersID = props.location.state.data;
+    
     const [user, setUser] = useState();
     const [roles, setRoles] = useState();
     const [profiles, setProfiles] = useState();
@@ -22,7 +21,7 @@ const UpdateUser = (props) => {
         return value;
     };
 
-    async function updateUserAdmin(data) {
+    async function handleUpdateUser(data) {
         try {
             const updatedUser = {
                 profile_id: getProfile_id(data.profile_id),
@@ -33,73 +32,55 @@ const UpdateUser = (props) => {
                 role_id   : getRole_id(data.role_id),
             };
 
-            await axios.patch(`http://localhost:5000/api/users/${usersID}`,updatedUser,{ withCredentials: true });
+            await updateUser( usersID , updatedUser );
             
-            // alert(`User ${user.first_name} ${user.last_name} updated`);
-            toast.success(`User ${user.first_name} ${user.last_name} updated`, {
-                backgroundColor: '#8329C5',
-                color: '#ffffff',
-            })
+            toast.success(`User ${user.first_name} ${user.last_name} updated`, 
+            { backgroundColor: '#8329C5', color: '#ffffff', });
             props.history.push("/platform/users");
 
             // props.history.push(`${props.history.state?.prevPath}`);
         } catch (error) {
-            toast.warning(error.response.data, {
-                backgroundColor: '#8329C5',
-                color: '#ffffff',
-            })
-            console.log(error.response.data);
+            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
     }
 
-    async function getUser(user_id) {
+    const getProfile_id = title => profiles.find((profile) => profile.title === title).id;
+    const getRole_id = title => roles.find((role) => role.title === title).id;
+
+    async function getUserDetails(user_id) {
         try {
             setDataImported(true);
-            const {data} = await axios.get(`${api_endPoint}/users/${user_id}`,{ withCredentials: true });
+            const {data} = await getUser(user_id);
             setUser(data);
         } catch (error) {
-            console.log(error);
+            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
     }
-    async function getRoles() {
+    async function getRolesList() {
         try {
             setDataImported(true);
-            const {data} = await axios.get(`${api_endPoint}/roles`,{ withCredentials: true });
+            const {data} = await getRoles();
             setRoles(data);
         } catch (error) {
-            console.log(error);
+            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
     }
-    async function getProfiles() {
+    async function getProfilesList() {
         try {
             setDataImported(true);
-            const {data} = await axios.get(`${api_endPoint}/profiles`,{ withCredentials: true });
+            const {data} = await getProfiles();
             setProfiles(data);
         } catch (error) {
-            console.log(error);
+            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
     }
-
-    const getProfile_id = (title) => {
-        if(title  && profiles){
-        let profileID;
-        profiles.filter(profile =>{ if (profile.title ===  title)profileID = profile.id;})
-        return profileID;}
-    }    
-    const getRole_id = (title) => {
-        if(title && roles){
-        let roleID;
-        roles.filter(role =>{ if(role.title ===  title)roleID = role.id; })
-        return roleID;}
-    }
-
 
 
     useEffect(() => {
         if (!dataImported) {
-            getRoles();
-            getProfiles();
-            getUser(usersID);
+            getRolesList();
+            getProfilesList();
+            getUserDetails(usersID);
         }
     }, [user, dataImported, roles , profiles]);
 
@@ -135,7 +116,7 @@ const UpdateUser = (props) => {
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
-                            updateUserAdmin(values);
+                            handleUpdateUser(values);
                             actions.setSubmitting(false);
                         }}
                     >
@@ -292,7 +273,6 @@ const UpdateUser = (props) => {
                                             })
                                             : ""
                                         }
-
                                     </Field>
                                     <div className="invalid-feedback d-block">
                                         <ErrorMessage name="role_id" />
@@ -313,7 +293,7 @@ const UpdateUser = (props) => {
             ) : (
                 <div className="mx-auto text-center w-50">
                     <p className="text-white bg-dark text-xl font-weight-bold">
-                        There is no user of ID {usersID}
+                        User Not Found!
                     </p>
                 </div>
             )}
