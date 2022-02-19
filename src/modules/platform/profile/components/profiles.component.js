@@ -110,8 +110,11 @@ const Profiles = () => {
 
 	const handleUser = (id) => {
 		const selectedUser = users.filter((user) => user.id === id);
-		const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`;
-		return fullName;
+        if(selectedUser[0]) {
+            const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`;
+            return fullName;
+        }
+        else return "User Deleted";
 	};
 
 	//detail profile section
