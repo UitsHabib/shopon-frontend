@@ -121,6 +121,7 @@ const ModalComplain = (props) => {
                                                         <label htmlFor="user_name" className="form-label">
                                                             User Name
                                                         </label>
+                                                        <span className="text-danger">*</span>
                                                         <Field
                                                             type="text"
                                                             className="form-control"
@@ -151,6 +152,7 @@ const ModalComplain = (props) => {
                                                         <label htmlFor="complain" className="form-label">
                                                             Complain Description
                                                         </label>
+                                                        <span className="text-danger">*</span>
                                                         <Field
                                                             type="text"
                                                             className="form-control"
@@ -166,6 +168,7 @@ const ModalComplain = (props) => {
                                                         <label htmlFor="shop_name" className="form-label">
                                                             Shop Name
                                                         </label>
+                                                        <span className="text-danger">*</span>
                                                         <Field
                                                             type="text"
                                                             className="form-control"
@@ -181,6 +184,7 @@ const ModalComplain = (props) => {
                                                         <label htmlFor="shop_type" className="form-label">
                                                             Shop Category
                                                         </label>
+                                                        <span className="text-danger">*</span>
                                                         <Field
                                                             className="form-control"
                                                             name="shop_type"
