@@ -12,18 +12,6 @@ export function deleteUser(userId) {
     });
 }
 
-export function getProfiles() {
-    return axios.get(`${baseUrl}/api/profiles`, {
-        withCredentials: true,
-    });
-}
-
-export function getRoles() {
-    return axios.get(`${baseUrl}/api/roles`, {
-        withCredentials: true,
-    });
-}
-
 export function createUser(user) {
     return axios.post("http://localhost:5000/api/users", user, {
         withCredentials: true,
