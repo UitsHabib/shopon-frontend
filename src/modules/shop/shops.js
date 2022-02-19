@@ -131,6 +131,7 @@ const Shops = (props) => {
         // } catch (error) {
         // 	console.log(error);
         // }
+        console.log(targetShop);
         const newShopList = [...shops];
         let newShop = newShopList.find(
             (shop) => shop.shop_id === targetShop.shop_id

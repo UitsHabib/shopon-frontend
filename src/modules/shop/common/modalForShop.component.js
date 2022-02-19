@@ -134,11 +134,9 @@ export function ModalForShops(props) {
 															as="select"
 														>
 															<option>Click Here to Select</option>
-															{shopCategories.map((shopCategory) => {
+															{shopCategories.map((shopCategory, index) => {
 																return (
-																	<>
-																		<option>{shopCategory}</option>
-																	</>
+																		<option key={index}>{shopCategory}</option>
 																);
 															})}
 														</Field>

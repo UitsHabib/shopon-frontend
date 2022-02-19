@@ -15,5 +15,5 @@ export function updateShop(targetShop) {
 }
 
 export function addNewShop(shop) {
-   return axios.post(`${baseUrl}/api/shops/`, shop, { withCredentials: 'true' })
+   return axios.post(`${baseUrl}/api/shops`, shop, { withCredentials: 'true' })
 }

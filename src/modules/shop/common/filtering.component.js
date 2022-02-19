@@ -4,7 +4,7 @@ const Filter = ({ shopCategories, selectedCategory, onClickFilter }) => {
     return (
         <Dropdown>
             <Dropdown.Toggle variant="outline-success" id="dropdown-basic">
-                Select Category
+               {selectedCategory}
             </Dropdown.Toggle>
             <Dropdown.Menu>
                 {shopCategories.map((item, index) => {
