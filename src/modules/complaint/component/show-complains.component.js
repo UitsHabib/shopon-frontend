@@ -88,6 +88,7 @@ const ShowComplain = (props) => {
 														<label htmlFor="user_name" className="form-label">
 															User Name
 														</label>
+														<span className="text-danger">*</span>
 														<Field
 															type="text"
 															className="form-control"
@@ -118,6 +119,7 @@ const ShowComplain = (props) => {
 														<label htmlFor="complain" className="form-label">
 															Complain Description
 														</label>
+														<span className="text-danger">*</span>
 														<Field
 															type="text"
 															as="textarea"
@@ -134,6 +136,7 @@ const ShowComplain = (props) => {
 														<label htmlFor="shop_name" className="form-label">
 															Shop Name
 														</label>
+														<span className="text-danger">*</span>
 														<Field
 															type="shop_name"
 															className="form-control"
@@ -149,6 +152,7 @@ const ShowComplain = (props) => {
 														<label htmlFor="shop_type" className="form-label">
 															Shop Category
 														</label>
+														<span className="text-danger">*</span>
 														<Field
 															className="form-control"
 															name="shop_type"
@@ -188,7 +192,7 @@ const ShowComplain = (props) => {
 														</div>
 													</div>
 													<div className="d-flex flex-wrap justify-content-between">
-														<button type="submit" className="btn btn-success">
+														<button type="submit" className="btn btn-dark">
 															Add Complain
 														</button>
 														<Button
