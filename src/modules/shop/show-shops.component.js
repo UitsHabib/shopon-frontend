@@ -85,7 +85,7 @@ const ShowShops = (props) => {
 
 													<div className="form-group mb-3">
 														<label htmlFor="shop_name" className="form-label">
-															Shop Name
+															Shop Name <span className="text-danger">*</span>
 														</label>
 														<Field
 															type="text"
@@ -100,7 +100,7 @@ const ShowShops = (props) => {
 
 													<div className="form-group mb-3">
 														<label htmlFor="shop_type" className="form-label">
-															Shop Category
+															Shop Category <span className="text-danger">*</span>
 														</label>
 														<Field
 															className="form-control"
@@ -124,7 +124,7 @@ const ShowShops = (props) => {
 
 													<div className="form-group mb-3">
 														<label htmlFor="shop_owner" className="form-label">
-															Shop Owner
+															Shop Owner <span className="text-danger">*</span>
 														</label>
 														<Field
 															type="shop_owner"

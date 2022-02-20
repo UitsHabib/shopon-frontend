@@ -32,11 +32,11 @@ const MyProfile = (props) => {
 						<li className="list-group-item">
 							User: {currentUser.first_name} {currentUser.last_name}
 						</li>
-						<li className="list-group-item">ID: {currentUser.id}</li>
-						<li className="list-group-item">Email: {currentUser.email}</li>
-						<li className="list-group-item">Phone: {currentUser.phone}</li>
-						<li className="list-group-item">Role: {currentUser.role_id}</li>
-						<li className="list-group-item">Status: {currentUser.status}</li>
+						<li className="list-group-item">ID: {currentUser.id === null ? '--' : currentUser.id}</li>
+						<li className="list-group-item">Email: {currentUser.email === null ? '--' : currentUser.email}</li>
+						<li className="list-group-item">Phone: {currentUser.phone === null ? '--' : currentUser.phone}</li>
+						<li className="list-group-item">Role: {currentUser.role_id === null ? '--' : currentUser.role_id}</li>
+						<li className="list-group-item">Status: {currentUser.status === null ? '--' : currentUser.status}</li>
 						<li className="list-group-item">
 							Profile Created At: {currentUser.created_at}
 						</li>
