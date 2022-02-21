@@ -1,35 +1,31 @@
 import React from "react";
-import axios from "axios";
 import { useHistory, Link } from "react-router-dom";
+import { useDispatch } from 'react-redux';
 import { loginSchema } from "../user.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
+import { login } from '../user.actions';
 
 const Login = (props) => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
-    async function handleLogin(data) {
-        try {
-            const response = await axios.post(
-                "http://localhost:5000/api/login",
-                data,
-                { withCredentials: true }
-            );
-            localStorage.setItem("loggedInUser", JSON.stringify(response.data));
+    function handleLogin(data) {
+        dispatch(login(data)).then(response => {
             props.location.state && props.location.state.from.pathname
                 ? history.push(props.location.state.from.pathname)
                 : history.push("/");
+                
             toast.success("Logged in Successfully", {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
-        } catch (error) {
-            console.log(error.response.data);
+        }).catch(error => {
             toast.error(error.response.data, {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
-        }
+        });
     }
 
     return (

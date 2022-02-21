@@ -1,18 +1,16 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import { toast } from 'react-toastify';
+import { useSelector } from "react-redux";
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 
-import getLoggedInUser from '../../../../core/service/get-logged-in-user';
 import { updateMyProfileSchema } from '../../user.schema';
 import { updateMyProfile } from './my-profile.action';
 
 const UpdateMyProfile = (props) => {
 	const history = useHistory();
-	const { path } = useRouteMatch();
 
-	const [currentUser, setCurrentUser] = useState(getLoggedInUser());
+	const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
     
 	async function handleUpdateMyProfile(newMyProfile) {
 		try {
@@ -40,12 +38,12 @@ const UpdateMyProfile = (props) => {
 
 				<Formik
 					initialValues={{
-						id: currentUser.id,
-						profile_id: currentUser.profile_id,
-						first_name: currentUser.first_name,
-						last_name: currentUser.last_name,
-						email: currentUser.email,
-						phone: currentUser.phone ? currentUser.phone : '',
+						id: loggedInUser.id,
+						profile_id: loggedInUser.profile_id,
+						first_name: loggedInUser.first_name,
+						last_name: loggedInUser.last_name,
+						email: loggedInUser.email,
+						phone: loggedInUser.phone ? loggedInUser.phone : '',
 					}}
 					onSubmit={(values, actions) => {
 						handleUpdateMyProfile(values);

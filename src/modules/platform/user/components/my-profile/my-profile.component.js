@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
-import getLoggedInUser from '../../../../core/service/get-logged-in-user';
+import { useSelector } from "react-redux";
 
 const MyProfile = (props) => {
-	const [currentUser, setCurrentUser] = useState(getLoggedInUser());
-	const { path } = useRouteMatch();
+	const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
 
 	return (
 		<div className="d-flex flex-wrap justify-content-around">
@@ -30,18 +28,18 @@ const MyProfile = (props) => {
 				<div className="card-body">
 					<ul className="list-group">
 						<li className="list-group-item">
-							User: {currentUser.first_name} {currentUser.last_name}
+							User: {loggedInUser.first_name} {loggedInUser.last_name}
 						</li>
-						<li className="list-group-item">ID: {currentUser.id}</li>
-						<li className="list-group-item">Email: {currentUser.email}</li>
-						<li className="list-group-item">Phone: {currentUser.phone}</li>
-						<li className="list-group-item">Role: {currentUser.role_id}</li>
-						<li className="list-group-item">Status: {currentUser.status}</li>
+						<li className="list-group-item">ID: {loggedInUser.id}</li>
+						<li className="list-group-item">Email: {loggedInUser.email}</li>
+						<li className="list-group-item">Phone: {loggedInUser.phone}</li>
+						<li className="list-group-item">Role: {loggedInUser.role_id}</li>
+						<li className="list-group-item">Status: {loggedInUser.status}</li>
 						<li className="list-group-item">
-							Profile Created At: {currentUser.created_at}
+							Profile Created At: {loggedInUser.created_at}
 						</li>
 						<li className="list-group-item">
-							Profile Created By: {currentUser.created_by}
+							Profile Created By: {loggedInUser.created_by}
 						</li>
 					</ul>
 				</div>

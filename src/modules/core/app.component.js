@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 
 import NoMatch from './NoMatch';
 import PublicRoute from './PublicRoute';
 import PrivateRoute from './PrivateRoute';
 import ServiceList from './components/service-list.component';
-import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes, MyProfile, Permissions, UpdateMyProfile } from '../platform';
+import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes, MyProfile, Permissions, UpdateMyProfile, userActions } from '../platform';
 import { Customer } from '../customer';
 import { Shops } from '../shop';
-import { ToastContainer } from 'react-toastify';
 import { Complain } from '../complaint';
 
+const { getSignedInUserProfile } = userActions;
+
 function App() {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(getSignedInUserProfile());
+    }, []);
+
     return (
         <>
             <ToastContainer />
