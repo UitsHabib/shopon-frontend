@@ -3,7 +3,7 @@ import axios from 'axios';
 const baseUrl = 'http://localhost:5000';
 
 export function getShops() {
-    return axios.get('shop-data.json');
+    return axios.get(`${baseUrl}/api/shops`);
 }
 
 export function deleteShop(shop_id) {

@@ -11,7 +11,8 @@ import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes
 import { Customer } from '../customer';
 import { Shops } from '../shop';
 import { Complain } from '../complaint';
-
+import { MyShopProfile, shopActions, ShopDashboard, ShopLogin, ShopLogout } from '../shop-new';
+import { getSignedInShopProfile } from '../shop-new/shop.actions';
 const { getSignedInUserProfile } = userActions;
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
 
     useEffect(() => {
         dispatch(getSignedInUserProfile());
+        dispatch(getSignedInShopProfile());
     }, []);
 
     return (
@@ -39,6 +41,13 @@ function App() {
                 <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
                 <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
                 <PrivateRoute path="/service-list" component={ServiceList} />
+
+
+                <PublicRoute path="/shop-login" component={ShopLogin} />
+                <PrivateRoute path="/shop-logout" component={ShopLogout} />
+                <PrivateRoute path="/shop-dashboard" component={ShopDashboard} />
+                <PrivateRoute path="/my-shop-profile" component={MyShopProfile} />
+
                 <Route component={NoMatch} />
             </Switch>
         </>
