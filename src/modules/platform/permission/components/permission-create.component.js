@@ -22,7 +22,7 @@ const PermissionCreate = ({ history }) => {
             <PermissionForm 
                 initialValues={initialValues} 
                 onSubmit={handleCreate} 
-                buttonName="Save"
+                buttonName="Create"
             />
         </>
     );

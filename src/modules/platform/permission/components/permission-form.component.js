@@ -36,9 +36,13 @@ const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
                 >
                     {(formikProps) => (
                         <Form onSubmit={formikProps.handleSubmit}>
+                            <label htmlFor="title" className="mb-1">
+                                <b>Title</b> 
+                                <span className="text-danger"> *</span>
+                            </label>
                             <Field
                                 className="form-control"
-                                as="textarea"
+                                id="title"
                                 placeholder="Title"
                                 name="title"
                             />
@@ -46,8 +50,13 @@ const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
                                 <ErrorMessage name="title" />
                             </div>
 
+                            <label htmlFor="description" className="mb-1">
+                                <b>Description </b>
+                                <span className="text-danger"> *</span>
+                            </label>
                             <Field
                                 className="form-control"
+                                id="description"
                                 as="textarea"
                                 placeholder="Description"
                                 name="description"
@@ -56,7 +65,10 @@ const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
                                 <ErrorMessage name="description" />
                             </div>
 
-                            <div>Services</div>
+                            <label htmlFor="title" className="mb-1">
+                                <b>Services</b> 
+                                <span className="text-danger"> *</span>
+                            </label>
                             <CheckboxGroup name="services" options={services} />
                             <div className="invalid-feedback d-block mb-3">
                                 <ErrorMessage name="services" />
