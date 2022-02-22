@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
-import getLoggedInUser from '../service/get-logged-in-user';
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
-	const { path } = props;
-	//console.log(path);
-	const pathNames = path.split('/').filter((pathName) => pathName != 'login');
-	let nextPath = '';
+	const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
+
 	return (
 		<>
 			<nav
@@ -16,35 +14,22 @@ const Navbar = (props) => {
 					<Link className="navbar-brand my-0" to="/">
 						<span className="h4">ShopOn</span>
 					</Link>
-
-					{/* <Link
-                        className="btn btn-outline-success"
-                        to="/service-list"
-                    >
-                        <span className="h6 my-0">Platform</span>
-                    </Link> */}
-					{/* {getLoggedInUser() && (
-                        <Link className="navbar-brand" to="/platform">
-                            Platform
-                        </Link>
-                    )} */}
 				</div>
 
-				{!getLoggedInUser() && (
+				{!loggedInUser && (
 					<Link className="navbar-brand btn btn-outline-success" to="/login">
 						Login
 					</Link>
 				)}
 
-				{getLoggedInUser() && (
+				{loggedInUser && (
 					<div className="d-flex flex-row align-items-center">
 						<span className="h5 my-0 mx-4">
 							<i className="bi bi-person-circle mx-1" />
 							<Link to="/my-profile">
 								{' '}
-								{`${getLoggedInUser().first_name} ${
-									getLoggedInUser().last_name
-								}`}
+								{`${loggedInUser.first_name} ${loggedInUser.last_name
+									}`}
 							</Link>
 						</span>
 
@@ -54,19 +39,6 @@ const Navbar = (props) => {
 					</div>
 				)}
 			</nav>
-
-			{/* {pathNames.map((pathName, index) => {
-                //console.log(pathName)
-                if (pathName != "") {
-                    nextPath += "/" + pathName;
-                    //console.log(nextPath);
-                    return (
-                        <Link key={index} to={`${nextPath}`} className="mx-2">
-                            {pathName === 'platform' ? 'admin panel' : pathName}
-                        </Link>
-                    );
-                }
-            })} */}
 		</>
 	);
 };

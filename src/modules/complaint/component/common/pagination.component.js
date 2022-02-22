@@ -1,12 +1,10 @@
 import _ from "lodash";
 
 const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
-    
     const totalPages = Math.ceil(totalItems / pageCount);
     const pages = _.range(1, totalPages + 1, 1);
 
     if (totalItems <= pageCount) return null;
-
     return (
         <nav aria-label="Page navigation example">
             <ul className="pagination">
@@ -47,6 +45,6 @@ const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
             </ul>
         </nav>
     );
-};
+}
 
 export default Pagination;

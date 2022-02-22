@@ -20,23 +20,20 @@ const TableHeader = ({ columns, onSort, sortColumn }) => {
             } else return <i className="bi bi-arrow-up"></i>;
         } else return null;
     }
-
     return (
-        <>
-            <thead>
-                <tr>
-                    {columns.map((col, index) => {
-                        return (
-                            <th key={index} onClick={() => handleSort(col)}>
-                                {" "}
-                                {col.label} {getIcon(col.path)}
-                            </th>
-                        );
-                    })}
-                </tr>
-            </thead>
-        </>
+        <thead>
+            <tr>
+                {columns.map((col, index) => {
+                    return (
+                        <th key={index} onClick={() => handleSort(col)}>
+                            {" "}
+                            {col.label} {getIcon(col.path)}
+                        </th>
+                    );
+                })}
+            </tr>
+        </thead>
     );
-};
+}
 
 export default TableHeader;

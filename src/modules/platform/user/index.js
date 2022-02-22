@@ -8,6 +8,8 @@ import ResetPassword from './components/reset-password.component';
 import MyProfile from './components/my-profile/my-profile.component';
 import UpdateMyProfile from './components/my-profile/update-my-profile.component';
 import UserForm from './components/user-form.component';
+import userReducer from './user.reducer';
+import * as userActions from './user.actions';
 
 export function UserClientRoutes(props) {
 	return <UserRoutes path={props.path} />;
@@ -22,4 +24,6 @@ export {
 	MyProfile,
 	UpdateMyProfile,
 	UserForm,
+    userReducer,
+	userActions
 };

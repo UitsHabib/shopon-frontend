@@ -1,85 +1,132 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
 import moment from 'moment';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button, Modal } from 'react-bootstrap';
+import { ComplainSchema } from '../complain.schema';
 import Filter from './common/filtering.component';
-import Pagination from './common/pagination.component';
 import Table from './common/table.component';
-import { addNewShopSchema } from './shop.schema';
+import Pagination from './common/pagination.component';
 
-const ShowShops = (props) => {
+const ShowComplain = (props) => {
 	const {
 		items,
 		columns,
 		onSort,
 		sortColumn,
 		totalItems,
-        totalShops,
 		pageCount,
 		activePage,
 		onClickPage,
-		onClickAddNewShop,
+		addNewComplain,
 		shopCategories,
 		selectedCategory,
 		onClickFilter,
 	} = props;
 
-    const [addNewShopShow, setAddNewShopShow] = useState(false);
-
 	const now = new Date();
 	const dateString = moment(now).format('DD-MM-YYYY');
 
-	function handleAddNewShop() {
-		setAddNewShopShow(!addNewShopShow);
+	const [addNewComplainShow, setAddNewComplainShow] = useState(false);
+
+	function handleAddNewComplain() {
+		setAddNewComplainShow(!addNewComplainShow);
 	}
 
 	return (
 		<>
-			<div className="d-flex flex-wrap justify-content-around">
-				<h5 className="my-3">Shop Table</h5>
-				<Button className="my-3" variant="success" onClick={handleAddNewShop}>
-					Add New Shop
+			<div className="d-flex flex-wrap justify-content-between">
+				<h5 className="my-3 p-2">Complain Table</h5>
+				<Button className="my-3 mt-2" variant="success" onClick={handleAddNewComplain}>
+					Add New Complain
 				</Button>
 
-				{addNewShopShow && (
+				{addNewComplainShow && (
 					<>
-						<Modal show={handleAddNewShop} onHide={handleAddNewShop}>
+						<Modal show={handleAddNewComplain} onHide={handleAddNewComplain}>
 							<Modal.Header closeButton>
-								<Modal.Title>Add New Shop</Modal.Title>
+								<Modal.Title>Add New Complain</Modal.Title>
 							</Modal.Header>
 							<Modal.Body>
 								<Formik
 									initialValues={{
-										shop_id: totalShops + 1,
+										id: totalItems + 1,
+										user_name: '',
+										userUrl: '',
+										complain: '',
 										shop_name: '',
 										shop_type: '',
-										shop_owner: '',
 										date_created: dateString,
 									}}
 									onSubmit={(values, actions) => {
-										setAddNewShopShow(!addNewShopShow);
-										onClickAddNewShop(values);
+										setAddNewComplainShow(!addNewComplainShow);
+										addNewComplain(values);
 										actions.setSubmitting(false);
 									}}
-									validationSchema={addNewShopSchema}
+									validationSchema={ComplainSchema}
 								>
 									{(formikprops) => {
 										return (
 											<Form onSubmit={formikprops.handleSubmit}>
 												<div className="m-4">
 													<div className="form-group mb-3">
-														<label htmlFor="shop_id" className="form-label">
+														<label htmlFor="id" className="form-label">
 															ID
 														</label>
 														<Field
 															type="text"
 															className="form-control"
-															id="shop_id"
-															name="shop_id"
+															id="id"
+															name="id"
 															disabled={true}
 														/>
 														<div className="invalid-feedback d-block">
-															<ErrorMessage name="shop_id" />
+															<ErrorMessage name="id" />
+														</div>
+													</div>
+
+													<div className="form-group mb-3">
+														<label htmlFor="user_name" className="form-label">
+															User Name
+														</label>
+														<Field
+															type="text"
+															className="form-control"
+															id="user_name"
+															name="user_name"
+														/>
+														<div className="invalid-feedback d-block">
+															<ErrorMessage name="user_name" />
+														</div>
+													</div>
+
+													<div className="form-group mb-3">
+														<label htmlFor="userUrl" className="form-label">
+															User Image
+														</label>
+														<Field
+															type="text"
+															className="form-control"
+															id="userUrl"
+															name="userUrl"
+														/>
+														<div className="invalid-feedback d-block">
+															<ErrorMessage name="userUrl" />
+														</div>
+													</div>
+
+													<div className="form-group mb-3" >
+														<label htmlFor="complain" className="form-label">
+															Complain Description
+														</label>
+														<Field
+															type="text"
+															as="textarea"
+															className="form-control"
+															id="complain"
+															name="complain"
+														/>
+														<div className="invalid-feedback d-block">
+															<ErrorMessage name="complain" />
 														</div>
 													</div>
 
@@ -88,7 +135,7 @@ const ShowShops = (props) => {
 															Shop Name
 														</label>
 														<Field
-															type="text"
+															type="shop_name"
 															className="form-control"
 															id="shop_name"
 															name="shop_name"
@@ -109,31 +156,16 @@ const ShowShops = (props) => {
 															as="select"
 														>
 															<option>Click Here to Select</option>
-															{shopCategories.map((shopCategory, index) => {
+															{shopCategories.map((shopCategory) => {
 																return (
-																	<React.Fragment key={index}>
+																	<>
 																		<option>{shopCategory}</option>
-																	</React.Fragment>
+																	</>
 																);
 															})}
 														</Field>
 														<div className="invalid-feedback d-block">
 															<ErrorMessage name="shop_type" />
-														</div>
-													</div>
-
-													<div className="form-group mb-3">
-														<label htmlFor="shop_owner" className="form-label">
-															Shop Owner
-														</label>
-														<Field
-															type="shop_owner"
-															className="form-control"
-															id="shop_owner"
-															name="shop_owner"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="shop_owner" />
 														</div>
 													</div>
 
@@ -157,11 +189,11 @@ const ShowShops = (props) => {
 													</div>
 													<div className="d-flex flex-wrap justify-content-between">
 														<button type="submit" className="btn btn-success">
-															Add Shop
+															Add Complain
 														</button>
 														<Button
 															variant="warning"
-															onClick={handleAddNewShop}
+															onClick={handleAddNewComplain}
 														>
 															Close
 														</Button>
@@ -197,7 +229,7 @@ const ShowShops = (props) => {
 										onSort={onSort}
 										sortColumn={sortColumn}
 									/>
-                                    
+
 									<Pagination
 										totalItems={totalItems}
 										pageCount={pageCount}
@@ -212,6 +244,6 @@ const ShowShops = (props) => {
 			</div>
 		</>
 	);
-};
+}
 
-export default ShowShops;
+export default ShowComplain;

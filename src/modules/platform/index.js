@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, useRouteMatch } from 'react-router-dom';
 
-import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm, UpdateMyProfile } from './user';
+import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm, UpdateMyProfile, userReducer, userActions } from './user';
 
 import { PermissionClientRoutes } from './permission';
 import { RoleClientRoutes, Roles } from './role';
@@ -22,4 +22,4 @@ export function PlatformRoutes() {
     );
 }
 
-export { Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm, Profiles, CreateProfile, UpdateMyProfile };
+export { Login, Logout, Dashboard, ForgotPassword, ResetPassword, MyProfile, UserForm, Profiles, CreateProfile, UpdateMyProfile, userReducer, userActions };

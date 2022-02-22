@@ -4,6 +4,7 @@ const UserManagement = (props) => {
 	const { path } = useRouteMatch();
 
 	const listItems = ['Users', 'Permissions', 'Profiles', 'Roles', 'Services'];
+    
 	return (
 		<>
 			<div
@@ -12,8 +13,6 @@ const UserManagement = (props) => {
 			>
 				{listItems.map((listItem, index) => {
 					return (
-						// <div className="card mx-4 my-2" key={index}>
-						//     <div className="card-body">
 						<Link
 							to={`${path}/${listItem.toLowerCase()}`}
 							key={index}
@@ -24,7 +23,6 @@ const UserManagement = (props) => {
 								style={{
 									width: '200px',
 									height: '300px',
-									// marginLeft: '50px',
 									cursor: 'pointer',
 									borderRadius: '1em',
 								}}
@@ -49,8 +47,6 @@ const UserManagement = (props) => {
 								</div>
 							</div>
 						</Link>
-						//     </div>
-						// </div>
 					);
 				})}
 			</div>
