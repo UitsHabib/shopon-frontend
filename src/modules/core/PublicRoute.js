@@ -1,11 +1,10 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useSelector } from "react-redux";
 import Navbar from './components/navbar.component';
 
-import getLoggedInUser from './service/get-logged-in-user';
-
 export default function PublicRoute({ component: Component, ...rest }) {
-    const loggedInUser = getLoggedInUser();
+    const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
 
     return (
         <>

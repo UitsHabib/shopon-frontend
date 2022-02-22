@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom';
-import getLoggedInUser from '../service/get-logged-in-user';
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
-	const { path } = props;
+	const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
+
 	return (
 		<>
 			<nav
@@ -15,19 +16,19 @@ const Navbar = (props) => {
 					</Link>
 				</div>
 
-				{!getLoggedInUser() && (
+				{!loggedInUser && (
 					<Link className="navbar-brand btn btn-outline-success" to="/login">
 						Login
 					</Link>
 				)}
 
-				{getLoggedInUser() && (
+				{loggedInUser && (
 					<div className="d-flex flex-row align-items-center">
 						<span className="h5 my-0 mx-4">
 							<i className="bi bi-person-circle mx-1" />
 							<Link to="/my-profile">
 								{' '}
-								{`${getLoggedInUser().first_name} ${getLoggedInUser().last_name
+								{`${loggedInUser.first_name} ${loggedInUser.last_name
 									}`}
 							</Link>
 						</span>
