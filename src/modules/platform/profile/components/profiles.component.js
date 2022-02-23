@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+// import { useSelector, useDispatch } from "react-redux";
 import Table from "./common/table.component";
 import _ from "lodash";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -9,6 +10,7 @@ import { useRouteMatch } from "react-router-dom";
 import { updateSchema } from "../profile.schema";
 import moment from "moment";
 import { toast } from "react-toastify";
+// import { getProfiles } from '../profile.actions';
 import {
 	deleteProfile,
 	getPermissions,
@@ -19,6 +21,7 @@ import {
 
 const Profiles = () => {
 	const { path } = useRouteMatch();
+    // const dispatch = useDispatch();
 	const [profiles, setProfiles] = useState([]);
 	const [users, setUsers] = useState([]);
 	const [permissions, setPermissions] = useState([]);
@@ -33,11 +36,14 @@ const Profiles = () => {
 	const [sortColumn, setSortColumn] = useState({ path: "id", order: "asc" });
 	const [needToFetchProfile, setNeedToFetchProfile] = useState(true);
 
+    // const profiles = useSelector(state => state.profileReducer.profiles);
+    // console.log(profiles)
+
 	//fetch user data from database
 	async function getUserList() {
 		try {
 			const { data } = await getUsers();
-			setUsers(data);
+			setUsers(data.users);
 		} catch {
 			console.log("error while getting users");
 		}
@@ -110,15 +116,15 @@ const Profiles = () => {
 
 	const handleUser = (id) => {
 		const selectedUser = users.filter((user) => user.id === id);
-        if(selectedUser[0]) {
-            const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`;
-            return fullName;
-        }
-        else return "User Deleted";
+		if (selectedUser[0]) {
+			const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`;
+			return fullName;
+		} else return "--";
 	};
 
 	//detail profile section
 	const handleDetail = (data) => {
+		console.log(data);
 		let permissions = [];
 		data.profile_permissions.map((pt) =>
 			permissions.push(pt.permission.title)
@@ -338,7 +344,7 @@ const Profiles = () => {
 									e.stopPropagation();
 								}}
 								style={{
-									textAlign: "center",
+									textAlign: "left",
 									width: "60%",
 									marginLeft: "20%",
 									marginTop: "10%",
@@ -413,10 +419,24 @@ const Profiles = () => {
 												</div>
 											</div>
 											<div id="checkbox-group">
-												Permissions{" "}
+												<span
+													type="button"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="At least one permission is required"
+												>
+													Select Permission{" "}
+												</span>
 												<span className="text-danger">
 													*
-												</span>
+												</span>{" "}
+												<i
+													type="button"
+													className="bi bi-question-circle-fill"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="At least one permission is required"
+												></i>
 											</div>
 											<div
 												role="group"
@@ -440,6 +460,17 @@ const Profiles = () => {
 																	{
 																		permission.title
 																	}
+																	<br />
+																	<i
+																		style={{
+																			marginLeft:
+																				"40px",
+																		}}
+																	>
+																		{
+																			permission.description
+																		}
+																	</i>
 																</label>
 																<br />
 															</React.Fragment>
