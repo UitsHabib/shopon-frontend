@@ -17,8 +17,6 @@ export default function PublicRoute({ component: Component, ...rest }) {
         else setLoggedInAs("user");
     }, []);
 
-    console.log(loggedInAs);
-
     return (
         <>
             {loggedInAs === "user" && (

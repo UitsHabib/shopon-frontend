@@ -15,12 +15,10 @@ export default function PrivateRoute({ component: Component, ...rest }) {
 
     const currentPathname = useLocation().pathname;
 
-    console.log(loggedInAs);
-
     useEffect(() => {
-        if(loggedInUser === null) setLoggedInAs('shop');
-        else setLoggedInAs('user');
-    }, [])
+        if (loggedInUser === null) setLoggedInAs("shop");
+        else setLoggedInAs("user");
+    }, []);
 
     return (
         <>

@@ -8,17 +8,18 @@ import { updateMyProfileSchema } from '../../shop.schema';
 import { updateShopProfile } from '../../shop.actions';
 import moment from 'moment';
 
-const UpdateMyProfile = (props) => {
+const UpdateMyShopProfile = (props) => {
 	const history = useHistory();
 
 	const loggedInShop = useSelector(state => state.shopReducer.loggedInShop);
+    console.log(loggedInShop);
 
     const currentdate = new Date();
     
 	async function handleUpdateMyProfile(newMyProfile) {
 		try {
 			const { data } = await updateShopProfile(newMyProfile);
-			history.push('/my-profile');
+			history.push('/update-my-profile');
             toast.success('Profile Updated Successfully', {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
@@ -170,4 +171,4 @@ const UpdateMyProfile = (props) => {
 	);
 };
 
-export default UpdateMyProfile;
+export default UpdateMyShopProfile;
