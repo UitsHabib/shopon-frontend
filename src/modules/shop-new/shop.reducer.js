@@ -7,7 +7,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case Types.SHOP_LOGIN_FULFILLED:
-        case Types.GET_SHOP_FULFILLED: {
+        case Types.GET_SHOP_PROFILE_FULFILLED: {
             const loggedInShop = action.payload.data;
             return {
                 ...state,
