@@ -11,7 +11,7 @@ import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes
 import { Customer } from '../customer';
 import { Shops } from '../shop';
 import { Complain } from '../complaint';
-import { MyShopProfile, shopActions, ShopDashboard, ShopLogin, ShopLogout, UpdateMyShopProfile } from '../shop-new';
+import { MyShopProfile, Products, shopActions, ShopDashboard, ShopLogin, ShopLogout, UpdateMyShopProfile } from '../shop-new';
 const { getSignedInShopProfile } = shopActions;
 const { getSignedInUserProfile } = userActions;
 
@@ -48,6 +48,7 @@ function App() {
                 <PrivateRoute path="/shop-dashboard" component={ShopDashboard} />
                 <PrivateRoute path="/my-shop-profile" component={MyShopProfile} />
                 <PrivateRoute path="/update-my-shop-profile" component={UpdateMyShopProfile} />
+                <PrivateRoute path="/shop-products" component={Products} />
 
                 <Route component={NoMatch} />
             </Switch>

@@ -5,6 +5,7 @@ import ForgotPassword from './components/shop-forgot-password.component';
 import MyShopProfile from './components/my-shop-profile/my-shop-profile.component';
 import UpdateMyShopProfile from './components/my-shop-profile/update-my-shop-profile.component';
 import shopReducer from './shop.reducer';
+import Products from './components/shop-products/products';
 import * as shopActions from './shop.actions';
 
 export {
@@ -15,5 +16,6 @@ export {
 	MyShopProfile,
 	UpdateMyShopProfile,
     shopReducer,
+    Products,
 	shopActions
 };
