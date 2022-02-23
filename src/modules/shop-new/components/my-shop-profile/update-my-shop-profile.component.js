@@ -19,7 +19,7 @@ const UpdateMyShopProfile = (props) => {
 	async function handleUpdateMyProfile(newMyProfile) {
 		try {
 			const { data } = await updateShopProfile(newMyProfile);
-			history.push('/update-my-profile');
+			history.push('/update-my-shop-profile');
             toast.success('Profile Updated Successfully', {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
@@ -157,7 +157,7 @@ const UpdateMyShopProfile = (props) => {
 										<button type="submit" className="btn btn-primary">
 											Update
 										</button>
-										<Link to="/my-profile" className="btn btn-danger">
+										<Link to="/my-shop-profile" className="btn btn-danger">
 											Cancel
 										</Link>
 									</div>
