@@ -96,6 +96,13 @@ export const pageLimit = (value) => {
     }
 }
 
+export const dataFetch = (value) => {
+    return {
+        type: Types.FETCH_DATA,
+        payload: !value
+    }
+}
+
 export const getServices = () => {
    return {
        type: Types.GET_SERVICES,

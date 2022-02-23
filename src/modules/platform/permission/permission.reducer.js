@@ -8,6 +8,7 @@ const initialState = {
     permissionId: null,
     activePage: 1,
     limit: 3,
+    fetchData: true,
 
     services: [],
 }
@@ -57,6 +58,9 @@ const reducer = (state = initialState, action) => {
             const limit = action.payload;
 
             return { ...state, limit }
+        }
+        case Types.FETCH_DATA: {
+            return { ...state, fetchData: action.payload }
         }
         case Types.GET_SERVICES_FULFILLED: {
             const { services } = action.payload.data;
