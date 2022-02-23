@@ -47,7 +47,7 @@ function App() {
                 <PrivateRoute path="/shop-logout" component={ShopLogout} />
                 <PrivateRoute path="/shop-dashboard" component={ShopDashboard} />
                 <PrivateRoute path="/my-shop-profile" component={MyShopProfile} />
-                <PrivateRoute path="update-my-shop-profile" component={UpdateMyShopProfile} />
+                <PrivateRoute path="/update-my-shop-profile" component={UpdateMyShopProfile} />
 
                 <Route component={NoMatch} />
             </Switch>

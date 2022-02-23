@@ -17,7 +17,7 @@ const MyShopProfile = (props) => {
 					/>
 
 					<Link
-						to="/update-my-profile"
+						to="/update-my-shop-profile"
 						title="Click here to update your profile"
 						className="btn btn-primary"
 						style={{ height: 'auto', width: '15rem' }}
