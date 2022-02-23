@@ -9,9 +9,8 @@ import PrivateRoute from './PrivateRoute';
 import ServiceList from './components/service-list.component';
 import { Dashboard, Login, Logout, ForgotPassword, ResetPassword, PlatformRoutes, MyProfile, Permissions, UpdateMyProfile, userActions } from '../platform';
 import { Customer } from '../customer';
-import { Shops } from '../shop';
 import { Complain } from '../complaint';
-import { MyShopProfile, Products, shopActions, ShopDashboard, ShopLogin, ShopLogout, UpdateMyShopProfile } from '../shop-new';
+import { MyShopProfile, Products, shopActions, ShopDashboard, ShopLogin, ShopLogout, UpdateMyShopProfile } from '../shop';
 const { getSignedInShopProfile } = shopActions;
 const { getSignedInUserProfile } = userActions;
 
@@ -34,7 +33,6 @@ function App() {
                 <Route path="/forgot-password" component={ForgotPassword} />
                 <Route path="/platform" component={PlatformRoutes} />
                 <PrivateRoute path="/customer" component={Customer} />
-                <PrivateRoute path="/shop" component={Shops} />
                 <PrivateRoute path="/complaint" component={Complain} />
 
                 <PrivateRoute path="/my-profile" component={MyProfile} />

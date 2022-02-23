@@ -29,20 +29,17 @@ const Products = (props) => {
     async function fetchAllProducts() {
         try {
             const { data } = await getAllProducts();
-            console.log(data);
-            const total = data.length();
-            setTotalPage(Math.ceil(total / productsPerPage));
-            setProducts(data);
+            //console.log(data.products.length);
+            setTotalPage(Math.ceil(data.products.length / productsPerPage));
+            setProducts(data.products);
         } catch (error) {
             console.log(error);
         }
     };
-
-    useEffect(() => {
-        fetchAllProducts();
-    }, []);
-
-    async function getProducts(currentPage) {
+    
+    async function paginateProducts(selectedPage) {
+        console.log(selectedPage.selected);
+        let currentPage = selectedPage.selected + 1;
         try {
             const { data } = await getPaginatedProducts(
                 currentPage,
@@ -139,11 +136,9 @@ const Products = (props) => {
         },
     ];
 
-    async function paginateProducts(selectedPage) {
-        console.log(selectedPage.selected);
-        let currentPage = selectedPage.selected + 1;
-        getProducts(currentPage);
-    }
+    useEffect(() => {
+        fetchAllProducts();
+    }, []);
 
     return (
         <>

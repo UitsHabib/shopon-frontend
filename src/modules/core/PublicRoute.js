@@ -8,14 +8,9 @@ export default function PublicRoute({ component: Component, ...rest }) {
     const loggedInUser = useSelector((state) => state.userReducer.loggedInUser);
     const loggedInShop = useSelector((state) => state.shopReducer.loggedInShop);
 
-    const [loggedInAs, setLoggedInAs] = useState("");
-
     const currentPathname = useLocation().pathname;
 
-    useEffect(() => {
-        if (currentPathname === "/shop-login") setLoggedInAs("shop");
-        else setLoggedInAs("user");
-    }, []);
+    const loggedInAs = currentPathname === "/shop-login" ? "shop" : "user";
 
     return (
         <>
