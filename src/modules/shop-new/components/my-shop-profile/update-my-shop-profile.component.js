@@ -19,7 +19,7 @@ const UpdateMyShopProfile = (props) => {
 	async function handleUpdateMyProfile(newMyProfile) {
 		try {
 			const { data } = await updateShopProfile(newMyProfile);
-			history.push('/update-my-shop-profile');
+			history.push('/my-shop-profile');
             toast.success('Profile Updated Successfully', {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
