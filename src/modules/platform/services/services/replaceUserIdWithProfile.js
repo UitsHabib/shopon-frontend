@@ -1,4 +1,4 @@
-import { getUserById } from '../common/services';
+import { getUserById } from "../common/services";
 
 const extractUserIds = (service) => {
 	return [service.created_by, service.updated_by];
@@ -12,12 +12,8 @@ const replaceUserIdWithProfile = async (service) => {
 
 	const updatedService = {
 		...service,
-		created_by: users.find(
-			({ profile_id: profileId }) => profileId === service.created_by
-		),
-		updated_by: users.find(
-			({ profile_id: profileId }) => profileId === service.updated_by
-		),
+		created_by: users.find(({ id }) => id === service.created_by),
+		updated_by: users.find(({ id }) => id === service.updated_by),
 	};
 
 	return updatedService;
