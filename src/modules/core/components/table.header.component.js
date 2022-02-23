@@ -27,6 +27,7 @@ const TableHeader = ({columns, sortColumns, onSort}) => {//sortColumn = {path: i
                         return(
                             <th scope="col"
                                 onClick={()=>handleSort(column)}
+                                key = {column.label}
                             >
                                 {column.label}{" "}
                                 {getIcon(column.path)}

@@ -19,8 +19,9 @@ const Users = (props) => {
         order: 'asc',
     });
     const [activePage, setActivePage] = useState(1);
-    const [pageCount, setPageCount] = useState(3);
+    const [pageCount, setPageCount] = useState(1);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
+    
 
     const columns = [
         {
@@ -73,7 +74,8 @@ const Users = (props) => {
                                     UPDATE
                                 </Link>
                             </Dropdown.Item>
-                            <Dropdown.Item onClick={() => handleDeleteUser(profile.id)}>Delete</Dropdown.Item>
+                            <Dropdown.Item disabled={disableDeleteUser(profile.id)} onClick={() => handleDeleteUser(profile.id)}>Delete</Dropdown.Item>
+                            <Dropdown.Item onClick={() => handleShowDetails(profile.id)}>Details</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
                 </td>
@@ -82,9 +84,18 @@ const Users = (props) => {
     ];
 
     const users = useSelector(state => state.userReducer.users);
-
+    const loggedInUser = useSelector(state => state.userReducer.loggedInUser.id);
+    
     const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
+    const disableDeleteUser = (id) => {
+        console.log(id);
+        console.log(loggedInUser);
+        
+    }
+    const handleShowDetails = (id) => {
+        
+    }
     const sortUsers = (users) => {
         const sortedUsers = _.orderBy(users, [sortColumn.path], [sortColumn.order]);
         return sortedUsers;
