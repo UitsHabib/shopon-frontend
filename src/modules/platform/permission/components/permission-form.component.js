@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 
 import { getServices } from "../permission.actions";
@@ -6,20 +7,13 @@ import PermissionSchema from "../permission.schema";
 import CheckboxGroup from "./checkbox-group.component";
 
 const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
-    const [services, setServices] = useState([]);
+    const dispatch = useDispatch();
 
-    const getserviceData = async () => {
-        try {
-            const { data } = await getServices();
-            setServices(data.services);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const services = useSelector(state => state.permissionReducer.services);
 
     useEffect(() => {
-        getserviceData();
-    }, []);
+        dispatch(getServices());
+    }, [dispatch]);
 
     return (
         <div className="row justify-content-center">

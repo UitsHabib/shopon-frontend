@@ -1,24 +1,22 @@
-import { useEffect, useState, useCallback } from "react";
-import _ from "lodash";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { getPermission } from "../permission.actions";
 import Table from "./common/table.component";
 import TableBody from "./common/tableBody.component";
 import TableHead from "./common/tableHead.component";
 
-const PermissionDetails = ({ location, match }) => {
-    const [permission, setPermission] = useState({});
-    const [sorting, setSorting] = useState({ path: "id", order: "asc" });
+const PermissionDetails = ({ match }) => {
+    const dispatch = useDispatch();
 
     const columns = [
         {
             label: "ID",
-            path: "user-id",
+            path: "user_id",
             content: (permission) => <td>{permission.id}</td>,
         },
         {
             label: "Service ID",
-            sort: true,
             path: "id",
             content: (permission, path) => <td>{permission.service[path]}</td>,
         },
@@ -34,24 +32,11 @@ const PermissionDetails = ({ location, match }) => {
         },
     ];
 
-    const getPermissionData = useCallback(async () => {
-        try {
-            const { data } = await getPermission(match.params.id);
-            setPermission(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }, [match.params.id]);
+    const permission = useSelector(state => state.permissionReducer.permission);
 
     useEffect(() => {
-        if (location.data) {
-            setPermission(location.data);
-        } else {
-            getPermissionData();
-        }
-    }, [location.data, getPermissionData]);
-
-    const sortedService = _.orderBy(permission.permission_services, [sorting.path], [sorting.order]);
+        dispatch(getPermission(match.params.id))
+    }, [dispatch, match.params.id]);
 
     return (
         <div className="container permission">
@@ -59,13 +44,10 @@ const PermissionDetails = ({ location, match }) => {
                 <div className="col-10">
                     <h3 className="text-center">{permission.title}</h3>
                     <p>{permission.description}</p>
+
                     <Table>
-                        <TableHead
-                            columns={columns}
-                            sorting={sorting}
-                            onSort={setSorting}
-                        />
-                        <TableBody items={sortedService} columns={columns} />
+                        <TableHead columns={columns} />
+                        <TableBody items={permission.permission_services} columns={columns} />
                     </Table>
                 </div>
             </div>

@@ -1,68 +1,65 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import _ from "lodash";
 import {toast} from "react-toastify";
 
-import { getPermissions, deletePermission } from "../permission.actions";
 import PermissionsTable from "./permissions-table.component";
 import Pagination from "./common/pagination.component";
 import DeleteModal from "./common/delete-modal.component"
+import { getPermissions, sortingPermission, deletePermissionStatus, permissionId, deletePermission, activePageHandle, pageLimit } from "../permission.actions";
 
 const Permissions = () => {
-    const [permissions, setPermissions] = useState([]);
-    const [fetchData, setFetchData] = useState(true);
-    const [isDelete, setIsDelete] = useState(false);
-    const [deletePermissionId, setDeletePermissionId] = useState(null);
-    const [sorting, setSorting] = useState({ path: "id", order: "asc" });
-    const [activePage, setActivePage] = useState(1);
-    const [count, setCount] = useState(3);
+    const dispatch = useDispatch();
+
+    // const [fetchData, setFetchData] = useState(true);
+
+    const handleSorting = (value) => dispatch(sortingPermission(value));
 
     const handleDeleteButton = (id) => {
-        setIsDelete(true);
-        setDeletePermissionId(id)
+        dispatch(deletePermissionStatus(true));
+        dispatch(permissionId (id));
     }
 
     const handleCancelDelete = () => {
-        setIsDelete(false);
-        setDeletePermissionId(null);
+        dispatch(deletePermissionStatus(false));
+        dispatch(permissionId(null));
     }
 
-    const handleDeletePermission = async () => {
-        try {
-            await deletePermission(deletePermissionId);
-            setIsDelete(false);
-            setFetchData(prev => !prev);
-            toast('Permission Deleted Successfully', { background: '#8329C5', color: '#ffffff' })
-        } catch (error) {
-            setIsDelete(false);
-            toast.warning(error.response.data, { background: '#8329C5', color: '#ffffff' })
-        }
+    const handleDeletePermission = () => {
+        dispatch(deletePermission(deletePermissionId))
+            .then(response => {
+                dispatch(deletePermissionStatus(false));
+                toast('Permission Deleted Successfully', { background: '#8329C5', color: '#ffffff' })
+            })
+            .catch(error => {
+                dispatch(deletePermissionStatus(false));
+                toast.warning(error.response.data, { background: '#8329C5', color: '#ffffff' });
+            })
     };
+
+    const handleActivePage = value => dispatch(activePageHandle(value));
 
     const handleChangeCount = (value) => {
-        setCount(value);
-        setActivePage(1);
+        dispatch(pageLimit(value));
+        dispatch(activePageHandle(1));
     };
 
-    const handleActivePage = value => setActivePage(value);
-
-    const getPermissionList = async () => {
-        try {
-            const { data } = await getPermissions();
-            setPermissions(data);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const permissions = useSelector(state => state.permissionReducer.permissions);
+    const sorting = useSelector(state => state.permissionReducer.sorting);
+    const isDeletePermission = useSelector(state => state.permissionReducer.isDeletePermission);
+    const deletePermissionId = useSelector(state => state.permissionReducer.permissionId)
+    const activePage = useSelector(state => state.permissionReducer.activePage);
+    const limit = useSelector(state => state.permissionReducer.limit);
 
     useEffect(() => {
-        getPermissionList();
-    }, [fetchData]);
+        dispatch(getPermissions())
+    }, [dispatch]);
 
     const sortPermissions = _.orderBy(permissions, [sorting.path], [sorting.order]);
 
     const paginatePremissions = (permissions) => {
-        const start = (activePage - 1) * count;
-        return permissions.slice(start, start + count);
+        const start = (activePage - 1) * limit;
+        return permissions.slice(start, start + limit);
     };
 
     const paginatedPermissions = paginatePremissions(sortPermissions);
@@ -73,12 +70,12 @@ const Permissions = () => {
                 permissions={paginatedPermissions}
                 sorting={sorting}
                 onClickDeleteButton={handleDeleteButton}
-                onClickSort={setSorting}
+                onClickSort={handleSorting}
             />
             <div className="d-flex justify-content-center">
                 <Pagination
                     totalLength={sortPermissions.length}
-                    count={count}
+                    count={limit}
                     activePage={activePage}
                     onClickActive={handleActivePage}
                     onChangeCount={handleChangeCount}
@@ -86,7 +83,7 @@ const Permissions = () => {
             </div>
 
             {
-                isDelete && <DeleteModal 
+                isDeletePermission && <DeleteModal 
                     onClickCancel={handleCancelDelete} 
                     onClickDelete={handleDeletePermission}
                 />
