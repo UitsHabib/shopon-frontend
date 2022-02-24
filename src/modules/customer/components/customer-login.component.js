@@ -52,7 +52,7 @@ const CustomerLogin = (props) => {
                 >
                     <div className="card-body">
                         <h5 className="d-flex flex-wrap justify-content-center">
-                            Login Form
+                            Customrt Login Form
                         </h5>
                         <Formik
                             initialValues={{

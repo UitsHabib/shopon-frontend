@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const CustomerNav = () => {
+    const loggedInCustomer = useSelector(
+        (state) => state.customerReducer.loggedInCustomer
+    );
     return (
         <>
             <nav
@@ -24,7 +28,7 @@ const CustomerNav = () => {
                         Search
                     </button>
                 </form>
-                <form className="d-flex">
+                {/* <div className="d-flex">
                     <Link to={"/login"} className="btn">
                         {" "}
                         Login
@@ -33,7 +37,38 @@ const CustomerNav = () => {
                         {" "}
                         SignUp
                     </Link>
-                </form>
+                </div> */}
+                {!loggedInCustomer && (
+                    <div className="d-flex">
+                        <Link to={"/login"} className="btn">
+                            {" "}
+                            Login
+                        </Link>
+                        <Link to={"/signup"} className="btn">
+                            {" "}
+                            SignUp
+                        </Link>
+                    </div>
+                )}
+
+                {loggedInCustomer && (
+                    <div className="d-flex">
+                        <span className="h5 my-0 mx-4">
+                            <i className="bi bi-person-circle mx-1" />
+                            <Link to="/my-profile">
+                                {" "}
+                                {`${loggedInCustomer.first_name}`}
+                            </Link>
+                        </span>
+
+                        <Link
+                            className="btn btn-outline-success"
+                            to="/admin/logout"
+                        >
+                            <span className="h6">Log Out</span>
+                        </Link>
+                    </div>
+                )}
             </nav>
             <nav
                 className="navbar navbar-light"
