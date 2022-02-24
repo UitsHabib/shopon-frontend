@@ -1,21 +1,21 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginSchema } from "../user.schema";
+import { loginSchema } from "../customer.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import { login } from "../user.actions";
+import { customerLogin } from "../customer.action";
 
-const Login = (props) => {
+const CustomerLogin = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
     function handleLogin(data) {
-        dispatch(login(data))
+        dispatch(customerLogin(data))
             .then((response) => {
                 props.location.state && props.location.state.from.pathname
                     ? history.push(props.location.state.from.pathname)
-                    : history.push("/admin");
+                    : history.push("/");
 
                 toast.success("Logged in Successfully", {
                     backgroundColor: "#8329C5",
@@ -128,4 +128,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default CustomerLogin;

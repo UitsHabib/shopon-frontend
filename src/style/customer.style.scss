@@ -1,0 +1,108 @@
+@import url(https://fonts.googleapis.com/css?family=Satisfy);
+@import url(https://fonts.googleapis.com/css?family=Acme);
+
+.card_box-wrapper {
+    background-color: #fff;
+    overflow: hidden;
+    max-width: 250px;
+    box-shadow: 0px 5px 43px rgba(0, 0, 0, 0.48);
+    padding: 0;
+    text-align: center;
+    position: relative;
+    margin: 10px;
+
+    .card_img {
+        max-width: 100%;
+    }
+}
+
+.card_title {
+    font-size: 1.6em;
+    font-weight: 900;
+    text-transform: uppercase;
+    margin: 0;
+    font-family: "Acme", sans-serif;
+}
+
+.card_desc {
+    font-family: "Satisfy", cursive;
+    font-size: 1.2em;
+}
+
+.card_box-content {
+    position: relative;
+    z-index: 1;
+
+    &:before {
+        content: "";
+        width: 200%;
+        height: 100px;
+        position: absolute;
+        display: block;
+        background-color: #fff;
+        transform: rotate(-8deg);
+        top: -50px;
+        left: -10%;
+        z-index: -1;
+    }
+
+    .card_buy {
+        display: block;
+        top: -80px;
+        right: 30px;
+        z-index: 2;
+        width: 70px;
+        height: 70px;
+        position: absolute;
+
+        span {
+            width: 70px;
+            height: 70px;
+            background-color: #06d6a0;
+            display: block;
+            border-radius: 50%;
+            position: absolute;
+            font-size: 36px;
+            color: #fff;
+            transition: all 0.3s ease;
+            transform: translate(-50%, -50%);
+            top: 50%;
+            left: 50%;
+
+            i {
+                padding: 15px;
+            }
+
+            .expanded & {
+                width: 750px;
+                height: 750px;
+
+                i {
+                    display: none;
+                }
+            }
+        }
+    }
+
+    .card_price {
+        font-size: 2em;
+        font-weight: 900;
+        display: block;
+        width: 100px;
+        margin: 20px auto 0;
+        position: relative;
+        font-family: "Satisfy", cursive;
+    }
+
+    .card_footer {
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 1em 0;
+
+            li {
+                color: #efd829;
+            }
+        }
+    }
+}

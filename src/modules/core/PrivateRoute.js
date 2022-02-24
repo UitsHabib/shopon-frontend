@@ -12,6 +12,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     const loggedInShop = useSelector((state) => state.shopReducer.loggedInShop);
 
     const loggedInAs = loggedInShop ? "shop" : "user";
+    console.log(loggedInUser);
 
     const currentPathname = useLocation().pathname;
 
@@ -34,7 +35,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
                             <Redirect
                                 push
                                 to={{
-                                    pathname: "/login",
+                                    pathname: "/admin/login",
                                     state: { from: props.location },
                                 }}
                             />
