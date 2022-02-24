@@ -28,7 +28,7 @@ function App() {
             <Switch>
                 <PublicRoute path="/login" component={Login} />
                 <PrivateRoute path="/logout" component={Logout} />
-                <PrivateRoute exact path="/" component={Dashboard} />
+                <PrivateRoute exact path="/dashboard" component={Dashboard} />
                 <Route path="/reset-password" component={ResetPassword} />
                 <Route path="/forgot-password" component={ForgotPassword} />
                 <Route path="/platform" component={PlatformRoutes} />

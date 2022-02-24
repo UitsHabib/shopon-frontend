@@ -9,8 +9,11 @@ export default function PublicRoute({ component: Component, ...rest }) {
     const loggedInShop = useSelector((state) => state.shopReducer.loggedInShop);
 
     const currentPathname = useLocation().pathname;
+    let loggedInAs = "user";
 
-    const loggedInAs = currentPathname === "/shop-login" ? "shop" : "user";
+    if(loggedInShop === null && loggedInUser === null) {
+        if(currentPathname === '/shop-login') loggedInAs = "shop";
+    }
 
     return (
         <>
@@ -26,7 +29,7 @@ export default function PublicRoute({ component: Component, ...rest }) {
                                     to={{
                                         pathname: props.location.state
                                             ? props.location.state.from.pathname
-                                            : "/",
+                                            : "/dashboard",
                                         search: props.location.state
                                             ? props.location.state.from.search
                                             : "",
@@ -66,6 +69,7 @@ export default function PublicRoute({ component: Component, ...rest }) {
                     />
                 </>
             )}
+           
         </>
     );
 }

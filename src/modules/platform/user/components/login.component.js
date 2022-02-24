@@ -14,7 +14,7 @@ const Login = (props) => {
         dispatch(login(data)).then(response => {
             props.location.state && props.location.state.from.pathname
                 ? history.push(props.location.state.from.pathname)
-                : history.push("/");
+                : history.push("/dashboard");
                 
             toast.success("Logged in Successfully", {
                 backgroundColor: "#8329C5",
