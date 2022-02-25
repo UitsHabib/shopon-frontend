@@ -11,7 +11,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     const loggedInUser = useSelector((state) => state.userReducer.loggedInUser);
     const loggedInShop = useSelector((state) => state.shopReducer.loggedInShop);
 
-    const loggedInAs = loggedInShop ? "shop" : "user";
+    const loggedInAs = loggedInShop ? "shop" : loggedInUser ? 'user' : "";
 
     const currentPathname = useLocation().pathname;
 

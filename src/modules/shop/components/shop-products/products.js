@@ -1,56 +1,47 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import _ from "lodash";
 import { Dropdown } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
 
 import ShowProducts from "./show-products.component";
-import { getPaginatedProducts, getAllProducts } from "./products.action";
+import { getPaginatedProducts, getAllProducts } from "./products.actions";
+import Pagination from "./common/pagination.component";
 import { toast } from "react-toastify";
 import Table from "./common/table.component";
-import ReactPaginate from "react-paginate";
 
 const Products = (props) => {
     const { path } = useRouteMatch();
-
-    const [products, setProducts] = useState([]);
+    const dispatch = useDispatch();
+    const shopProducts = useSelector(
+        (state) => state.shopProductsReducer.productList
+    );
     const [sortColumn, setSortColumn] = useState({
         path: "id",
         order: "asc",
     });
-    const [productsPerPage, setProductsPerPage] = useState(5);
-    const [totalPage, setTotalPage] = useState(0);
+    const [paginatedProducts, setPaginatedProducts] = useState([]);
+    const productsPerPage = 5;
+    let totalPages = 0
+    const [activePage, setActivePage] = useState(1);
 
     const [targetProduct, setTargetProduct] = useState({});
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [updateDetailModal, setUpdateDetailModal] = useState(false);
     const [deleteDetailModal, setDeleteDetailModal] = useState(false);
 
-    async function fetchAllProducts() {
+    const handleClickPage = (activePage) => setActivePage(activePage);
+
+    async function paginateProducts() {
+        totalPages = Math.ceil((shopProducts.length)/productsPerPage);
         try {
-            const { data } = await getAllProducts();
-            //console.log(data.products.length);
-            setTotalPage(Math.ceil(data.products.length / productsPerPage));
-            setProducts(data.products);
-        } catch (error) {
+            const { data } = await getPaginatedProducts(activePage, productsPerPage); 
+            setPaginatedProducts(data.products);
+        } catch(error) {
             console.log(error);
         }
     };
-    
-    async function paginateProducts(selectedPage) {
-        console.log(selectedPage.selected);
-        let currentPage = selectedPage.selected + 1;
-        try {
-            const { data } = await getPaginatedProducts(
-                currentPage,
-                productsPerPage
-            );
-            console.log(data);
-            setProducts(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
 
     const columns = [
         {
@@ -137,27 +128,15 @@ const Products = (props) => {
     ];
 
     useEffect(() => {
-        fetchAllProducts();
+        dispatch(getAllProducts());
     }, []);
+
+    paginateProducts();
 
     return (
         <>
-            <Table items={products} columns={columns} />
-
-            <ReactPaginate
-                previousLabel={"previous"}
-                nextLabel={"next"}
-                pageCount={totalPage}
-                onPageChange={paginateProducts}
-                containerClassName={"pagination justify-content-center"}
-                pageClassName={"page-item"}
-                pageLinkClassName={"page-link"}
-                previousClassName={"page-item"}
-                previousLinkClassName={"page-link"}
-                nextClassName={"page-item"}
-                nextLinkClassName={"page-link"}
-                activeClassName={"active"}
-            />
+            <Table items={paginatedProducts} columns={columns} />
+            <Pagination totalItems={shopProducts.length} pageCount={totalPages} activePage={activePage} onClickPage={handleClickPage} />
 
             {/* {showDetailModal ? (
                 <ModalForProduct
