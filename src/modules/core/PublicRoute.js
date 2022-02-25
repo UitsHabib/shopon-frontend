@@ -17,7 +17,9 @@ export default function PublicRoute({ component: Component, ...rest }) {
     useEffect(() => {
         if (currentPathname === "/shop-login") setLoggedInAs("shop");
         else if (currentPathname === "/") setLoggedInAs("customer");
-        else setLoggedInAs("user");
+        else if (currentPathname === "/admin/login") setLoggedInAs("user");
+        else if (currentPathname === "/login") setLoggedInAs("customer");
+        else if (currentPathname === "/signup") setLoggedInAs("customer");
     }, []);
 
     return (
@@ -34,7 +36,7 @@ export default function PublicRoute({ component: Component, ...rest }) {
                                     to={{
                                         pathname: props.location.state
                                             ? props.location.state.from.pathname
-                                            : "/",
+                                            : "/admin",
                                         search: props.location.state
                                             ? props.location.state.from.search
                                             : "",

@@ -21,9 +21,9 @@ import {
 } from "../platform";
 import {
     Customer,
-    customerReducer,
-    CustomerNav,
     CustomerLogin,
+    CustomerSignUp,
+    CustomerLogout,
 } from "../customer";
 import { Complain } from "../complaint";
 import {
@@ -59,8 +59,9 @@ function App() {
                 />
                 <Route path="/admin/platform" component={PlatformRoutes} />
                 <PrivateRoute exact path="/admin" component={Dashboard} />
-
+                <PublicRoute path="/signup" component={CustomerSignUp} />
                 <PublicRoute path="/login" component={CustomerLogin} />
+                <Route path="/logout" component={CustomerLogout} />
                 <PublicRoute exact path="/" component={Customer} />
                 <PrivateRoute path="/complaint" component={Complain} />
 

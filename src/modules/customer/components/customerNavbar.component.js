@@ -61,10 +61,7 @@ const CustomerNav = () => {
                             </Link>
                         </span>
 
-                        <Link
-                            className="btn btn-outline-success"
-                            to="/admin/logout"
-                        >
+                        <Link className="btn btn-outline-success" to="/logout">
                             <span className="h6">Log Out</span>
                         </Link>
                     </div>

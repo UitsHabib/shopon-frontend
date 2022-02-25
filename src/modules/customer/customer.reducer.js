@@ -23,6 +23,12 @@ export default function reducer(state = initialState, action) {
             };
         }
 
+        case Types.CUSTOMER_LOGOUT_FULFILLED: {
+            let newState = [...state];
+            newState.loggedInCustomer = null;
+            return newState;
+        }
+
         default:
             return state;
     }

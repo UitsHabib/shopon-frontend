@@ -11,7 +11,7 @@ const Navbar = (props) => {
                 style={{ backgroundColor: "#e3f2fd", height: "90px" }}
             >
                 <div className="d-flex flex-row align-items-center">
-                    <Link className="navbar-brand my-0" to="/">
+                    <Link className="navbar-brand my-0" to="/admin">
                         <span className="h4">ShopOn</span>
                     </Link>
                 </div>
@@ -19,7 +19,7 @@ const Navbar = (props) => {
                 {!loggedInUser && (
                     <Link
                         className="navbar-brand btn btn-outline-success"
-                        to="/login"
+                        to="/admin/login"
                     >
                         Login
                     </Link>
@@ -35,7 +35,10 @@ const Navbar = (props) => {
                             </Link>
                         </span>
 
-                        <Link className="btn btn-outline-success" to="/logout">
+                        <Link
+                            className="btn btn-outline-success"
+                            to="/admin/logout"
+                        >
                             <span className="h6">Log Out</span>
                         </Link>
                     </div>
