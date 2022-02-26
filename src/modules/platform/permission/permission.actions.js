@@ -3,12 +3,18 @@ import Types from "./permission.types";
 
 const baseUrl = "http://localhost:5000";
 
-export const getPermissions = () => {
+export const getPermissions = (page, limit, orderBy, orderType) => {
+    const url = `${baseUrl}/api/permissions`
+        +(page ? `?page=${page}` : "")
+        +(limit ? `&&limit=${limit}` : "")
+        +(orderBy ? `&&orderBy=${orderBy}` : "")
+        +(orderType ? `&&orderType=${orderType}` : "");
+
     return {
         type: Types.GET_PERMISSIONS,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/permissions`, 
+            url, 
             withCredentials: true
         })
     }

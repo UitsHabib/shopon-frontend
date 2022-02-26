@@ -8,6 +8,7 @@ const initialState = {
     permissionId: null,
     activePage: 1,
     limit: 3,
+    total: null,
     fetchData: true,
 
     services: [],
@@ -16,9 +17,9 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case Types.GET_PERMISSIONS_FULFILLED: {
-            const permissions = action.payload.data;
+            const { permissions, metaData } = action.payload.data;
 
-            return { ...state, permissions};
+            return { ...state, permissions, total: metaData.total};
         }
         case Types.SORT_PERMISSION: {
             const sorting = action.payload;
