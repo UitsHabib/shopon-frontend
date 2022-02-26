@@ -24,6 +24,7 @@ import {
     CustomerLogin,
     CustomerSignUp,
     CustomerLogout,
+    CustomerProduct,
 } from "../customer";
 import { Complain } from "../complaint";
 import {
@@ -62,6 +63,7 @@ function App() {
                 <PrivateRoute exact path="/admin" component={Dashboard} />
                 <PublicRoute path="/signup" component={CustomerSignUp} />
                 <PublicRoute path="/login" component={CustomerLogin} />
+                <PublicRoute path="/product/:id" component={CustomerProduct} />
                 <Route path="/logout" component={CustomerLogout} />
                 <PublicRoute exact path="/" component={Customer} />
 

@@ -14,16 +14,12 @@ export function getPublicProduct() {
     };
 }
 
-export function customerLogin(data) {
-    return {
-        type: Types.CUSTOMER_LOGIN,
-        payload: axios({
-            method: "post",
-            url: `${baseUrl}/api/customers/login`,
-            data,
-            withCredentials: "true",
-        }),
-    };
+export async function customerLogin(data) {
+    const response = await axios.post(`${baseUrl}/api/customers/login`, data, {
+        withCredentials: true,
+    });
+    console.log(response);
+    return response;
 }
 
 export function customerlogout() {

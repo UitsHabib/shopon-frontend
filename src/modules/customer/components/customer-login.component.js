@@ -8,26 +8,29 @@ import { customerLogin } from "../customer.action";
 
 const CustomerLogin = (props) => {
     const history = useHistory();
-    const dispatch = useDispatch();
 
-    function handleLogin(data) {
-        dispatch(customerLogin(data))
-            .then((response) => {
-                props.location.state && props.location.state.from.pathname
-                    ? history.push(props.location.state.from.pathname)
-                    : history.push("/");
-
-                toast.success("Logged in Successfully", {
-                    backgroundColor: "#8329C5",
-                    color: "#ffffff",
-                });
-            })
-            .catch((error) => {
-                toast.error(error.response.data, {
-                    backgroundColor: "#8329C5",
-                    color: "#ffffff",
-                });
+    async function handleLogin(data) {
+        try {
+            const response = await customerLogin(data);
+            console.log(response);
+            localStorage.setItem(
+                "loggedInCustomer",
+                JSON.stringify(response.data)
+            );
+            props.location.state && props.location.state.from.pathname
+                ? history.push(props.location.state.from.pathname)
+                : history.push("/");
+            toast.success("Logged in Successfully", {
+                backgroundColor: "#8329C5",
+                color: "#ffffff",
             });
+        } catch (error) {
+            console.log(error.response.data);
+            toast.error(error.response.data, {
+                backgroundColor: "#8329C5",
+                color: "#ffffff",
+            });
+        }
     }
 
     return (

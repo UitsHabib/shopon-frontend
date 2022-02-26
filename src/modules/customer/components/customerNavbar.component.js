@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import getLoggedInCustomer from "../service/getLoggedInCustomer";
 
 const CustomerNav = () => {
-    const loggedInCustomer = useSelector(
-        (state) => state.customerReducer.loggedInCustomer
-    );
+    const loggedInCustomer = getLoggedInCustomer();
+    const cartItem = useSelector((state) => state.customerReducer.cart);
     return (
         <>
             <nav
@@ -53,7 +53,18 @@ const CustomerNav = () => {
 
                 {loggedInCustomer && (
                     <div className="d-flex">
-                        <span className="h5 my-0 mx-4">
+                        <button type="button" class="position-relative">
+                            <span>
+                                <i
+                                    style={{ fontSize: "25px" }}
+                                    className="bi bi-cart"
+                                ></i>
+                            </span>
+                            <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {cartItem.length}
+                            </span>
+                        </button>
+                        <span className="h5 my-1 mx-4">
                             <i className="bi bi-person-circle mx-1" />
                             <Link to="/my-profile">
                                 {" "}

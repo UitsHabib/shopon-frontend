@@ -4,6 +4,7 @@ import CustomerNav from "./components/customerNavbar.component";
 import CustomerLogin from "./components/customer-login.component";
 import CustomerSignUp from "./components/customer-signup.component";
 import CustomerLogout from "./components/customer-logout.component";
+import CustomerProduct from "./components/product.component";
 export {
     Customer,
     customerReducer,
@@ -11,4 +12,5 @@ export {
     CustomerLogin,
     CustomerSignUp,
     CustomerLogout,
+    CustomerProduct,
 };

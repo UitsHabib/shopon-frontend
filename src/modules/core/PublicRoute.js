@@ -20,6 +20,8 @@ export default function PublicRoute({ component: Component, ...rest }) {
         else if (currentPathname === "/admin/login") setLoggedInAs("user");
         else if (currentPathname === "/login") setLoggedInAs("customer");
         else if (currentPathname === "/signup") setLoggedInAs("customer");
+        else if (currentPathname.startsWith("/product"))
+            setLoggedInAs("customer");
     }, []);
 
     return (
