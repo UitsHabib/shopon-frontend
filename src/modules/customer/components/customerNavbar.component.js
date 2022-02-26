@@ -5,6 +5,7 @@ import getLoggedInCustomer from "../service/getLoggedInCustomer";
 const CustomerNav = () => {
     const loggedInCustomer = getLoggedInCustomer();
     const cartItem = useSelector((state) => state.customerReducer.cart);
+    const handleSearch = () => {};
     return (
         <>
             <nav
@@ -17,10 +18,12 @@ const CustomerNav = () => {
                     </Link>
                 </div>
 
-                <form className="d-flex">
+                <form onSubmit={handleSearch} className="d-flex">
                     <input
                         className="form-control me-2"
                         type="search"
+                        name="search"
+                        id="Search"
                         placeholder="Search Product"
                         style={{ minWidth: "400px" }}
                     />
@@ -28,6 +31,7 @@ const CustomerNav = () => {
                         Search
                     </button>
                 </form>
+
                 {/* <div className="d-flex">
                     <Link to={"/login"} className="btn">
                         {" "}

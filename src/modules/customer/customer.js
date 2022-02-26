@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 
 const Customer = (props) => {
     const dispatch = useDispatch();
+
     const loggedInCustomer = getLoggedInCustomer();
     const imageItem = [four, five, six];
     const cartItem = useSelector((state) => state.customerReducer.cart);
