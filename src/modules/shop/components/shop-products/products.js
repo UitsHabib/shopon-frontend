@@ -6,7 +6,11 @@ import { Dropdown } from "react-bootstrap";
 import { useRouteMatch } from "react-router-dom";
 
 import ShowProducts from "./show-products.component";
-import { getPaginatedProducts, getAllProducts } from "./products.actions";
+import {
+    getPaginatedProducts,
+    getAllProducts,
+    getSortedProducts,
+} from "./products.actions";
 import Pagination from "./common/pagination.component";
 import { toast } from "react-toastify";
 import Table from "./common/table.component";
@@ -17,32 +21,28 @@ const Products = (props) => {
     const shopProducts = useSelector(
         (state) => state.shopProductsReducer.productList
     );
+    const totalItems = useSelector(
+        (state) => state.shopProductsReducer.totalProducts
+    );
+    const paginatedProducts = useSelector(
+        (state) => state.shopProductsReducer.paginatedProductList
+    );
+
+    const sortedProducts = useSelector(
+        (state) => state.shopProductsReducer.sortedProductList
+    );
+
+    const productsPerPage = 5;
+    const [activePage, setActivePage] = useState(1);
     const [sortColumn, setSortColumn] = useState({
         path: "id",
         order: "asc",
     });
-    const [paginatedProducts, setPaginatedProducts] = useState([]);
-    const productsPerPage = 5;
-    let totalPages = 0
-    const [activePage, setActivePage] = useState(1);
 
     const [targetProduct, setTargetProduct] = useState({});
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [updateDetailModal, setUpdateDetailModal] = useState(false);
     const [deleteDetailModal, setDeleteDetailModal] = useState(false);
-
-    const handleClickPage = (activePage) => setActivePage(activePage);
-
-    async function paginateProducts() {
-        totalPages = Math.ceil((shopProducts.length)/productsPerPage);
-        try {
-            const { data } = await getPaginatedProducts(activePage, productsPerPage); 
-            setPaginatedProducts(data.products);
-        } catch(error) {
-            console.log(error);
-        }
-    };
-
     const columns = [
         {
             label: "ID",
@@ -86,6 +86,7 @@ const Products = (props) => {
         },
         {
             label: "Action",
+            path: "action",
             content: (targetShop) => (
                 <></>
                 // <Dropdown>
@@ -127,16 +128,42 @@ const Products = (props) => {
         },
     ];
 
+    const handleClickPage = (activePage) => setActivePage(activePage);
+    const handleSort = (sortColumn) => setSortColumn(sortColumn);
+
     useEffect(() => {
         dispatch(getAllProducts());
     }, []);
 
-    paginateProducts();
+    // useEffect(() => {
+    //     dispatch(getPaginatedProducts(activePage, productsPerPage));
+    // }, [activePage]);
+
+    useEffect(() => {
+        dispatch(
+            getSortedProducts(
+                activePage,
+                productsPerPage,
+                sortColumn.path,
+                sortColumn.order
+            )
+        );
+    }, [sortColumn, activePage]);
 
     return (
         <>
-            <Table items={paginatedProducts} columns={columns} />
-            <Pagination totalItems={shopProducts.length} pageCount={totalPages} activePage={activePage} onClickPage={handleClickPage} />
+            <Table
+                items={sortedProducts}
+                columns={columns}
+                sortColumn={sortColumn}
+                onSort={handleSort}
+            />
+            <Pagination
+                totalItems={totalItems}
+                pageCount={productsPerPage}
+                activePage={activePage}
+                onClickPage={handleClickPage}
+            />
 
             {/* {showDetailModal ? (
                 <ModalForProduct

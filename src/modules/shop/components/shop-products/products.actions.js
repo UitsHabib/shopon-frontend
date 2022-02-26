@@ -15,9 +15,24 @@ export function getAllProducts() {
 }
 
 export function getPaginatedProducts(page, limit) {
+    return {
+        type: Types.GET_PAGINATED_SHOP_PRODUCT,
+        payload: axios({
+            method: "get",
+            url: `${baseUrl}/api/shops/products/?page=${page}&&limit=${limit}`,
+            withCredentials: "true",
+        }),
+    };
+}
+
+export function getSortedProducts(page, limit, orderBy, orderType) {
+    return {
+        type: Types.GET_SORTED_SHOP_PRODUCT,
+        payload: axios({
+            method: "get",
+            url: `${baseUrl}/api/shops/products/?page=${page}&&limit=${limit}&&orderBy=${orderBy}&&orderType=${orderType}`,
+            withCredentials: "true",
+        }),
+    };
     //console.log(page, limit);
-    return axios.get(
-        `${baseUrl}/api/shops/products/?page=${page}&&limit=${limit}`,
-        { withCredentials: "true" }
-    );
 }

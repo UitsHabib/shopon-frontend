@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { Button, Modal } from 'react-bootstrap';
 import { addNewShopSchema } from '../shop.schema';
 
-export function ModalForShops(props) {
+export function ModalForShopProduct(props) {
 	const {
         type,
 		targetShop,
