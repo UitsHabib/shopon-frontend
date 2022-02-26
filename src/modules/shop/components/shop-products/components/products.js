@@ -153,10 +153,6 @@ const Products = (props) => {
         },
     ];
 
-    function handleAddnewProductShow() {
-        setAddNewProductShow(!addNewProductShow);
-    }
-
     async function handleAddnewProduct(newProduct) {
         try {
             await addNewProduct(newProduct);
@@ -215,7 +211,7 @@ const Products = (props) => {
     }
 
     useEffect(() => {
-        dispatch(getAllProducts());
+        dispatch(getAllProducts(1, null, null, null));
     }, [needToFetch]);
 
     // useEffect(() => {

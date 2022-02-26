@@ -11,7 +11,7 @@ export default function reducer(state = initialState, action) {
     switch (action.type) {
         case Types.GET_SHOP_PRODUCT_FULFILLED: {
             const productList = action.payload.data.products;
-            const totalProducts = action.payload.data.meta.total;
+            const totalProducts = action.payload.data.metaData.total;
             return {
                 ...state,
                 totalProducts,
