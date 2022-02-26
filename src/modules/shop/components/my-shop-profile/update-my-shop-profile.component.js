@@ -12,20 +12,19 @@ const UpdateMyShopProfile = (props) => {
 	const history = useHistory();
 
 	const loggedInShop = useSelector(state => state.shopReducer.loggedInShop);
-    console.log(loggedInShop);
-
     const currentdate = new Date();
     
 	async function handleUpdateMyProfile(newMyProfile) {
 		try {
 			const { data } = await updateShopProfile(newMyProfile);
-			history.push('/my-shop-profile');
+            window.location.href = '/my-shop-profile'
+			//history.push('/my-shop-profile');
             toast.success('Profile Updated Successfully', {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
 			})
 		} catch (error) {
-			toast.error('Profile Updatation Failed', {
+			toast.error(error.response.data, {
 				backgroundColor: '#8329C5',
 				color: '#ffffff',
 			})
@@ -43,7 +42,7 @@ const UpdateMyShopProfile = (props) => {
 					initialValues={{
 						id: loggedInShop.id,
 						name: loggedInShop.name,
-						description: loggedInShop.description,
+						description: loggedInShop.description ? loggedInShop.description : '',
 						email: loggedInShop.email,
 						license_number: loggedInShop.license_number ? loggedInShop.license_number : '',
                         updated_at: moment(currentdate).format('dddd, MMMM Do YYYY, h:mm:ss a')
@@ -103,6 +102,21 @@ const UpdateMyShopProfile = (props) => {
 										/>
 										<div className="invalid-feedback d-block">
 											<ErrorMessage name="email" />
+										</div>
+									</div>
+
+                                    <div className="form-group mb-3">
+										<label htmlFor="description" className="form-label">
+											Description
+										</label>
+										<Field
+											type="text"
+											className="form-control"
+											id="description"
+											name="description"
+										/>
+										<div className="invalid-feedback d-block">
+											<ErrorMessage name="description" />
 										</div>
 									</div>
 

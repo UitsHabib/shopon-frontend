@@ -6,7 +6,7 @@ import MyShopProfile from './components/my-shop-profile/my-shop-profile.componen
 import UpdateMyShopProfile from './components/my-shop-profile/update-my-shop-profile.component';
 import shopReducer from './shop.reducer';
 import shopProductsReducer  from './components/shop-products/shop-products.reducer';
-import Products from './components/shop-products/products';
+import Products from './components/shop-products/components/products';
 import * as shopActions from './shop.actions';
 
 export {

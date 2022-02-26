@@ -26,7 +26,7 @@ const TableHeader = ({columns, sortColumn, onSort}) => {//sortColumn = {path: id
                 {
                     columns.map( (column, index)=> {
                         return(
-                            <th scope="col" key={index}
+                            <th class="text-center" scope="col" key={index}
                                 onClick={()=>handleSort(column)}
                             >
                                 {column.label}{" "}
