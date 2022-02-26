@@ -61,17 +61,55 @@ export function createUser(user) {
 }
 
 export function getUser(user_id) {
-    return axios.get(`${baseUrl}/api/users/${user_id}`, {
-        withCredentials: true,
-    });
-}
-export function getRoles() {
-    return axios.get(`${baseUrl}/api/roles`, { withCredentials: true });
+    console.log("U ID : ", user_id);
+
+    return {
+        type: Types.GET_USER,
+        payload: axios({
+            method: "get",
+            url: `${baseUrl}/api/users/${user_id}`,
+            withCredentials: "true",
+        }),
+    };
+
+    // return axios.get(`${baseUrl}/api/users/${user_id}`, {
+    //     withCredentials: true,
+    // });
 }
 
+// export function getProfiles() {
+//     return axios.get(`${baseUrl}/api/profiles`, { withCredentials: true });
+// }
+
 export function getProfiles() {
-    return axios.get(`${baseUrl}/api/profiles`, { withCredentials: true });
+    console.log("in action profile");
+  return {
+      type: Types.GET_PROFILES,
+      payload: axios({
+          method: "get",
+          url: `${baseUrl}/api/profiles`,
+          withCredentials: "true",
+      }),
+  };
 }
+
+// export function getRoles() {
+//     return axios.get(`${baseUrl}/api/roles`, { withCredentials: true });
+// }
+
+export function getRoles() {
+    console.log("in action roles");
+  return {
+      type: Types.GET_ROLES,
+      payload: axios({
+          method: "get",
+          url: `${baseUrl}/api/roles`,
+          withCredentials: "true",
+      }),
+  };
+}
+
+
 
 export function updateUser(usersID, updatedUser) {
     return axios.patch(`${baseUrl}/api/users/${usersID}`, updatedUser, {

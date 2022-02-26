@@ -1,5 +1,6 @@
 import {toast} from "react-toastify";
 import { useEffect, useState } from "react";
+import { useSelector , useDispatch } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 
@@ -8,12 +9,14 @@ import { getProfiles, getRoles, getUser, updateUser } from "../user.actions";
 
 const UpdateUser = (props) => {
     const { path } = useRouteMatch();
+    const dispatch = useDispatch();
     const usersID = props.location.state.data;
     
     const [user, setUser] = useState();
     const [roles, setRoles] = useState();
     const [profiles, setProfiles] = useState();
     const [dataImported, setDataImported] = useState(false);
+    const [reload, setReload] = useState(1);
 
     const removeNull = (value) => {
         if (value === null) return "";
@@ -44,14 +47,14 @@ const UpdateUser = (props) => {
         }
     }
 
-    const getProfile_id = title => profiles.find((profile) => profile.title === title).id;
     const getRole_id = title => roles.find((role) => role.title === title).id;
-
+    
     async function getUserDetails(user_id) {
         try {
             setDataImported(true);
             const {data} = await getUser(user_id);
-            setUser(data);
+            console.log("data" ,data);
+            // setUser(data);
         } catch (error) {
             toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
@@ -60,7 +63,7 @@ const UpdateUser = (props) => {
         try {
             setDataImported(true);
             const {data} = await getRoles();
-            setRoles(data);
+            // setRoles(data);
         } catch (error) {
             toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
@@ -69,21 +72,66 @@ const UpdateUser = (props) => {
         try {
             setDataImported(true);
             const {data} = await getProfiles();
-            setProfiles(data);
+            // setProfiles(data);
         } catch (error) {
             toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
     }
+    
+    const nroles = useSelector((state) => state.userReducer.roles);
+    const nuser = useSelector((state) => state.userReducer.user);
+    const nprofiles = useSelector((state) => state.userReducer.profiles);
+    const setAll = () =>{
 
+        if(!roles)
+        setRoles(nroles);
+        if(!user)
+        setUser(nuser);
+        if(!profiles)
+        setProfiles( nprofiles);
+        
+        console.log("User : " , user);
+        console.log("profiles : " , profiles);
+        console.log("Roles : " , roles)
+        console.log("User : " , nuser);
+        console.log("profiles : " , nprofiles);
+        console.log("Roles : " , nroles)
+    }
 
+    const getProfile_id = title => profiles.find((profile) => profile.title === title).id;
+    
+   
     useEffect(() => {
-        if (!dataImported) {
-            getRolesList();
-            getProfilesList();
-            getUserDetails(usersID);
-        }
-    }, [user, dataImported, roles , profiles]);
+        // if (!dataImported) {
+            if(!profiles)
+            dispatch(getProfiles());
+            if(!roles)
+            dispatch(getRoles());
+            if(!user)
+            dispatch(getUser(usersID));
+            // setReload(!reload);
 
+            // getRolesList();
+            // getProfilesList();
+            
+            setAll();
+
+
+            // getUserDetails(usersID);
+        // } 
+        if(reload <5){
+            console.log(reload);
+            setReload(reload +1);}
+        if(user && profiles && roles ) 
+        {
+            console.log("User : " , user);
+            console.log("profiles : " , profiles);
+            console.log("Roles : " , roles);
+            setDataImported(true);
+        }   
+    }, [dataImported  , user, profiles , roles ]);
+    
+    
     return (
         <>
             <button
@@ -95,7 +143,7 @@ const UpdateUser = (props) => {
                     // console.log(`${props.history.state?.prevPath}`);
                 }}
                 style={{ margin: "20px", marginLeft: "85%" }}
-            >
+                >
                 Go Back
             </button>
             <br />
