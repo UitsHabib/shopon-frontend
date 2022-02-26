@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Modal from 'react-modal';
+import Modal from "react-modal";
 
 import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
@@ -8,7 +8,7 @@ import _ from "lodash";
 import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 import { getUsers, deleteUser, getUser } from "../user.actions";
-import { getPermission } from '../../permission/permission.actions';
+import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
 
@@ -21,23 +21,28 @@ const Users = (props) => {
         order: "asc",
     });
     const [activePage, setActivePage] = useState(1);
-    const [pageCount, setPageCount] = useState(1);
+    const [pageCount, setPageCount] = useState(2);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
-    const [modalIsOpen, setIsOpen] = useState(false);
+    const [detailsModal, setDetailsModal] = useState(false);
     const [userDetails, setUserDetails] = useState({});
-    const [ userPermissions, setUserPermissions ] = useState([]);
-    const [ showPermission, setShowPermission ] = useState(false);
+    const [userPermissions, setUserPermissions] = useState([]);
+    const [showPermission, setShowPermission] = useState(false);
+    const [deleteModal, setDeleteModal] = useState(false);
+    const [deletedUserId, setDeletedUserId] = useState("1");
 
     const modalStyle = {
         content: {
-          top: '30%',
-          left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          marginRight: '-50%',
-          transform: 'translate(-50%, -50%)',
+            top: "30%",
+            left: "50%",
+            right: "auto",
+            bottom: "auto",
+            marginRight: "-50%",
+            transform: "translate(-50%, -50%)",
+            backgroundFilter: "blur(2px)",
+            border: "1px solid black",
         },
-      };
+        overlay: { zIndex: 1000 },
+    };
 
     const columns = [
         {
@@ -101,7 +106,11 @@ const Users = (props) => {
                                 </Link>
                             </Dropdown.Item>
                             <Dropdown.Item
-                                onClick={() => handleDeleteUser(profile.id)}
+                                onClick={() => {
+                                    console.log(typeof profile.id);
+                                    setDeletedUserId(profile.id);
+                                    setDeleteModal(true);
+                                }}
                             >
                                 Delete
                             </Dropdown.Item>
@@ -118,6 +127,10 @@ const Users = (props) => {
     ];
 
     const users = useSelector((state) => state.userReducer.users);
+    console.log(users);
+    users.map((user) => {
+        if (user.phone === null) user.phone = "--";
+    });
     const loggedInUser = useSelector(
         (state) => state.userReducer.loggedInUser.id
     );
@@ -125,21 +138,23 @@ const Users = (props) => {
     const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
     const handleShowDetails = (id) => {
-        setIsOpen(true);
-        try{
-            getUser(id)
-            .then(res => setUserDetails(res.data))
-        }catch (err){console.log('err getting user');}
+        setDetailsModal(true);
+        try {
+            getUser(id).then((res) => setUserDetails(res.data));
+        } catch (err) {
+            console.log("err getting user");
+        }
     };
 
     const handleUserPermission = (id) => {
-        try{
-            getPermission(id)
-            .then(res => {
+        try {
+            getPermission(id).then((res) => {
                 console.log(res.data.permission_services);
                 setUserPermissions(res.data.permission_services);
-            })
-        }catch (err){console.log('err getting user permission');}
+            });
+        } catch (err) {
+            console.log("err getting user permission");
+        }
     };
     const sortUsers = (users) => {
         const sortedUsers = _.orderBy(
@@ -150,13 +165,13 @@ const Users = (props) => {
         return sortedUsers;
     };
 
-    async function handleDeleteUser(userId) {
+    async function handleDeleteUser() {
         try {
-            await deleteUser(userId);
+            await deleteUser(deletedUserId);
             toast.success(`Successfully deleted`);
             setNeedToFetchUser(!needToFetchUser);
         } catch (error) {
-            alert(`Could not delete User ${userId}`);
+            alert(`Could not delete User ${deletedUserId}`);
         }
     }
 
@@ -174,17 +189,15 @@ const Users = (props) => {
 
     const paginatedUsers = paginateUsers();
     const userList = sortUsers(paginatedUsers);
-    const handleCloseModal = () => {
-        
-    }
+
     return (
         <div className="container">
             <Modal
-                isOpen={modalIsOpen}
+                isOpen={detailsModal}
                 style={modalStyle}
                 contentLabel="Details Modal"
             >
-                <button onClick={() => setIsOpen(false)}>close</button>
+                <button onClick={() => setDetailsModal(false)}>close</button>
                 <div>
                     <ul>
                         {
@@ -199,26 +212,59 @@ const Users = (props) => {
                         }
                     </ul>
                     <div>
-                        <button onClick={()=> {
-                            handleUserPermission(userDetails.profile.profile_permissions[0].permission_id);
-                            setShowPermission(!showPermission)
-                        }
-                        }>{showPermission === false ? 'Show Permissions' : 'Close'}</button>
-                        {
-                            showPermission === true ? (
-                                <ul>
-                                    {
-                                        userPermissions.map(permission=> {
-                                            return <li key={permission.service.id}>{permission.service.title}</li>;
-                                        }
-                                            
-                                        )
-                                    }
-                                </ul>
-                            ): null
-                        }    
+                        <button
+                            onClick={() => {
+                                handleUserPermission(
+                                    userDetails.profile.profile_permissions[0]
+                                        .permission_id
+                                );
+                                setShowPermission(!showPermission);
+                            }}
+                        >
+                            {showPermission === false
+                                ? "Show Permissions"
+                                : "Close"}
+                        </button>
+                        {showPermission === true ? (
+                            <ul>
+                                {userPermissions.map((permission) => {
+                                    return (
+                                        <li key={permission.service.id}>
+                                            {permission.service.title}
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        ) : null}
                     </div>
-                   
+                </div>
+            </Modal>
+            <Modal
+                isOpen={deleteModal}
+                style={modalStyle}
+                contentLabel="Details Modal"
+            >
+                <div>
+                <i class="fa-solid fa-circle-xmark"></i>
+                    <p>Are you sure you want to delete this user?</p>
+                    <button
+                        type="button"
+                        class="btn btn-warning"
+                        onClick={() => {
+                            handleDeleteUser();
+                            setDeleteModal(false);
+                        }}
+                        style={{ marginRight: "10px" }}
+                    >
+                        Yes
+                    </button>
+                    <button
+                        type="button"
+                        class="btn btn-secondary"
+                        onClick={() => setDeleteModal(false)}
+                    >
+                        No
+                    </button>
                 </div>
             </Modal>
 

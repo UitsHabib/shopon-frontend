@@ -14,8 +14,10 @@ const UpdateUser = (props) => {
     const [roles, setRoles] = useState();
     const [profiles, setProfiles] = useState();
     const [dataImported, setDataImported] = useState(false);
+    const [refreshUpdate, setRefreshUpdate] = useState(1);
 
     const removeNull = (value) => {
+        if(value ==="") return "";
         if (value === null) return "";
         if (!value) return "";
         return value;
@@ -29,10 +31,11 @@ const UpdateUser = (props) => {
                 last_name : data.last_name,
                 // email  : data.email,
                 password  : data.password,
-                role_id   : getRole_id(data.role_id),
+                // role_id   : getRole_id(data.role_id),
             };
 
             await updateUser( usersID , updatedUser );
+            setRefreshUpdate(2);
             
             toast.success(`User ${user.first_name} ${user.last_name} updated`, 
             { backgroundColor: '#8329C5', color: '#ffffff', });
@@ -86,18 +89,7 @@ const UpdateUser = (props) => {
 
     return (
         <>
-            <button
-                className="btn btn-success"
-                onClick={() => {
-                    // props.history.push(`${props.history.state?.prevPath}`);
-                    setDataImported(false);
-                    props.history.push("/platform/users");
-                    // console.log(`${props.history.state?.prevPath}`);
-                }}
-                style={{ margin: "20px", marginLeft: "85%" }}
-            >
-                Go Back
-            </button>
+           
             <br />
             <div className="mx-5 text-center">
                 <h3>Update User</h3>
@@ -112,12 +104,14 @@ const UpdateUser = (props) => {
                             email           : user.email,
                             password        : removeNull(user.password),
                             confirm_password: removeNull(user.confirm_password),
-                            role_id         :  removeNull(roles.find((role) => role.id === user.role_id).title )
+                            role_id         :  removeNull(roles.find((role) => role.id === user.role_id))
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
                             handleUpdateUser(values);
                             actions.setSubmitting(false);
+                            setDataImported(false);
+                            setTimeout(()=>props.history.push("/platform/users"), 1000);
                         }}
                     >
                         {(formikProps) => (
