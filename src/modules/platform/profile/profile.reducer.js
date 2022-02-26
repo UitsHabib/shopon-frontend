@@ -10,7 +10,7 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 profiles: action.payload.data.profiles,
-                metaData: action.payload.data.metaData
+                metaData: action.payload.data.metaData.total
             };
         }
     }

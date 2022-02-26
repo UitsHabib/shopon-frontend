@@ -10,17 +10,18 @@ import { useRouteMatch } from "react-router-dom";
 import { updateSchema } from "../profile.schema";
 import moment from "moment";
 import { toast } from "react-toastify";
+
 import {
 	deleteProfile,
 	getPermissions,
 	getProfiles,
-	getUsers,
 	updateProfile,
 } from "../profile.actions";
 
 const Profiles = () => {
 	const { path } = useRouteMatch();
-    const dispatch = useDispatch();
+	const dispatch = useDispatch();
+
 	const [permissions, setPermissions] = useState([]);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [update, setUpdate] = useState(null);
@@ -33,10 +34,8 @@ const Profiles = () => {
 	const [sortColumn, setSortColumn] = useState({ path: "id", order: "asc" });
 	const [needToFetchProfile, setNeedToFetchProfile] = useState(true);
 
-    const profiles = useSelector(state => state.profileReducer.profiles);
-    const metaData = useSelector(state => state.profileReducer.metaData);
-    console.log(metaData);
-    const users = useSelector(state => state.userReducer.users);
+	const profiles = useSelector((state) => state.profileReducer.profiles);
+	const metaData = useSelector((state) => state.profileReducer.metaData);
 
 	//fetch permission data from database
 	async function getPermissionList() {
@@ -51,10 +50,6 @@ const Profiles = () => {
 	//update profile data in database
 	async function updateProfileList({ id, title, description, permissions }) {
 		try {
-			const allProfiles = [...profiles];
-			const profile = allProfiles.find((pf) => pf.id === id);
-			profile.title = title;
-			profile.description = description;
 			await updateProfile(id, title, description, permissions);
 			toast.success(`Successfully updated`);
 			setNeedToFetchProfile(!needToFetchProfile);
@@ -68,8 +63,6 @@ const Profiles = () => {
 	async function deleteProfileList() {
 		try {
 			const { id } = deleteInfo;
-			const allProfiles = [...profiles];
-			const newProfiles = allProfiles.filter((pf) => id !== pf.id);
 			await deleteProfile(id);
 			toast.success(`Successfully deleted`);
 			setNeedToFetchProfile(!needToFetchProfile);
@@ -80,24 +73,12 @@ const Profiles = () => {
 	}
 
 	useEffect(() => {
-		dispatch(getUsers());
-	}, []);
-
-	useEffect(() => {
 		dispatch(getProfiles());
 	}, [needToFetchProfile]);
 
 	useEffect(() => {
 		getPermissionList();
 	}, []);
-
-	const handleUser = (id) => {
-		const selectedUser = users.filter((user) => user.id === id);
-		if (selectedUser[0]) {
-			const fullName = `${selectedUser[0].first_name} ${selectedUser[0].last_name}`;
-			return fullName;
-		} else return "--";
-	};
 
 	//detail profile section
 	const handleDetail = (data) => {
@@ -147,6 +128,7 @@ const Profiles = () => {
 
 	const handleClickPage = (activePage) => {
 		setActivePage(activePage);
+        // setNeedToFetchProfile(!needToFetchProfile);
 	};
 
 	const paginateProfiles = (profiles) => {
@@ -181,7 +163,7 @@ const Profiles = () => {
 			content: (profile, key) => (
 				<td style={{ color: "#136CB2" }}>
 					{" "}
-					{profile[key].first_name+ ' ' + profile[key].last_name}
+					{profile[key].first_name + " " + profile[key].last_name}
 				</td>
 			),
 		},
@@ -201,7 +183,7 @@ const Profiles = () => {
 			content: (profile, key) => (
 				<td style={{ color: "#136CB2" }}>
 					{" "}
-					{profile[key].first_name+ ' ' + profile[key].last_name}
+					{profile[key].first_name + " " + profile[key].last_name}
 				</td>
 			),
 		},
@@ -293,9 +275,8 @@ const Profiles = () => {
 						onSort={handleSort}
 						sortColumn={sortColumn}
 					></Table>
-
 					<Pagination
-						totalItems={profiles.length}
+						totalItems={metaData}
 						pageCount={pageCount}
 						activePage={activePage}
 						onClickPage={handleClickPage}
