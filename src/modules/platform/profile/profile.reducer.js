@@ -9,9 +9,10 @@ export default function reducer(state = initialState, action) {
         case Types.GET_PROFILES_FULFILLED: {
             return {
                 ...state,
-                profiles: action.payload.data
+                profiles: action.payload.data.profiles,
+                metaData: action.payload.data.metaData
             };
         }
     }
     return state;
-}
+} 

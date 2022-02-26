@@ -13,7 +13,7 @@ const CreateProfile = () => {
 	async function getPermissionList() {
 		try {
 			const { data } = await getPermissions();
-			setPermissions(data);
+			setPermissions(data.permissions);
 		} catch {
 			console.log("error while getting permissions");
 		}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Table from "./common/table.component";
 import _ from "lodash";
 import { Formik, Form, Field, ErrorMessage } from "formik";
@@ -10,7 +10,6 @@ import { useRouteMatch } from "react-router-dom";
 import { updateSchema } from "../profile.schema";
 import moment from "moment";
 import { toast } from "react-toastify";
-// import { getProfiles } from '../profile.actions';
 import {
 	deleteProfile,
 	getPermissions,
@@ -21,9 +20,7 @@ import {
 
 const Profiles = () => {
 	const { path } = useRouteMatch();
-    // const dispatch = useDispatch();
-	const [profiles, setProfiles] = useState([]);
-	const [users, setUsers] = useState([]);
+    const dispatch = useDispatch();
 	const [permissions, setPermissions] = useState([]);
 	const [isUpdate, setIsUpdate] = useState(false);
 	const [update, setUpdate] = useState(null);
@@ -36,34 +33,16 @@ const Profiles = () => {
 	const [sortColumn, setSortColumn] = useState({ path: "id", order: "asc" });
 	const [needToFetchProfile, setNeedToFetchProfile] = useState(true);
 
-    // const profiles = useSelector(state => state.profileReducer.profiles);
-    // console.log(profiles)
-
-	//fetch user data from database
-	async function getUserList() {
-		try {
-			const { data } = await getUsers();
-			setUsers(data.users);
-		} catch {
-			console.log("error while getting users");
-		}
-	}
-
-	//fetch profile data from database
-	async function getProfileList() {
-		try {
-			const { data } = await getProfiles();
-			setProfiles(data);
-		} catch {
-			console.log("error while getting profiles");
-		}
-	}
+    const profiles = useSelector(state => state.profileReducer.profiles);
+    const metaData = useSelector(state => state.profileReducer.metaData);
+    console.log(metaData);
+    const users = useSelector(state => state.userReducer.users);
 
 	//fetch permission data from database
 	async function getPermissionList() {
 		try {
 			const { data } = await getPermissions();
-			setPermissions(data);
+			setPermissions(data.permissions);
 		} catch {
 			console.log("error while getting permissions");
 		}
@@ -77,7 +56,6 @@ const Profiles = () => {
 			profile.title = title;
 			profile.description = description;
 			await updateProfile(id, title, description, permissions);
-			setProfiles(allProfiles);
 			toast.success(`Successfully updated`);
 			setNeedToFetchProfile(!needToFetchProfile);
 			handleUpdateModal();
@@ -93,7 +71,6 @@ const Profiles = () => {
 			const allProfiles = [...profiles];
 			const newProfiles = allProfiles.filter((pf) => id !== pf.id);
 			await deleteProfile(id);
-			setProfiles(newProfiles);
 			toast.success(`Successfully deleted`);
 			setNeedToFetchProfile(!needToFetchProfile);
 			handleDeleteModal();
@@ -103,11 +80,11 @@ const Profiles = () => {
 	}
 
 	useEffect(() => {
-		getUserList();
+		dispatch(getUsers());
 	}, []);
 
 	useEffect(() => {
-		getProfileList();
+		dispatch(getProfiles());
 	}, [needToFetchProfile]);
 
 	useEffect(() => {
@@ -200,11 +177,11 @@ const Profiles = () => {
 		},
 		{
 			label: "Created By",
-			path: "created_by",
+			path: "createdByUser",
 			content: (profile, key) => (
 				<td style={{ color: "#136CB2" }}>
 					{" "}
-					{handleUser(profile[key])}
+					{profile[key].first_name+ ' ' + profile[key].last_name}
 				</td>
 			),
 		},
@@ -220,11 +197,11 @@ const Profiles = () => {
 		},
 		{
 			label: "Updated By",
-			path: "updated_by",
+			path: "updatedByUser",
 			content: (profile, key) => (
 				<td style={{ color: "#136CB2" }}>
 					{" "}
-					{handleUser(profile[key])}
+					{profile[key].first_name+ ' ' + profile[key].last_name}
 				</td>
 			),
 		},
