@@ -10,6 +10,14 @@ import { getPermissions, sortingPermission, deletePermissionStatus, permissionId
 const Permissions = () => {
     const dispatch = useDispatch();
 
+    const permissions = useSelector(state => state.permissionReducer.permissions);
+    const sorting = useSelector(state => state.permissionReducer.sorting);
+    const isDeletePermission = useSelector(state => state.permissionReducer.isDeletePermission);
+    const deletePermissionId = useSelector(state => state.permissionReducer.permissionId)
+    const activePage = useSelector(state => state.permissionReducer.activePage);
+    const limit = useSelector(state => state.permissionReducer.limit);
+    const total = useSelector(state => state.permissionReducer.total);
+
     const handleSorting = (value) => dispatch(sortingPermission(value));
 
     const handleDeleteButton = (id) => {
@@ -40,14 +48,6 @@ const Permissions = () => {
         dispatch(pageLimit(value));
         dispatch(activePageHandle(1));
     };
-
-    const permissions = useSelector(state => state.permissionReducer.permissions);
-    const sorting = useSelector(state => state.permissionReducer.sorting);
-    const isDeletePermission = useSelector(state => state.permissionReducer.isDeletePermission);
-    const deletePermissionId = useSelector(state => state.permissionReducer.permissionId)
-    const activePage = useSelector(state => state.permissionReducer.activePage);
-    const limit = useSelector(state => state.permissionReducer.limit);
-    const total = useSelector(state => state.permissionReducer.total);
 
     useEffect(() => {
         dispatch(getPermissions(activePage, limit, sorting.path, sorting.order));
