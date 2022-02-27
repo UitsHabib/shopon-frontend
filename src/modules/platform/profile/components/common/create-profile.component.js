@@ -29,7 +29,7 @@ const CreateProfile = () => {
 				color: "#ffffff",
 			});
 		} catch (error) {
-            alert(error.response.data);
+			alert("Profile already exits");
 			// toast.warning(error.response.data, {
 			// 	backgroundColor: "#8329C5",
 			// 	color: "#ffffff",
@@ -148,6 +148,9 @@ const CreateProfile = () => {
 										<br />
 									</React.Fragment>
 								))}
+								<div className="invalid-feedback d-block">
+									<ErrorMessage name="permissions" />
+								</div>
 							</div>
 							<br />
 							<button className="btn btn-primary" type="submit">

@@ -16,6 +16,8 @@ import {
 	getPermissions,
 	getProfiles,
 	updateProfile,
+    activePageHandle,
+    sortingProfile
 } from "../profile.actions";
 
 const Profiles = () => {
@@ -23,19 +25,18 @@ const Profiles = () => {
 	const dispatch = useDispatch();
 
 	const [permissions, setPermissions] = useState([]);
-	const [isUpdate, setIsUpdate] = useState(false);
 	const [update, setUpdate] = useState(null);
-	const [isDelete, setIsDelete] = useState(false);
 	const [deleteInfo, setDeleteInfo] = useState(null);
-	const [isDetail, setIsDetail] = useState(false);
 	const [detailInfo, setDetailInfo] = useState(null);
-	const [activePage, setActivePage] = useState(1);
-	const [pageCount, setPageCount] = useState(5);
-	const [sortColumn, setSortColumn] = useState({ path: "id", order: "asc" });
+    const [modal, setModal] = useState({detail: false, update: false, delete: false})
+
 	const [needToFetchProfile, setNeedToFetchProfile] = useState(true);
 
 	const profiles = useSelector((state) => state.profileReducer.profiles);
-	const metaData = useSelector((state) => state.profileReducer.metaData);
+    const activePage = useSelector(state => state.profileReducer.activePage);
+    const limit = useSelector(state => state.profileReducer.limit);
+    const total = useSelector(state => state.profileReducer.total);
+    const sorting = useSelector(state => state.profileReducer.sorting);
 
 	//fetch permission data from database
 	async function getPermissionList() {
@@ -50,10 +51,10 @@ const Profiles = () => {
 	//update profile data in database
 	async function updateProfileList({ id, title, description, permissions }) {
 		try {
-			await updateProfile(id, title, description, permissions);
+			dispatch(updateProfile(id, title, description, permissions));
 			toast.success(`Successfully updated`);
+            setModal({...modal, update: false});
 			setNeedToFetchProfile(!needToFetchProfile);
-			handleUpdateModal();
 		} catch {
 			console.log("error while updating profiles");
 		}
@@ -63,18 +64,18 @@ const Profiles = () => {
 	async function deleteProfileList() {
 		try {
 			const { id } = deleteInfo;
-			await deleteProfile(id);
+            dispatch(deleteProfile(id));
 			toast.success(`Successfully deleted`);
+            setModal({...modal, delete: false})
 			setNeedToFetchProfile(!needToFetchProfile);
-			handleDeleteModal();
 		} catch (error) {
 			console.error("Error: ", error);
 		}
 	}
 
 	useEffect(() => {
-		dispatch(getProfiles());
-	}, [needToFetchProfile]);
+		dispatch(getProfiles(activePage, limit, sorting.path, sorting.order));
+	}, [needToFetchProfile, activePage, limit, sorting]);
 
 	useEffect(() => {
 		getPermissionList();
@@ -82,7 +83,7 @@ const Profiles = () => {
 
 	//detail profile section
 	const handleDetail = (data) => {
-		console.log(data);
+		// console.log(data);
 		let permissions = [];
 		data.profile_permissions.map((pt) =>
 			permissions.push(pt.permission.title)
@@ -90,11 +91,7 @@ const Profiles = () => {
 		const created_at = moment(data.created_at).format("lll");
 		const updated_at = moment(data.updated_at).format("lll");
 		setDetailInfo({ ...data, permissions, created_at, updated_at });
-		setIsDetail((prev) => !prev);
-	};
-
-	const handleDetailModal = () => {
-		setIsDetail((prev) => !prev);
+        setModal({...modal, detail: true})
 	};
 
 	//update profile section
@@ -104,50 +101,18 @@ const Profiles = () => {
 			permissions.push(pt.permission.id.toString())
 		);
 		setUpdate({ ...data, permissions });
-		setIsUpdate((prev) => !prev);
-	};
-
-	const handleUpdateModal = () => {
-		setIsUpdate((prev) => !prev);
-		setUpdate(null);
+        setModal({...modal, update: true})
 	};
 
 	//delete profile section
 	const handleDelete = (data) => {
 		setDeleteInfo(data);
-		setIsDelete((prev) => !prev);
+        setModal({...modal, delete: true})
 	};
 
-	const handleDeleteModal = (data) => {
-		setIsDelete((prev) => !prev);
-	};
+    const handleActivePage = value => dispatch(activePageHandle(value));
+    const handleSorting = value => dispatch(sortingProfile(value));
 
-	const handleSort = (sortColumn) => {
-		setSortColumn(sortColumn);
-	};
-
-	const handleClickPage = (activePage) => {
-		setActivePage(activePage);
-        // setNeedToFetchProfile(!needToFetchProfile);
-	};
-
-	const paginateProfiles = (profiles) => {
-		const start = (activePage - 1) * pageCount;
-		const paginateProfiles = profiles.slice(start, start + pageCount);
-		return paginateProfiles;
-	};
-
-	const sortProfiles = (profiles) => {
-		const sortedProfiles = _.orderBy(
-			profiles,
-			[sortColumn.path],
-			[sortColumn.order]
-		);
-		return sortedProfiles;
-	};
-
-	const paginatedProfiles = paginateProfiles(profiles);
-	const sortedProfiles = sortProfiles(paginatedProfiles);
 	const columns = [
 		{
 			label: "Title",
@@ -270,29 +235,29 @@ const Profiles = () => {
 					}}
 				>
 					<Table
-						items={sortedProfiles}
+						items={profiles}
 						columns={columns}
-						onSort={handleSort}
-						sortColumn={sortColumn}
+						onSort={handleSorting}
+						sortColumn={sorting}
 					></Table>
 					<Pagination
-						totalItems={metaData}
-						pageCount={pageCount}
+						totalItems={total}
+						pageCount={limit}
 						activePage={activePage}
-						onClickPage={handleClickPage}
+						onClickPage={handleActivePage}
 					></Pagination>
 				</div>
-				{isUpdate ? (
+				{modal.update ? (
 					<div
 						className="modal"
-						style={{ display: isUpdate ? "block" : "none" }}
+						style={{ display: modal.update ? "block" : "none" }}
 					>
 						<div
 							className="modal-backdrop"
 							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-								handleUpdateModal();
+                                setModal({...modal, update: false})
 							}}
 						>
 							<div
@@ -321,7 +286,7 @@ const Profiles = () => {
 									}}
 									validationSchema={updateSchema}
 									onSubmit={(values, actions) => {
-										console.log(values);
+										console.log("se",values);
 										updateProfileList(values);
 										actions.setSubmitting(false);
 									}}
@@ -334,7 +299,7 @@ const Profiles = () => {
 												<button
 													type="button"
 													className="btn-close pull-right"
-													onClick={handleUpdateModal}
+													onClick={() => setModal({...modal, update: false})}
 													aria-label="Close"
 												></button>
 												<label
@@ -443,7 +408,7 @@ const Profiles = () => {
 											<button
 												className="btn btn-primary pull-right"
 												type="submit"
-												onClick={updateProfileList}
+												// onClick={() => updateProfileList(data)}
 											>
 												Save changes
 											</button>{" "}
@@ -456,7 +421,7 @@ const Profiles = () => {
 													color: "white",
 													marginRight: "10px",
 												}}
-												onClick={handleUpdateModal}
+												onClick={() => setModal({...modal, update: false})}
 											>
 												Cancel
 											</button>
@@ -470,17 +435,17 @@ const Profiles = () => {
 					<div />
 				)}
 
-				{isDelete ? (
+				{modal.delete ? (
 					<div
 						className="modal"
-						style={{ display: isDelete ? "block" : "none" }}
+						style={{ display: modal.delete ? "block" : "none" }}
 					>
 						<div
 							className="modal-backdrop"
 							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-								handleDeleteModal();
+                                setModal({...modal, delete: false})
 							}}
 						>
 							<div
@@ -504,7 +469,7 @@ const Profiles = () => {
 									<button
 										type="button"
 										className="btn-close pull-right"
-										onClick={handleDeleteModal}
+										onClick={() => setModal({...modal, delete: false})}
 										aria-label="Close"
 									></button>
 									<h1>Delete Account</h1>
@@ -525,7 +490,7 @@ const Profiles = () => {
 												color: "white",
 												marginRight: "10px",
 											}}
-											onClick={handleDeleteModal}
+											onClick={() => setModal({...modal, delete: false})}
 										>
 											Cancel
 										</button>
@@ -545,17 +510,18 @@ const Profiles = () => {
 					<div />
 				)}
 
-				{isDetail ? (
+				{modal.detail ? (
 					<div
 						className="modal"
-						style={{ display: isDetail ? "block" : "none" }}
+						style={{ display: modal.detail ? "block" : "none" }}
 					>
 						<div
 							className="modal-backdrop"
 							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-								handleDetailModal();
+								// handleDetailModal();
+                                setModal({...modal, detail: false})
 							}}
 						>
 							<div
@@ -578,7 +544,7 @@ const Profiles = () => {
 									<button
 										type="button"
 										className="btn-close pull-right"
-										onClick={handleDetailModal}
+										onClick={() => setModal({...modal, detail: false})}
 										aria-label="Close"
 									></button>
 
@@ -640,7 +606,7 @@ const Profiles = () => {
 											color: "white",
 											marginRight: "10px",
 										}}
-										onClick={handleDetailModal}
+										onClick={() => setModal({...modal, detail: false})}
 									>
 										Close
 									</button>
