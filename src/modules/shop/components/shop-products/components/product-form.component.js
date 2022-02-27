@@ -39,6 +39,8 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
 
     const product = useSelector((state) => state.productsReducer.product);
 
+    const categories = ["123"];
+
     useEffect(() => {
         if (productId) dispatch(getProduct(productId));
     }, [productId]);
@@ -146,7 +148,18 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                                 className="form-control"
                                                 id="category_id"
                                                 name="category_id"
-                                            />
+                                                as="select"
+                                            >
+                                                <option value="">Click to Select A Category</option>
+                                                {
+                                                    categories.map(category => {
+                                                        return <option value={`${category}`}>
+                                                        {`${category}`}
+                                                    </option>
+                                                    })
+                                                }
+                                                
+                                            </Field>
                                             <div className="invalid-feedback d-block">
                                                 <ErrorMessage name="category_id" />
                                             </div>
