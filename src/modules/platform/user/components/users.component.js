@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
+    console.log(path)
     const dispatch = useDispatch();
 
     const [sortColumn, setSortColumn] = useState({
@@ -77,6 +78,7 @@ const Users = (props) => {
         {
             label: "Actions",
             content: (profile, detail) => (
+                
                 <td>
                     <Dropdown>
                         <Dropdown.Toggle
@@ -88,6 +90,7 @@ const Users = (props) => {
 
                         <Dropdown.Menu>
                             <Dropdown.Item>
+                            {console.log(profile.id)}
                                 <Link
                                     to={{
                                         pathname:

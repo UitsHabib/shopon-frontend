@@ -47,7 +47,7 @@ const UserForm = (props) => {
         try {
             const response = await getRoles();
             console.log(response.data);
-            setrole(response.data);
+            setrole(response.data.roles);
         } catch (e) {
             console.log(e.response.data);
         }
@@ -56,7 +56,7 @@ const UserForm = (props) => {
         try {
             const response = await getProfiles();
             console.log(response.data);
-            setprofile(response.data);
+            setprofile(response.data.profiles);
         } catch (e) {
             console.log(e.response.data);
         }
