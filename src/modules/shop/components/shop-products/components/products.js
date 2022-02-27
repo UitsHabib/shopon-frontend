@@ -213,7 +213,7 @@ const Products = (props) => {
             {action.updateDetail ? (
                 <ProductModals
                     type="update"
-                    productId={targetProduct.id}
+                    targetProduct={targetProduct}
                     show={action.addNewProduct || action.updateDetail}
                     onHide={() => setAction({})}
                     needToFetch={needToFetch}

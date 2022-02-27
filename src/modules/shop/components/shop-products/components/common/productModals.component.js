@@ -8,13 +8,11 @@ export function ProductModals(props) {
     const {
         type,
         targetProduct,
-        showDetailModal,
         setAction,
         show,
         onHide,
         needToFetch,
         fetch,
-        productId,
     } = props;
 
     const dispatch = useDispatch();
@@ -107,7 +105,7 @@ export function ProductModals(props) {
                         onHide={onHide}
                         needToFetch={needToFetch}
                         fetch={fetch}
-                        productId={productId}
+                        productId={targetProduct.id}
                     />
                 </>
             )}
