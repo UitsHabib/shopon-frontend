@@ -25,9 +25,10 @@ export default function reducer(state = initialState, action) {
             };
         }
         case Types.GET_USER_FULFILLED: {
+            console.log("in fulfilled :  ",action.payload.data.user);
             return {
                 ...state,
-                user: action.payload.data.user,
+                user: action.payload.data,
             };
         }
         case Types.GET_PROFILES_FULFILLED: {

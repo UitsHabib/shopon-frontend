@@ -1,8 +1,8 @@
-import {toast} from "react-toastify";
 import { useEffect, useState } from "react";
 import { useSelector , useDispatch } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from "formik";
-import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+import { useRouteMatch } from "react-router-dom"; 
+import {toast} from "react-toastify";
 
 import { updateUserSchema } from "../user.schema";
 import { getProfiles, getRoles, getUser, updateUser } from "../user.actions";
@@ -10,126 +10,44 @@ import { getProfiles, getRoles, getUser, updateUser } from "../user.actions";
 const UpdateUser = (props) => {
     const { path } = useRouteMatch();
     const dispatch = useDispatch();
-    const usersID = props.location.state.data;
+    const userID = props.location.state.data;
     
-    const [user, setUser] = useState();
-    const [roles, setRoles] = useState();
-    const [profiles, setProfiles] = useState();
     const [dataImported, setDataImported] = useState(false);
-    const [reload, setReload] = useState(1);
-
-    const removeNull = (value) => {
-        if (value === null) return "";
-        if (!value) return "";
-        return value;
-    };
-
+   
+    const roles = useSelector((state) => state.userReducer.roles);
+    const user = useSelector((state) => state.userReducer.user);
+    const profiles = useSelector((state) => state.userReducer.profiles);
+    
     async function handleUpdateUser(data) {
         try {
             const updatedUser = {
-                profile_id: getProfile_id(data.profile_id),
+                profile_id: data.profile_id,
                 first_name: data.first_name,
                 last_name : data.last_name,
                 // email  : data.email,
                 password  : data.password,
-                role_id   : getRole_id(data.role_id),
+                role_id   : data.role_id,
             };
-
-            await updateUser( usersID , updatedUser );
+            console.log(updatedUser , data);
+            await updateUser( userID , updatedUser );
             
             toast.success(`User ${user.first_name} ${user.last_name} updated`, 
             { backgroundColor: '#8329C5', color: '#ffffff', });
             props.history.push("/platform/users");
-
-            // props.history.push(`${props.history.state?.prevPath}`);
         } catch (error) {
-            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
+            console.log(error);
+            toast.warning(error.response, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
     }
-
-    const getRole_id = title => roles.find((role) => role.title === title).id;
-    
-    async function getUserDetails(user_id) {
-        try {
-            setDataImported(true);
-            const {data} = await getUser(user_id);
-            console.log("data" ,data);
-            // setUser(data);
-        } catch (error) {
-            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
-        }
-    }
-    async function getRolesList() {
-        try {
-            setDataImported(true);
-            const {data} = await getRoles();
-            // setRoles(data);
-        } catch (error) {
-            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
-        }
-    }
-    async function getProfilesList() {
-        try {
-            setDataImported(true);
-            const {data} = await getProfiles();
-            // setProfiles(data);
-        } catch (error) {
-            toast.warning(error.response.data, { backgroundColor: '#8329C5', color: '#ffffff', })
-        }
-    }
-    
-    const nroles = useSelector((state) => state.userReducer.roles);
-    const nuser = useSelector((state) => state.userReducer.user);
-    const nprofiles = useSelector((state) => state.userReducer.profiles);
-    const setAll = () =>{
-
-        if(!roles)
-        setRoles(nroles);
-        if(!user)
-        setUser(nuser);
-        if(!profiles)
-        setProfiles( nprofiles);
-        
-        console.log("User : " , user);
-        console.log("profiles : " , profiles);
-        console.log("Roles : " , roles)
-        console.log("User : " , nuser);
-        console.log("profiles : " , nprofiles);
-        console.log("Roles : " , nroles)
-    }
-
-    const getProfile_id = title => profiles.find((profile) => profile.title === title).id;
-    
-   
+ 
     useEffect(() => {
-        // if (!dataImported) {
-            if(!profiles)
-            dispatch(getProfiles());
-            if(!roles)
+            dispatch(getProfiles()); 
             dispatch(getRoles());
-            if(!user)
-            dispatch(getUser(usersID));
-            // setReload(!reload);
-
-            // getRolesList();
-            // getProfilesList();
+            dispatch(getUser(userID));
             
-            setAll();
-
-
-            // getUserDetails(usersID);
-        // } 
-        if(reload <5){
-            console.log(reload);
-            setReload(reload +1);}
-        if(user && profiles && roles ) 
-        {
-            console.log("User : " , user);
-            console.log("profiles : " , profiles);
-            console.log("Roles : " , roles);
-            setDataImported(true);
-        }   
-    }, [dataImported  , user, profiles , roles ]);
+            if(!dataImported)
+                setDataImported(true);   
+    }, [dataImported]);
     
     
     return (
@@ -137,10 +55,8 @@ const UpdateUser = (props) => {
             <button
                 className="btn btn-success"
                 onClick={() => {
-                    // props.history.push(`${props.history.state?.prevPath}`);
                     setDataImported(false);
                     props.history.push("/platform/users");
-                    // console.log(`${props.history.state?.prevPath}`);
                 }}
                 style={{ margin: "20px", marginLeft: "85%" }}
                 >
@@ -150,21 +66,22 @@ const UpdateUser = (props) => {
             <div className="mx-5 text-center">
                 <h3>Update User</h3>
             </div>
-            {user && profiles && roles ? (
+            {dataImported && user?.id ===userID && profiles && roles  ? (
                 <div className="card bg-light " style={{ margin: "30px auto", maxWidth: "45rem" }}>
                     <Formik
                         initialValues={{
-                            profile_id      : removeNull(profiles.find((profile) => profile.id === user.profile_id).title ),
+                            profile_id      : user.profile ? user.profile.id : "",
                             first_name      : user.first_name,
                             last_name       : user.last_name,
                             email           : user.email,
-                            password        : removeNull(user.password),
-                            confirm_password: removeNull(user.confirm_password),
-                            role_id         :  removeNull(roles.find((role) => role.id === user.role_id).title )
+                            password        : user.password ? user.password : "" ,
+                            confirm_password: user.confirm_password,
+                            role_id         : user.role ? user.role.id : ""
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
                             handleUpdateUser(values);
+                            console.log(values);
                             actions.setSubmitting(false);
                         }}
                     >
@@ -285,13 +202,12 @@ const UpdateUser = (props) => {
                                         className="form-control"
                                         as="select"
                                         id="profile_id"
-                                        name="profile_id"
+                                        name="profile_id"            
                                     >
+                                        <option value={""} disabled={true}> Select a Profile </option>
                                         {
                                             profiles ?
-                                            profiles.map((profile , index)=>{
-                                                return <option key={index} >{profile.title}</option>;
-                                            })
+                                            profiles.map((profile , index)=>  <option key={index} value={profile.id} >{profile.title}</option>)
                                             : ""
                                         }
                                     </Field>
@@ -314,11 +230,10 @@ const UpdateUser = (props) => {
                                         id="role_id"
                                         name="role_id"
                                     >
+                                         <option value={""} disabled={true}> Select a Role </option>
                                         {
                                             roles ?
-                                            roles.map((role , index)=>{
-                                                return <option key={index} >{role.title}</option>;
-                                            })
+                                            roles.map((role , index)=>  <option key={index} value={role.id} >{role.title}</option>)
                                             : ""
                                         }
                                     </Field>

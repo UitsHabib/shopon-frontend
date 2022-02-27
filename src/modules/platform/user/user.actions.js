@@ -61,7 +61,7 @@ export function createUser(user) {
 }
 
 export function getUser(user_id) {
-    console.log("U ID : ", user_id);
+    // console.log("U ID : ", user_id);
 
     return {
         type: Types.GET_USER,
@@ -71,15 +71,7 @@ export function getUser(user_id) {
             withCredentials: "true",
         }),
     };
-
-    // return axios.get(`${baseUrl}/api/users/${user_id}`, {
-    //     withCredentials: true,
-    // });
 }
-
-// export function getProfiles() {
-//     return axios.get(`${baseUrl}/api/profiles`, { withCredentials: true });
-// }
 
 export function getProfiles() {
     console.log("in action profile");
@@ -92,10 +84,6 @@ export function getProfiles() {
       }),
   };
 }
-
-// export function getRoles() {
-//     return axios.get(`${baseUrl}/api/roles`, { withCredentials: true });
-// }
 
 export function getRoles() {
     console.log("in action roles");
