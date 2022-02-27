@@ -83,6 +83,8 @@ const UpdateUser = (props) => {
                             handleUpdateUser(values);
                             console.log(values);
                             actions.setSubmitting(false);
+                            setDataImported(false);
+                            setTimeout(()=>props.history.push("/platform/users"), 1000);
                         }}
                     >
                         {(formikProps) => (

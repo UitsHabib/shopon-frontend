@@ -185,10 +185,10 @@ export const SignInSchema = Yup.object().shape({
 		.email('must be a valid email')
 		.max(50, 'Too Long!')
 		.required('Email is Required'),
-	password: Yup.string()
-		.min(6, 'Too Short!')
-		.max(50, 'Too Long!')
-		.required('password is Required'),
+	// password: Yup.string()
+	// 	.min(6, 'Too Short!')
+	// 	.max(50, 'Too Long!')
+	// 	.required('password is Required'),
 	firstName: Yup.string().trim().required('first name is required'),
 	lastName: Yup.string().required('lastname is required'),
 	confirmPassword: Yup.string()
