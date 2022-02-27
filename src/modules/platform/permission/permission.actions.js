@@ -5,10 +5,10 @@ const baseUrl = "http://localhost:5000";
 
 export const getPermissions = (page, limit, orderBy, orderType) => {
     const url = `${baseUrl}/api/permissions`
-        +(page ? `?page=${page}` : "")
-        +(limit ? `&&limit=${limit}` : "")
-        +(orderBy ? `&&orderBy=${orderBy}` : "")
-        +(orderType ? `&&orderType=${orderType}` : "");
+        + (page ? `?page=${page}` : "")
+        + (limit ? `&&limit=${limit}` : "")
+        + (orderBy ? `&&orderBy=${orderBy}` : "")
+        + (orderType ? `&&orderType=${orderType}` : "");
 
     return {
         type: Types.GET_PERMISSIONS,

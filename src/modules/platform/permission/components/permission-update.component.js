@@ -9,6 +9,12 @@ import PermissionForm from "./permission-form.component";
 const PermissionUpdate = ({ history, match }) => {
     const dispatch = useDispatch();
 
+    const permission = useSelector(state => state.permissionReducer.permission)
+
+    const { permission_services } = permission;
+
+    const initialValues = { title: permission.title, description: permission.description, services: _.map(permission_services, "service.id") };
+
     const handleUpdate =  (values) => {
         dispatch(updatePermission(match.params.id, values))
             .then(response => {
@@ -20,17 +26,9 @@ const PermissionUpdate = ({ history, match }) => {
             })
     };
 
-    const data = useSelector(state => state.permissionReducer.permission)
-
     useEffect(() => {
         dispatch(getPermission(match.params.id));
     }, [dispatch, match.params.id])
-
-    const { permission_services } = data;
-    const picked = _.map(permission_services, "service.id");
-    const serviceArray = picked.map(String);
-
-    const initialValues = { title: data.title, description: data.description, services: serviceArray };
 
     return (
         <>

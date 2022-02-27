@@ -18,8 +18,6 @@ const Permissions = () => {
     const limit = useSelector(state => state.permissionReducer.limit);
     const total = useSelector(state => state.permissionReducer.total);
 
-    const handleSorting = (value) => dispatch(sortingPermission(value));
-
     const handleDeleteButton = (id) => {
         dispatch(deletePermissionStatus(true));
         dispatch(permissionId (id));
@@ -42,8 +40,6 @@ const Permissions = () => {
             })
     };
 
-    const handleActivePage = value => dispatch(activePageHandle(value));
-
     const handleChangeCount = (value) => {
         dispatch(pageLimit(value));
         dispatch(activePageHandle(1));
@@ -59,14 +55,15 @@ const Permissions = () => {
                 permissions={permissions}
                 sorting={sorting}
                 onClickDeleteButton={handleDeleteButton}
-                onClickSort={handleSorting}
+                // onClickSort={handleSorting}
+                onClickSort={value => dispatch(sortingPermission(value))}
             />
             <div className="d-flex justify-content-center">
                 <Pagination
                     totalLength={total}
                     count={limit}
                     activePage={activePage}
-                    onClickActive={handleActivePage}
+                    onClickActive={value => dispatch(activePageHandle(value))}
                     onChangeCount={handleChangeCount}
                 />
             </div>

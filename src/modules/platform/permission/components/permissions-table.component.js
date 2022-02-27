@@ -65,7 +65,7 @@ const PermissionsTable = ({ permissions, sorting, onClickSort, onClickDeleteButt
                             <Link className="dropdown-item" to={{ pathname: `${path}/${data.id}`, data: data }}>
                                 Details
                             </Link>
-                            <Link className="dropdown-item" to={{ pathname: `${path}/update/${data.id}`, data: data }}>
+                            <Link className="dropdown-item" to={{ pathname: `${path}/${data.id}/update`, data: data }}>
                                 Edit
                             </Link>
 							<Dropdown.Item onClick={() => onClickDeleteButton(data.id)}>

@@ -7,6 +7,8 @@ import PermissionForm from "./permission-form.component";
 const PermissionCreate = ({ history }) => {
     const dispatch = useDispatch();
 
+    const initialValues = { title: "", description: "", services: [] };
+
     const handleCreate = values => {
         dispatch(createPermission(values))
             .then(response => {
@@ -23,8 +25,6 @@ const PermissionCreate = ({ history }) => {
                 });
             });
     };
-
-    const initialValues = { title: "", description: "", services: [] };
 
     return (
         <>

@@ -9,6 +9,8 @@ import TableHead from "./common/tableHead.component";
 const PermissionDetails = ({ match }) => {
     const dispatch = useDispatch();
 
+    const permission = useSelector(state => state.permissionReducer.permission);
+
     const columns = [
         {
             label: "ID",
@@ -31,8 +33,6 @@ const PermissionDetails = ({ match }) => {
             content: (permission, path) => <td>{permission.service[path]}</td>,
         },
     ];
-
-    const permission = useSelector(state => state.permissionReducer.permission);
 
     useEffect(() => {
         dispatch(getPermission(match.params.id))
