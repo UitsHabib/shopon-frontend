@@ -1,65 +1,39 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import _ from "lodash";
-import { Button, Dropdown, Modal } from "react-bootstrap";
-import { useRouteMatch } from "react-router-dom";
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Button, Dropdown } from "react-bootstrap";
 
-import {
-    getPaginatedProducts,
-    getAllProducts,
-    getSortedProducts,
-    deleteProduct,
-    updateProduct,
-    addNewProduct,
-} from "../products.actions";
+import { getProducts, getProduct } from "../products.actions";
 import Pagination from "./common/pagination.component";
-import { toast } from "react-toastify";
 import Table from "./common/table.component";
-import { ModalForProduct } from "./common/modalForProduct.component";
-import moment from "moment";
-import { NewProductSchema } from "../products.schema";
+import { ProductModals } from "./common/productModals.component";
+import ProductForm from "./product-form.component";
 
 const Products = (props) => {
-    const { path } = useRouteMatch();
     const dispatch = useDispatch();
 
-    const totalItems = useSelector(
-        (state) => state.shopProductsReducer.totalProducts
-    );
-    // const paginatedProducts = useSelector(
-    //     (state) => state.shopProductsReducer.paginatedProductList
-    // );
-
-    const sortedProducts = useSelector(
-        (state) => state.shopProductsReducer.sortedProductList
-    );
-
-    const productsPerPage = 5;
     const [activePage, setActivePage] = useState(1);
     const [sortColumn, setSortColumn] = useState({
         path: "id",
         order: "asc",
     });
 
-    const [targetProduct, setTargetProduct] = useState({});
-    const [showDetailModal, setShowDetailModal] = useState(false);
-    const [updateDetailModal, setUpdateDetailModal] = useState(false);
-    const [deleteDetailModal, setDeleteDetailModal] = useState(false);
     const [needToFetch, setNeedToFetch] = useState(false);
-    const [addNewProductShow, setAddNewProductShow] = useState(false);
+    const [action, setAction] = useState({});
 
-    const now = new Date();
-    const dateString = moment(now).format("DD-MM-YYYY");
+    const totalItems = useSelector((state) => state.productsReducer.totalProducts);
+    const sortedProducts = useSelector((state) => state.productsReducer.productList);
+    const targetProduct = useSelector((state) => state.productsReducer.product);
 
+    const productsPerPage = 5;
     const columns = [
         {
             label: "ID",
             path: "id",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -67,7 +41,9 @@ const Products = (props) => {
             path: "name",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -75,7 +51,9 @@ const Products = (props) => {
             path: "category_id",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -83,7 +61,9 @@ const Products = (props) => {
             path: "description",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -91,7 +71,9 @@ const Products = (props) => {
             path: "price",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -99,7 +81,9 @@ const Products = (props) => {
             path: "discount",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -107,7 +91,9 @@ const Products = (props) => {
             path: "stock_quantity",
             sorting: true,
             content: (products, key) => (
-                <td class="text-center">{products[key] === null ? "--" : products[key]}</td>
+                <td class="text-center">
+                    {products[key] === null ? "--" : products[key]}
+                </td>
             ),
         },
         {
@@ -125,24 +111,24 @@ const Products = (props) => {
                     <Dropdown.Menu>
                         <Dropdown.Item
                             onClick={() => {
-                                setShowDetailModal((prev) => !prev);
-                                setTargetProduct(targetProduct);
+                                setAction({ showDetail: true });
+                                dispatch(getProduct(targetProduct.id));
                             }}
                         >
                             Product Details
                         </Dropdown.Item>
                         <Dropdown.Item
                             onClick={() => {
-                                setUpdateDetailModal((prev) => !prev);
-                                setTargetProduct(targetProduct);
+                                setAction({ updateDetail: true });
+                                dispatch(getProduct(targetProduct.id));
                             }}
                         >
                             Update
                         </Dropdown.Item>
                         <Dropdown.Item
                             onClick={() => {
-                                setDeleteDetailModal((prev) => !prev);
-                                setTargetProduct(targetProduct);
+                                setAction({ deleteDetailModal: true });
+                                dispatch(getProduct(targetProduct.id));
                             }}
                         >
                             Delete
@@ -153,23 +139,6 @@ const Products = (props) => {
         },
     ];
 
-    async function handleAddnewProduct(newProduct) {
-        try {
-            await addNewProduct(newProduct);
-            setNeedToFetch(!needToFetch);
-            setAddNewProductShow(!addNewProductShow);
-            toast.success("Product Added Successfully", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        } catch(error) {
-            toast.error(error.response.data, {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        }
-    }
-
     function handleClickPage(activePage) {
         setActivePage(activePage);
     }
@@ -178,49 +147,9 @@ const Products = (props) => {
         setSortColumn(sortColumn);
     }
 
-    async function handleUpdateProduct(updatedProduct) {
-        try {
-            await updateProduct(updatedProduct);
-            setNeedToFetch(!needToFetch);
-            toast.success("Product Updated Successfully", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        } catch (error) {
-            toast.error("Product Updatation Failed", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        }
-    }
-
-    async function handleDeleteProduct(targetProduct) {
-        try {
-            await deleteProduct(targetProduct.id);
-            setNeedToFetch(!needToFetch);
-            toast.success("Product Has Been Deleted Successfully", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        } catch (error) {
-            toast.error("Product Deletion Failed", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        }
-    }
-
-    useEffect(() => {
-        dispatch(getAllProducts(1, null, null, null));
-    }, [needToFetch]);
-
-    // useEffect(() => {
-    //     dispatch(getPaginatedProducts(activePage, productsPerPage));
-    // }, [activePage]);
-
     useEffect(() => {
         dispatch(
-            getSortedProducts(
+            getProducts(
                 activePage,
                 productsPerPage,
                 sortColumn.path,
@@ -236,195 +165,70 @@ const Products = (props) => {
                 <Button
                     className="my-3"
                     variant="success"
-                    onClick={() => setAddNewProductShow(!addNewProductShow)}
+                    onClick={() => setAction({ addNewProduct: true })}
                 >
                     Add New Product
                 </Button>
-                {addNewProductShow && (
-					<>
-						<Modal show={() => setAddNewProductShow(!addNewProductShow)} onHide={() => setAddNewProductShow(!addNewProductShow)}>
-							<Modal.Header closeButton>
-								<Modal.Title>Add New Product</Modal.Title>
-							</Modal.Header>
-							<Modal.Body>
-                            <Formik
-									initialValues={{
-										name: '',
-										category_id: '',
-										description: '',
-										price: 0,
-                                        discount: '0',
-                                        stock_quantity: 0,
-									}}
-									onSubmit={(values, actions) => {
-                                        console.log(values);
-										handleAddnewProduct(values);
-										actions.setSubmitting(false);
-									}}
-									validationSchema={NewProductSchema}
-								>
-									{(formikprops) => {
-										return (
-											<Form onSubmit={formikprops.handleSubmit}>
-												<div className="m-4">
-													<div className="form-group mb-3">
-														<label htmlFor="name" className="form-label">
-															Product Name <span className="text-danger">*</span>
-														</label>
-														<Field
-															type="text"
-															className="form-control required"
-															id="name"
-															name="name"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="name" />
-														</div>
-													</div>
-
-													<div className="form-group mb-3">
-														<label htmlFor="category_id" className="form-label">
-															Category <span className="text-danger">*</span>
-														</label>
-                                                        <Field
-															type="number"
-															className="form-control"
-															id="category_id"
-															name="category_id"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="category_id" />
-														</div>
-													</div>
-
-													<div className="form-group mb-3">
-														<label htmlFor="description" className="form-label">
-															Description <span className="text-danger">*</span>
-														</label>
-														<Field
-															type="text"
-															className="form-control"
-															id="description"
-															name="description"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="description" />
-														</div>
-													</div>
-
-                                                    <div className="form-group mb-3">
-														<label htmlFor="price" className="form-label">
-															Price <span className="text-danger">*</span>
-														</label>
-														<Field
-															type="number"
-															className="form-control"
-															id="price"
-															name="price"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="price" />
-														</div>
-													</div>
-
-                                                    <div className="form-group mb-3">
-														<label htmlFor="discount" className="form-label">
-															Discount
-														</label>
-														<Field
-															type="string"
-															className="form-control"
-															id="discount"
-															name="discount"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="discount" />
-														</div>
-													</div>
-
-                                                    <div className="form-group mb-3">
-														<label htmlFor="stock_quantity" className="form-label">
-															Available Quantity <span className="text-danger">*</span>
-														</label>
-														<Field
-															type="number"
-															className="form-control"
-															id="stock_quantity"
-															name="stock_quantity"
-                                                            min="0"
-														/>
-														<div className="invalid-feedback d-block">
-															<ErrorMessage name="stock_quantity" />
-														</div>
-													</div>
-
-													<div className="d-flex flex-wrap justify-content-between">
-														<button type="submit" className="btn btn-success">
-															Add Product
-														</button>
-														<Button
-															variant="warning"
-															onClick={() => setAddNewProductShow(!addNewProductShow)}
-														>
-															Close
-														</Button>
-													</div>
-												</div>
-											</Form>
-										);
-									}}
-								</Formik>
-							</Modal.Body>
-						</Modal>
-					</>
-				)}
+                <ProductForm
+                    show={action.addNewProduct || action.updateDetail}
+                    onHide={() => setAction({})}
+                    needToFetch={needToFetch}
+                    fetch={setNeedToFetch}
+                />
             </div>
             <div className="d-flex flex-wrap justify-content-center">
                 <div className="card" style={{ width: "80rem" }}>
                     <div className="card-body d-flex flex-wrap justify-content-center">
-                        <Table
-                            items={sortedProducts}
-                            columns={columns}
-                            sortColumn={sortColumn}
-                            onSort={handleSort}
-                        />
-                        <Pagination
-                            totalItems={totalItems}
-                            pageCount={productsPerPage}
-                            activePage={activePage}
-                            onClickPage={handleClickPage}
-                        />
+                        {sortedProducts.length > 0 ? (
+                            <>
+                                <Table
+                                    items={sortedProducts}
+                                    columns={columns}
+                                    sortColumn={sortColumn}
+                                    onSort={handleSort}
+                                />
+                                <Pagination
+                                    totalItems={totalItems}
+                                    pageCount={productsPerPage}
+                                    activePage={activePage}
+                                    onClickPage={handleClickPage}
+                                />
+                            </>
+                        ) : (
+                            ""
+                        )}
                     </div>
                 </div>
             </div>
 
-            {showDetailModal ? (
-                <ModalForProduct
+            {action.showDetail ? (
+                <ProductModals
                     type="show"
                     targetProduct={targetProduct}
-                    showDetailModal={showDetailModal}
-                    setShowDetailModal={setShowDetailModal}
+                    show={action.showDetail}
+                    onHide={() => setAction({})}
                 />
             ) : null}
 
-            {updateDetailModal ? (
-                <ModalForProduct
+            {action.updateDetail ? (
+                <ProductModals
                     type="update"
-                    totalItems={totalItems}
-                    targetProduct={targetProduct}
-                    updateDetailModal={updateDetailModal}
-                    setUpdateDetailModal={setUpdateDetailModal}
-                    onClickUpdateProduct={handleUpdateProduct}
+                    productId={targetProduct.id}
+                    show={action.addNewProduct || action.updateDetail}
+                    onHide={() => setAction({})}
+                    needToFetch={needToFetch}
+                    fetch={setNeedToFetch}
                 />
             ) : null}
 
-            {deleteDetailModal ? (
-                <ModalForProduct
+            {action.deleteDetailModal ? (
+                <ProductModals
                     type="delete"
                     targetProduct={targetProduct}
-                    deleteDetailModal={deleteDetailModal}
-                    setDeleteDetailModal={setDeleteDetailModal}
-                    onClickDeleteProduct={handleDeleteProduct}
+                    show={action.deleteDetailModal}
+                    onHide={() => setAction({})}
+                    needToFetch={needToFetch}
+                    fetch={setNeedToFetch}
                 />
             ) : null}
         </>

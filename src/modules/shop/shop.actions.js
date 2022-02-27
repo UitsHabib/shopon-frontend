@@ -38,7 +38,12 @@ export function shopLogout() {
 }
 
 export function updateShopProfile(updatedShop) {
-    return axios.put(`${baseUrl}/api/shops/profile`, updatedShop, {
-        withCredentials: true,
-    });
+    return {
+        type: Types.UPDATE_SHOP_PROFILE,
+        payload: axios({
+            method: 'put',
+            url: `/api/shops/profile`,
+            data: updatedShop,
+        })
+    };
 }

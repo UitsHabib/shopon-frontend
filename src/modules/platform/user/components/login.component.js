@@ -21,7 +21,7 @@ const Login = (props) => {
                 color: "#ffffff",
             });
         }).catch(error => {
-            toast.error(error.response.data, {
+            toast.error("error", {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
@@ -58,6 +58,7 @@ const Login = (props) => {
                                 password: "",
                             }}
                             onSubmit={(values, actions) => {
+                                console.log(values);
                                 handleLogin(values);
                                 actions.setSubmitting(false);
                             }}

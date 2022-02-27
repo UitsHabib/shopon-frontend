@@ -1,61 +1,60 @@
 import axios from "axios";
-import Types from "./shop-products.types";
+import Types from "./products.types";
 
-const baseUrl = "http://localhost:5000";
-
-export function getAllProducts(page, limit, orderBy, orderType) {
-    const url = `${baseUrl}/api/shops/products/?page=${page}` 
-        + (limit ? `&limit=${limit}` : '')
-        + (orderBy ? `&orderBy=${orderBy}` : '')
-        + (orderType ? `&orderType=${orderType}` : '');
+export function getProducts(page, limit, orderBy, orderType) {
+    const url =
+        `/api/shops/products/?page=${page}` +
+        (limit ? `&limit=${limit}` : "") +
+        (orderBy ? `&orderBy=${orderBy}` : "") +
+        (orderType ? `&orderType=${orderType}` : "");
 
     return {
-        type: Types.GET_SHOP_PRODUCT,
+        type: Types.GET_PRODUCTS,
         payload: axios({
             method: "get",
             url,
-            withCredentials: "true",
         }),
     };
 }
 
-export function getPaginatedProducts(page, limit) {
+export function getProduct(productID) {
     return {
-        type: Types.GET_PAGINATED_SHOP_PRODUCT,
+        type: Types.GET_PRODUCT,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/shops/products/?page=${page}&&limit=${limit}`,
-            withCredentials: "true",
-        }),
-    };
-}
-
-export function getSortedProducts(page, limit, orderBy, orderType) {
-    return {
-        type: Types.GET_SORTED_SHOP_PRODUCT,
-        payload: axios({
-            method: "get",
-            url: `${baseUrl}/api/shops/products/?page=${page}&&limit=${limit}&&orderBy=${orderBy}&&orderType=${orderType}`,
-            withCredentials: "true",
+            url: `/api/shops/products/${productID}`,
         }),
     };
 }
 
 export function addNewProduct(newProduct) {
-    console.log(newProduct);
-   return axios.post(`${baseUrl}/api/shops/products`, newProduct, { withCredentials: true })
+    return {
+        type: Types.ADD_PRODUCT,
+        payload: axios({
+            method: "post",
+            url: `/api/shops/products`,
+            data: newProduct
+        }),
+    };
 }
 
 export function deleteProduct(targetProductID) {
-    return axios.delete(`${baseUrl}/api/shops/products/${targetProductID}`, {
-        withCredentials: true,
-    });
+    return {
+        type: Types.DELETE_PRODUCT,
+        payload: axios({
+            method: "delete",
+            url: `/api/shops/products/${targetProductID}`,
+        }),
+    };
 }
 
 export function updateProduct(updatedProduct) {
-    return axios.patch(
-        `${baseUrl}/api/shops/products/${updatedProduct.id}`,
-        updatedProduct,
-        { withCredentials: true }
-    );
+    return {
+        type: Types.UPDATE_PRODUCT,
+        payload: axios({
+            method: "patch",
+            url: `/api/shops/products/${updatedProduct.id}`,
+            data: updatedProduct
+        }),
+    };
 }

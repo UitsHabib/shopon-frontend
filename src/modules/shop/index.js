@@ -5,8 +5,9 @@ import ForgotPassword from './components/shop-forgot-password.component';
 import MyShopProfile from './components/my-shop-profile/my-shop-profile.component';
 import UpdateMyShopProfile from './components/my-shop-profile/update-my-shop-profile.component';
 import shopReducer from './shop.reducer';
-import shopProductsReducer  from './components/shop-products/shop-products.reducer';
+import productsReducer  from './components/shop-products/products.reducer';
 import Products from './components/shop-products/components/products';
+import * as productActions from './components/shop-products/products.actions';
 import * as shopActions from './shop.actions';
 
 export {
@@ -17,7 +18,8 @@ export {
 	MyShopProfile,
 	UpdateMyShopProfile,
     shopReducer,
+    productsReducer,
+	shopActions,
     Products,
-    shopProductsReducer,
-	shopActions
+    productActions,
 };

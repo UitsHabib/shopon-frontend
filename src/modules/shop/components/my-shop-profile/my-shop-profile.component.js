@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import moment from 'moment';
 
@@ -32,16 +31,16 @@ const MyShopProfile = (props) => {
 						<li className="list-group-item">
 							Shop Name: {loggedInShop.name}
 						</li>
-                        <li className="list-group-item">Description: {loggedInShop.description !== null ? loggedInShop.description : '--'}</li>
-						<li className="list-group-item">ID: {loggedInShop.id !== null ? loggedInShop.id : '--'}</li>
-						<li className="list-group-item">Email: {loggedInShop.email !== null ? loggedInShop.email : '--'}</li>
-						<li className="list-group-item">License Number: {loggedInShop.license_number !== null ? loggedInShop.license_number : '--'}</li>
-						<li className="list-group-item">Status: {loggedInShop.is_active !== null ? loggedInShop.is_active : '--'}</li>
+                        <li className="list-group-item">Description: {loggedInShop.description ? loggedInShop.description : '--'}</li>
+						<li className="list-group-item">ID: {loggedInShop.id ? loggedInShop.id : '--'}</li>
+						<li className="list-group-item">Email: {loggedInShop.email ? loggedInShop.email : '--'}</li>
+						<li className="list-group-item">License Number: {loggedInShop.license_number ? loggedInShop.license_number : '--'}</li>
+						<li className="list-group-item">Status: {loggedInShop.is_active ? loggedInShop.is_active : '--'}</li>
 						<li className="list-group-item">
-							Profile Created At: {loggedInShop.created_at !== null ? moment(loggedInShop.created_at).format('dddd, MMMM Do YYYY, h:mm:ss a') : '--'}
+							Profile Created At: {loggedInShop.created_at ? moment(loggedInShop.created_at).format('dddd, MMMM Do YYYY, h:mm:ss a') : '--'}
 						</li>
 						<li className="list-group-item">
-							Profile Updated At: {loggedInShop.updated_at !== null ? moment(loggedInShop.updated_at).format('dddd, MMMM Do YYYY, h:mm:ss a') : '--'}
+							Profile Updated At: {loggedInShop.updated_at ? moment(loggedInShop.updated_at).format('dddd, MMMM Do YYYY, h:mm:ss a') : '--'}
 						</li>
 					</ul>
 				</div>
