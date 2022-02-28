@@ -32,27 +32,6 @@ export const getProfile = (id) => {
     };
 }
 
-export const sortingProfile = (value) => {
-    return {
-        type: Types.SORT_PROFILE,
-        payload: value,
-    }
-}
-
-export const activePageHandle = (page) => {
-    return {
-        type: Types.ACTIVE_PAGE,
-        payload: page
-    }
-}
-
-export const pageLimit = (value) => {
-    return {
-        type: Types.PAGE_LIMIT,
-        payload: value
-    }
-}
-
 export function getPermissions() {
 	return axios.get(`${baseUrl}/api/permissions`, { withCredentials: "true" });
 }
