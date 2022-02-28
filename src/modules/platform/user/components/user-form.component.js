@@ -1,17 +1,20 @@
 import { SignInSchema } from "../user.schema";
 import { Formik, Field, Form } from "formik";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createUser, getProfiles, getRoles } from "../user.actions";
 
 const UserForm = (props) => {
     const [apiError, setapiError] = useState(null);
-    const [role, setrole] = useState([]);
-    const [profile, setprofile] = useState([]);
+    const dispatch = useDispatch();
+
+    const role = useSelector(state=> state.userReducer.roles);
+    const profile = useSelector(state => state.userReducer.profiles);
 
     const handleSubmit = async (values) => {
         const newAdmin = {
-            profile_id: 1,
+            profile_id: values.profile_id,
             first_name: values.firstName,
             last_name: values.lastName,
             email: values.email,
@@ -43,43 +46,14 @@ const UserForm = (props) => {
         }
     };
 
-    const getRolesFromApi = async () => {
-        try {
-            const response = await getRoles();
-            console.log(response.data);
-            setrole(response.data);
-        } catch (e) {
-            console.log(e.response.data);
-        }
-    };
-    const getProfilesFromApi = async () => {
-        try {
-            const response = await getProfiles();
-            console.log(response.data);
-            setprofile(response.data);
-        } catch (e) {
-            console.log(e.response.data);
-        }
-    };
     useEffect(() => {
-        getRolesFromApi();
-        getProfilesFromApi();
+        dispatch(getProfiles());
+        dispatch(getRoles());
     }, []);
 
     return (
         <div>
-            <button
-                className="btn btn-success"
-                onClick={() => {
-                    // props.history.push(`${props.history.state?.prevPath}`);
-
-                    props.history.push("/platform/users");
-                    // console.log(`${props.history.state?.prevPath}`);
-                }}
-                style={{ margin: "20px", marginLeft: "85%" }}
-            >
-                Go Back
-            </button>
+            
             <br />
             <div className="mx-5 text-center">
                 <h3>Create a new User</h3>
@@ -100,8 +74,10 @@ const UserForm = (props) => {
                         profile_id: "",
                     }}
                     onSubmit={(values, { resetForm }) => {
+                        console.log(values);
                         handleSubmit(values);
                         resetForm();
+                        props.history.push("/platform/users");
                     }}
                     validationSchema={SignInSchema}
                 >
@@ -114,7 +90,7 @@ const UserForm = (props) => {
                                             htmlFor="firstName"
                                             className="col-form-label"
                                         >
-                                            First Name
+                                            First Name <span style={{'color':'red'}}> *</span>
                                         </label>
                                         <Field
                                             type="text"
@@ -135,7 +111,7 @@ const UserForm = (props) => {
                                             htmlFor="lastName"
                                             className="col-form-label"
                                         >
-                                            Last Name
+                                            Last Name <span style={{'color':'red'}}> *</span>
                                         </label>
                                         <Field
                                             type="text"
@@ -156,7 +132,7 @@ const UserForm = (props) => {
                                             htmlFor="email"
                                             className="col-form-label"
                                         >
-                                            Email
+                                            Email <span style={{'color':'red'}}> *</span>
                                         </label>
                                         <Field
                                             type="email"
@@ -179,53 +155,10 @@ const UserForm = (props) => {
                                 <div className="row g-3">
                                     <div className="col">
                                         <label
-                                            htmlFor="password"
-                                            className="col-form-label"
-                                        >
-                                            Password
-                                        </label>
-                                        <Field
-                                            type="password"
-                                            className="form-control"
-                                            id="password"
-                                            name="password"
-                                        />
-                                        {errors.password ? (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.password}
-                                            </div>
-                                        ) : null}
-                                    </div>
-                                </div>
-                                <div className="row g-3">
-                                    <div className="col">
-                                        <label
-                                            htmlFor="confirmPassword"
-                                            className="col-form-label"
-                                        >
-                                            Confirm Password
-                                        </label>
-                                        <Field
-                                            type="password"
-                                            className="form-control"
-                                            id="confirmPassword"
-                                            name="confirmPassword"
-                                            values=""
-                                        />
-                                        {errors.confirmPassword ? (
-                                            <div className="invalid-feedback d-block">
-                                                {errors.confirmPassword}
-                                            </div>
-                                        ) : null}
-                                    </div>
-                                </div>
-                                <div className="row g-3">
-                                    <div className="col">
-                                        <label
                                             htmlFor="profile_id"
                                             className="col-form-label"
                                         >
-                                            Select Profile
+                                            Select Profile <span style={{'color':'red'}}> *</span>
                                         </label>
                                         <Field
                                             type="select"
@@ -287,6 +220,49 @@ const UserForm = (props) => {
                                         {errors.role_id ? (
                                             <div className="invalid-feedback d-block">
                                                 {errors.role_id}
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                </div>
+                                 <div className="row g-3">
+                                    <div className="col">
+                                        <label
+                                            htmlFor="password"
+                                            className="col-form-label"
+                                        >
+                                            Password <span style={{'color':'red'}}> *</span>
+                                        </label>
+                                        <Field
+                                            type="password"
+                                            className="form-control"
+                                            id="password"
+                                            name="password"
+                                        />
+                                        {errors.password ? (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.password}
+                                            </div>
+                                        ) : null}
+                                    </div>
+                                </div>
+                                <div className="row g-3">
+                                    <div className="col">
+                                        <label
+                                            htmlFor="confirmPassword"
+                                            className="col-form-label"
+                                        >
+                                            Confirm Password <span style={{'color':'red'}}> *</span>
+                                        </label>
+                                        <Field
+                                            type="password"
+                                            className="form-control"
+                                            id="confirmPassword"
+                                            name="confirmPassword"
+                                            values=""
+                                        />
+                                        {errors.confirmPassword ? (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.confirmPassword}
                                             </div>
                                         ) : null}
                                     </div>

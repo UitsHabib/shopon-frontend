@@ -44,9 +44,27 @@ export function getUsers() {
             method: "get",
             url: `${baseUrl}/api/users`,
             withCredentials: "true",
+        })
+    };
+}
+
+export function getPaginatedUsers(page, limit, orderBy, orderType) {
+    console.log(page, limit, orderBy, orderType);
+
+    const url =`${baseUrl}/api/users/?page=${page}` 
+    + (limit ? `&limit=${limit}` : "") 
+    + (orderBy ? `&orderBy=${orderBy}` : "") 
+    + (orderType ? `&orderType=${orderType}` : "");
+    return {
+        type: Types.GET_PAGINATED_USERS,
+        payload: axios({
+            method: "get",
+            url,
+            withCredentials: "true",
         }),
     };
 }
+
 
 export function deleteUser(userId) {
     return axios.delete(`${baseUrl}/api/users/${userId}`, {
@@ -61,17 +79,43 @@ export function createUser(user) {
 }
 
 export function getUser(user_id) {
-    return axios.get(`${baseUrl}/api/users/${user_id}`, {
-        withCredentials: true,
-    });
-}
-export function getRoles() {
-    return axios.get(`${baseUrl}/api/roles`, { withCredentials: true });
+    // console.log("U ID : ", user_id);
+
+    return {
+        type: Types.GET_USER,
+        payload: axios({
+            method: "get",
+            url: `${baseUrl}/api/users/${user_id}`,
+            withCredentials: "true",
+        }),
+    };
 }
 
 export function getProfiles() {
-    return axios.get(`${baseUrl}/api/profiles`, { withCredentials: true });
+    console.log("in action profile");
+  return {
+      type: Types.GET_PROFILES,
+      payload: axios({
+          method: "get",
+          url: `${baseUrl}/api/profiles`,
+          withCredentials: "true",
+      }),
+  };
 }
+
+export function getRoles() {
+    console.log("in action roles");
+  return {
+      type: Types.GET_ROLES,
+      payload: axios({
+          method: "get",
+          url: `${baseUrl}/api/roles`,
+          withCredentials: "true",
+      }),
+  };
+}
+
+
 
 export function updateUser(usersID, updatedUser) {
     return axios.patch(`${baseUrl}/api/users/${usersID}`, updatedUser, {
