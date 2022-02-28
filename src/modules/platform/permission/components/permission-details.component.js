@@ -1,75 +1,85 @@
-import { useEffect, useState, useCallback } from "react";
-import _ from "lodash";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Modal } from "react-bootstrap";
 
 import { getPermission } from "../permission.actions";
-import Table from "./common/table.component";
-import TableBody from "./common/tableBody.component";
-import TableHead from "./common/tableHead.component";
 
-const PermissionDetails = ({ location, match }) => {
-    const [permission, setPermission] = useState({});
-    const [sorting, setSorting] = useState({ path: "id", order: "asc" });
 
-    const columns = [
-        {
-            label: "ID",
-            path: "user-id",
-            content: (permission) => <td>{permission.id}</td>,
-        },
-        {
-            label: "Service ID",
-            sort: true,
-            path: "id",
-            content: (permission, path) => <td>{permission.service[path]}</td>,
-        },
-        {
-            label: "Service Title",
-            path: "title",
-            content: (permission, path) => <td>{permission.service[path]}</td>,
-        },
-        {
-            label: "Service Slug",
-            path: "slug",
-            content: (permission, path) => <td>{permission.service[path]}</td>,
-        },
-    ];
+const PermissionDetails = ({ permissionId, ...rest }) => {
+    const dispatch = useDispatch();
 
-    const getPermissionData = useCallback(async () => {
-        try {
-            const { data } = await getPermission(match.params.id);
-            setPermission(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }, [match.params.id]);
+    const permission = useSelector(state => state.permissionReducer.permission)
 
     useEffect(() => {
-        if (location.data) {
-            setPermission(location.data);
-        } else {
-            getPermissionData();
-        }
-    }, [location.data, getPermissionData]);
-
-    const sortedService = _.orderBy(permission.permission_services, [sorting.path], [sorting.order]);
+        if(permissionId) dispatch(getPermission(permissionId));
+    }, [dispatch, permissionId]);
 
     return (
-        <div className="container permission">
-            <div className="row justify-content-center">
-                <div className="col-10">
-                    <h3 className="text-center">{permission.title}</h3>
-                    <p>{permission.description}</p>
-                    <Table>
-                        <TableHead
-                            columns={columns}
-                            sorting={sorting}
-                            onSort={setSorting}
-                        />
-                        <TableBody items={sortedService} columns={columns} />
-                    </Table>
+        <Modal 
+            {...rest}
+            size="lg"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    <h3>Details</h3>
+                    <p style={{fontSize: "15px"}}>Here is permission details.</p>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <div>
+                    <label>
+                        <strong>Title:</strong>{" "}
+                        {permission.title}
+                        <br />
+                        <br />
+                        <strong>
+                            Description:
+                        </strong>{" "}
+                        {permission.description}
+                        <br />
+                        <br />
+                        <strong>Type:</strong>{" "}
+                        {permission.type}
+                        <br />
+                        <br />
+                        <strong>Slug:</strong>{" "}
+                        {permission.slug}
+                        <br />
+                        <br />
+                        <strong>
+                            Created At:
+                        </strong>{" "}
+                        {permission.created_at}
+                        <br />
+                        <br />
+                        <strong>
+                            Updated At:
+                        </strong>{" "}
+                        {permission.updated_at}
+                        <br />
+                        <br />
+                        <strong>
+                            Profile Permissions:
+                        </strong>
+                        {permission?.permission_services?.map(
+                            (permission_service) => (
+                                <p
+                                    key={permission_service.id}
+                                    style={{
+                                        marginLeft:
+                                            "50px",
+                                    }}
+                                >
+                                    {permission_service.service.title}
+                                </p>
+                            )
+                        )}
+                        <br />
+                    </label>
                 </div>
-            </div>
-        </div>
+            </Modal.Body>
+        </Modal>
     );
 };
 

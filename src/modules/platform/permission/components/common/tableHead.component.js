@@ -16,7 +16,7 @@ const TableHead = ({ columns, sorting, onClickSort }) => {
     console.log()
 
     return (
-        <thead>
+        <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
             <tr>
                 {columns.map((column) => (
                     <th
