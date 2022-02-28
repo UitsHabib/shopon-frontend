@@ -1,14 +1,18 @@
-import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
-import useServices from '../hooks/useServices';
+import React, { useState } from "react";
+import { Button } from "react-bootstrap";
+import { useHistory, useRouteMatch } from "react-router-dom";
 
-import { Table, Pagination } from '../common/components';
-import ServiceDetails from './serviceDetails.component';
+import useServices from "../hooks/useServices";
 
-import servicesMetadata from './services.metadata';
+import { Table, Pagination } from "../common/components";
+import ServiceDetails from "./serviceDetails.component";
 
-const Services = () => {
-	const [paginate, updatePage] = useState({ currentPage: 1, itemsPerPage: 2 });
+import servicesMetadata from "./services.metadata";
+
+const Services = ({ history, location: { search } }) => {
+	const queriedPage = new URLSearchParams(search).get("page");
+	const paginate = { currentPage: queriedPage || 1, itemsPerPage: 2 };
+	// const [paginate, updatePage] = useState({ currentPage: 1, itemsPerPage: 2 });
 	const { services, meta } = useServices(paginate);
 	const [serviceDetail, setServiceDetail] = useState();
 
@@ -31,7 +35,7 @@ const Services = () => {
 				totalNoOfItems={totalNoOfItems}
 				itemsPerPage={paginate.itemsPerPage}
 				updateCurrentPage={(page) =>
-					updatePage((prevPaginate) => ({ ...prevPaginate, currentPage: page }))
+					history.push(`/platform/services?page=${page}`)
 				}
 			/>
 			{serviceDetail ? (
