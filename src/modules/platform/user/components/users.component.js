@@ -96,22 +96,7 @@ const Users = (props) => {
                         <Dropdown.Item
                                 onClick={() => handleUpdateModal(profile.id)}
                             >
-                                Update
-                                {/* <Link
-                                    to={{
-                                        pathname:
-                                            path + "/" + profile.id + "/update",
-                                        state: {
-                                            data: profile.id,
-                                        },
-                                    }}
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "black",
-                                    }}
-                                >
-                                    UPDATE
-                                </Link> */}
+                                Update                               
                             </Dropdown.Item>
                             <Dropdown.Item
                                 onClick={() => {
@@ -134,9 +119,9 @@ const Users = (props) => {
         },
     ];
 
-    const users = useSelector((state) => state.userReducer.users);
+    const users = useSelector((state) => state.userReducer.userData.users);
     console.log(users);
-    users.map((user) => {
+    users?.map((user) => {
         if (user.phone === null) user.phone = "--";
     });
     const loggedInUser = useSelector(
@@ -173,6 +158,11 @@ const Users = (props) => {
             console.log("err getting user permission");
         }
     };
+
+    const toggleNeedToFecthUsers = () =>{
+        setNeedToFetchUser(!needToFetchUser);
+    }
+
     const sortUsers = (users) => {
         const sortedUsers = _.orderBy(
             users,
@@ -184,7 +174,7 @@ const Users = (props) => {
 
     async function handleDeleteUser() {
         try {
-            await deleteUser(deletedUserId);
+            deleteUser(deletedUserId);
             toast.success(`Successfully deleted`);
             setNeedToFetchUser(!needToFetchUser);
         } catch (error) {
@@ -196,9 +186,10 @@ const Users = (props) => {
 
     const paginateUsers = () => {
         const start = (activePage - 1) * pageCount;
-        const paginatedUsers = users.slice(start, start + pageCount);
+        const paginatedUsers = users?.slice(start, start + pageCount);
         return paginatedUsers;
     };
+    
 
     useEffect(() => {
         dispatch(getUsers());
@@ -209,6 +200,8 @@ const Users = (props) => {
 
     return (
         <div className="container">
+            { users ?
+            <>
             <Modal
                 isOpen={detailsModal}
                 style={modalStyle}
@@ -264,7 +257,7 @@ const Users = (props) => {
                 <button onClick={() => setUpdateModal(false)} 
                 style={{ margin: "20px", marginLeft: "85%" }}>close</button>
                 <UpdateUser id = {updateUserId} setUpdateModal={setUpdateModal} 
-                setNeedToFetchUser={setNeedToFetchUser} needToFetchUser={needToFetchUser}/>
+                toggleNeedToFecthUsers={toggleNeedToFecthUsers}/>
                             
             </Modal>
             <Modal
@@ -321,8 +314,9 @@ const Users = (props) => {
                 onClickPage={handleClickPage}
             />
             }
-            
-        </div>
+            </>
+        
+        : null }    </div>
     );
 };
 

@@ -5,19 +5,21 @@ import { useRouteMatch } from "react-router-dom";
 import {toast} from "react-toastify";
 
 import { updateUserSchema } from "../user.schema";
-import { getProfiles, getRoles, getUser, updateUser } from "../user.actions";
+import { getUser, updateUser } from "../user.actions";
+import {getRoles} from "../../role/role.actions"
+import {getProfiles} from "../../profile/profile.actions"
 
 const UpdateUser = (props) => {
     const { path } = useRouteMatch();
     const dispatch = useDispatch();
     const userID = props.id;
-    const {setUpdateModal , setNeedToFetchUser , needToFetchUser} = props;
+    const {setUpdateModal , toggleNeedToFecthUsers} = props;
     
     const [dataImported, setDataImported] = useState(false);
    
-    const roles = useSelector((state) => state.userReducer.roles);
+    const roles = useSelector((state) => state.roleReducer.roleData.roles);
     const user = useSelector((state) => state.userReducer.user);
-    const profiles = useSelector((state) => state.userReducer.profiles);
+    const profiles = useSelector((state) => state.profileReducer.profileData.profiles);
     
     async function handleUpdateUser(data) {
         try {
@@ -30,14 +32,15 @@ const UpdateUser = (props) => {
                 role_id   : data.role_id,
             };
             console.log(updatedUser , data);
-            await updateUser( userID , updatedUser );
+            updateUser( userID , updatedUser );
             
+            toggleNeedToFecthUsers();
             toast.success(`User ${user.first_name} ${user.last_name} updated`, 
             { backgroundColor: '#8329C5', color: '#ffffff', });
             setUpdateModal(false);
-            setNeedToFetchUser(!needToFetchUser);
-            // props.history.push("/platform/users");
         } catch (error) {
+            toggleNeedToFecthUsers();
+
             console.log(error);
             toast.warning(error.response, { backgroundColor: '#8329C5', color: '#ffffff', })
         }
@@ -54,17 +57,8 @@ const UpdateUser = (props) => {
     
     
     return (
-        <>
-            {/* <button
-                className="btn btn-success"
-                onClick={() => {
-                    setDataImported(false);
-                    props.history.push("/platform/users");
-                }}
-                style={{ margin: "20px", marginLeft: "85%" }}
-                >
-                Go Back
-            </button> */}
+        <> 
+            {console.log("profiles" ,profiles , "roles" ,roles , "user", user)}
             <br />
             <div className="mx-5 text-center">
                 <h3>Update User</h3>
@@ -86,8 +80,6 @@ const UpdateUser = (props) => {
                             handleUpdateUser(values);
                             console.log(values);
                             actions.setSubmitting(false);
-                            setDataImported(false);
-                            setTimeout(()=>props.history.push("/platform/users"), 1000);
                         }}
                     >
                         {(formikProps) => (

@@ -8,8 +8,7 @@ export function getSignedInUserProfile() {
         type: Types.GET_PROFILE,
         payload: axios({
             method: 'get',
-            url: `${baseUrl}/api/users/profile`,
-            withCredentials: "true",
+            url: `api/users/profile`,
         })
     };
 }
@@ -19,9 +18,8 @@ export function login(data) {
         type: Types.LOGIN,
         payload: axios({
             method: 'post',
-            url: `${baseUrl}/api/login`,
+            url: `api/login`,
             data,
-            withCredentials: "true",
         })
     };
 }
@@ -31,8 +29,7 @@ export function logout() {
         type: Types.LOGOUT,
         payload: axios({
             method: 'get',
-            url: `${baseUrl}/api/logout`,
-            withCredentials: "true",
+            url: `api/logout`,
         })
     };
 }
@@ -42,16 +39,19 @@ export function getUsers() {
         type: Types.GET_USERS,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/users`,
-            withCredentials: "true",
+            url: `/api/users`,
         }),
     };
 }
 
 export function deleteUser(userId) {
-    return axios.delete(`${baseUrl}/api/users/${userId}`, {
-        withCredentials: true,
-    });
+    return {
+        type: Types.UPDATE_USER,
+        payload: axios({
+            method: "delete",
+            url: `api/users/${userId}`,
+        }),
+    };
 }
 
 export function createUser(user) {
@@ -61,46 +61,26 @@ export function createUser(user) {
 }
 
 export function getUser(user_id) {
-    // console.log("U ID : ", user_id);
-
+     console.log("U ID : ", user_id);
     return {
         type: Types.GET_USER,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/users/${user_id}`,
-            withCredentials: "true",
+            url: `api/users/${user_id}`,
         }),
     };
 }
 
-// export function getProfiles() {
-//     console.log("in action profile");
-//   return {
-//       type: Types.GET_PROFILES,
-//       payload: axios({
-//           method: "get",
-//           url: `${baseUrl}/api/profiles`,
-//           withCredentials: "true",
-//       }),
-//   };
-// }
-
-// export function getRoles() {
-//     console.log("in action roles");
-//   return {
-//       type: Types.GET_ROLES,
-//       payload: axios({
-//           method: "get",
-//           url: `${baseUrl}/api/roles`,
-//           withCredentials: "true",
-//       }),
-//   };
-// }
-
-
-
-export function updateUser(usersID, updatedUser) {
-    return axios.patch(`${baseUrl}/api/users/${usersID}`, updatedUser, {
-        withCredentials: true,
-    });
+export function updateUser(usersID, data) {
+    return {
+        type: Types.UPDATE_USER,
+        payload: axios({
+            method: "patch",
+            url: `api/users/${usersID}`, 
+            data,
+        }),
+    };
+    // return axios.patch(`api/users/${usersID}`, data, {
+    //     withCredentials: true,
+    // });
 }
