@@ -1,4 +1,4 @@
-import Customer from "./customer";
+import CustomerHome from "./components/customer-home.component";
 import customerReducer from "./customer.reducer";
 import CustomerNav from "./components/customerNavbar.component";
 import CustomerLogin from "./components/customer-login.component";
@@ -7,7 +7,7 @@ import CustomerLogout from "./components/customer-logout.component";
 import CustomerProduct from "./components/product.component";
 import * as CustomerAction from "./customer.actions";
 export {
-    Customer,
+    CustomerHome,
     customerReducer,
     CustomerNav,
     CustomerLogin,

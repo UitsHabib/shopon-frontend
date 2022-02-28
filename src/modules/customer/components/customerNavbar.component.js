@@ -54,7 +54,10 @@ const CustomerNav = () => {
                                     name="search"
                                     id="search"
                                     placeholder="Search Product"
-                                    style={{ maxWidth: "500px" }}
+                                    style={{
+                                        // maxWidth: "500px",
+                                        minWidth: "400px",
+                                    }}
                                 />
                                 <button
                                     className="btn btn-outline-success"
