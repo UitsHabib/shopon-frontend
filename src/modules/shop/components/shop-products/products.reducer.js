@@ -3,9 +3,9 @@ import Types from "./products.types";
 const initialState = {
     productList: [],
     totalProducts: 0,
+    product: {},
 
     productData: {},
-    product: {}
 };
 
 export default function reducer(state = initialState, action) {

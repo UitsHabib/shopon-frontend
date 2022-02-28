@@ -14,14 +14,14 @@ const Login = (props) => {
         dispatch(login(data)).then(response => {
             props.location.state && props.location.state.from.pathname
                 ? history.push(props.location.state.from.pathname)
-                : history.push("/dashboard");
+                : history.push("/");
                 
             toast.success("Logged in Successfully", {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
         }).catch(error => {
-            toast.error("error", {
+            toast.error(error.response.data, {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
@@ -58,7 +58,6 @@ const Login = (props) => {
                                 password: "",
                             }}
                             onSubmit={(values, actions) => {
-                                console.log(values);
                                 handleLogin(values);
                                 actions.setSubmitting(false);
                             }}
