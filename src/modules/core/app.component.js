@@ -121,44 +121,26 @@ function App() {
                 <PublicRoute path="/admin/login" component={Login} />
                 <PrivateRoute path="/admin/logout" component={Logout} />
                 <Route path="/admin/reset-password" component={ResetPassword} />
-                <Route
-                    path="/admin/forgot-password"
-                    component={ForgotPassword}
-                />
+                <Route path="/admin/forgot-password" component={ForgotPassword} />
                 <Route path="/admin/platform" component={PlatformRoutes} />
                 <PrivateRoute path="/admin/complaint" component={Complain} />
                 <PrivateRoute exact path="/admin" component={Dashboard} />
+
                 <PublicRoute path="/signup" component={CustomerSignUp} />
                 <PublicRoute path="/login" component={CustomerLogin} />
                 <PublicRoute path="/product/:id" component={CustomerProduct} />
                 <Route path="/logout" component={CustomerLogout} />
                 <PublicRoute exact path="/" component={CustomerHome} />
-
                 <PrivateRoute path="/my-profile" component={MyProfile} />
-                <PrivateRoute
-                    path="/update-my-profile"
-                    component={UpdateMyProfile}
-                />
-                <PrivateRoute
-                    path="/update-my-profile"
-                    component={UpdateMyProfile}
-                />
+                <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
+                <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
                 <PrivateRoute path="/service-list" component={ServiceList} />
 
                 <PublicRoute path="/shop-login" component={ShopLogin} />
                 <PrivateRoute path="/shop-logout" component={ShopLogout} />
-                <PrivateRoute
-                    path="/shop-dashboard"
-                    component={ShopDashboard}
-                />
-                <PrivateRoute
-                    path="/my-shop-profile"
-                    component={MyShopProfile}
-                />
-                <PrivateRoute
-                    path="/update-my-shop-profile"
-                    component={UpdateMyShopProfile}
-                />
+                <PrivateRoute path="/shop-dashboard" component={ShopDashboard} />
+                <PrivateRoute path="/my-shop-profile" component={MyShopProfile} />
+                <PrivateRoute path="/update-my-shop-profile" component={UpdateMyShopProfile}/>
                 <PrivateRoute path="/shop-products" component={Products} />
 
                 <Route component={NoMatch} />
