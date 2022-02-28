@@ -9,10 +9,6 @@ export const PermissionClientRoutes = (props) => {
 }
 
 export {
-    permissionReducer
-}
- 
-export {
     permissionReducer,
     permissionActions
 }

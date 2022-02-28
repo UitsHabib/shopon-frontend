@@ -1,6 +1,5 @@
 import Types from './permission.types';
 import axios from "axios";
-import Types from "./permission.types";
 
 const baseUrl = "http://localhost:5000";
 
