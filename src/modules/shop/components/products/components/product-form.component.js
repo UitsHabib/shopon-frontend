@@ -59,17 +59,11 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                         initialValues={{
                             id: productId ? product.id || "" : "",
                             name: productId ? product.name || "" : "",
-                            category_id: productId
-                                ? product.category_id || ""
-                                : "",
-                            description: productId
-                                ? product.description || ""
-                                : "",
+                            category_id: productId ? product.category_id || "" : "",
+                            description: productId ? product.description || "" : "",
                             price: productId ? product.price || "" : "",
                             discount: productId ? product.discount || "0" : "0",
-                            stock_quantity: productId
-                                ? product.stock_quantity || ""
-                                : "",
+                            stock_quantity: productId ? product.stock_quantity || "" : "",
                         }}
                         validationSchema={NewProductSchema}
                         enableReinitialize={true}
@@ -83,11 +77,7 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         action.resetForm();
                                     })
                                     .catch((err) => {
-                                        const errorMessage =
-                                            typeof err.response.data ===
-                                            "string"
-                                                ? err.response.data
-                                                : err.response.statusText;
+                                        const errorMessage = typeof err.response.data === "string" ? err.response.data : err.response.statusText;
                                         toast.error(errorMessage);
                                     });
                             } else {
@@ -99,11 +89,7 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         action.resetForm();
                                     })
                                     .catch((err) => {
-                                        const errorMessage =
-                                            typeof err.response.data ===
-                                            "string"
-                                                ? err.response.data
-                                                : err.response.statusText;
+                                        const errorMessage = typeof err.response.data === "string" ? err.response.data : err.response.statusText;
                                         toast.error(errorMessage);
                                     });
                             }
@@ -114,14 +100,9 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                 <Form onSubmit={formikProps.handleSubmit}>
                                     <div className="m-4">
                                         <div className="form-group mb-3">
-                                            <label
-                                                htmlFor="name"
-                                                className="form-label"
-                                            >
+                                            <label htmlFor="name" className="form-label">
                                                 Product Name{" "}
-                                                <span className="text-danger">
-                                                    *
-                                                </span>
+                                                <span className="text-danger"> * </span>
                                             </label>
                                             <Field
                                                 type="text"
@@ -135,14 +116,8 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         </div>
 
                                         <div className="form-group mb-3">
-                                            <label
-                                                htmlFor="category_id"
-                                                className="form-label"
-                                            >
-                                                Category{" "}
-                                                <span className="text-danger">
-                                                    *
-                                                </span>
+                                            <label htmlFor="category_id" className="form-label">
+                                                Category{" "} <span className="text-danger"> * </span>
                                             </label>
                                             <Field
                                                 type="number"
@@ -167,14 +142,8 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         </div>
 
                                         <div className="form-group mb-3">
-                                            <label
-                                                htmlFor="description"
-                                                className="form-label"
-                                            >
-                                                Description{" "}
-                                                <span className="text-danger">
-                                                    *
-                                                </span>
+                                            <label htmlFor="description" className="form-label">
+                                                Description{" "}<span className="text-danger"> * </span>
                                             </label>
                                             <Field
                                                 type="text"
@@ -188,14 +157,8 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         </div>
 
                                         <div className="form-group mb-3">
-                                            <label
-                                                htmlFor="price"
-                                                className="form-label"
-                                            >
-                                                Price{" "}
-                                                <span className="text-danger">
-                                                    *
-                                                </span>
+                                            <label htmlFor="price" className="form-label">
+                                                Price{" "} <span className="text-danger"> * </span>
                                             </label>
                                             <Field
                                                 type="number"
@@ -209,10 +172,7 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         </div>
 
                                         <div className="form-group mb-3">
-                                            <label
-                                                htmlFor="discount"
-                                                className="form-label"
-                                            >
+                                            <label htmlFor="discount" className="form-label">
                                                 Discount (%)
                                             </label>
                                             <Field
@@ -227,14 +187,8 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         </div>
 
                                         <div className="form-group mb-3">
-                                            <label
-                                                htmlFor="stock_quantity"
-                                                className="form-label"
-                                            >
-                                                Available Quantity{" "}
-                                                <span className="text-danger">
-                                                    *
-                                                </span>
+                                            <label htmlFor="stock_quantity" className="form-label">
+                                                Available Quantity{" "} <span className="text-danger"> * </span>
                                             </label>
                                             <Field
                                                 type="number"
@@ -249,10 +203,7 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                         </div>
                                     </div>
 
-                                    <button
-                                        type="submit"
-                                        className="btn btn-block text-white btn-secondary mt-4 p-2"
-                                    >
+                                    <button type="submit" className="btn btn-block text-white btn-secondary mt-4 p-2">
                                         {productId ? "Update" : "Create"}
                                     </button>
                                 </Form>

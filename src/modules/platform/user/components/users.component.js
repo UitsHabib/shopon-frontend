@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from "react-redux";
-
 import Table from '../../../core/components/table.component';
 import Pagination from '../../../core/components/pagination.component';
 import _ from 'lodash';

@@ -15,7 +15,6 @@ const Products = (props) => {
         path: "id",
         order: "asc",
     });
-
     const [needToFetch, setNeedToFetch] = useState(false);
     const [action, setAction] = useState({});
 
@@ -35,7 +34,7 @@ const Products = (props) => {
     function handleSort(sortColumn) {
         setSortColumn(sortColumn);
     }
-
+    
     useEffect(() => {
         dispatch(
             getProducts(

@@ -1,4 +1,4 @@
-import DashboardItem from "./shop-dashboardItem.component";
+import DashboardItem from "./dashboardItem.component";
 
 const ShopDashboard = (props) => {
 	return (
