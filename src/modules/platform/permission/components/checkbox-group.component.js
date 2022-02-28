@@ -14,7 +14,7 @@ const CheckboxGroup = ({ options, name, value, ...rest }) => {
                             value={option.id}
                             checked={field.value.includes(option.id)}
                         />
-                        {option.title}
+                        <span> {option.title}</span>
                     </label>
                 ));
             }}

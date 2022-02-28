@@ -1,5 +1,6 @@
-import Types from './permission.types';
 import axios from "axios";
+import Types from './permission.types';
+
 
 export const getPermissions = (page, limit, orderBy, orderType) => {
     const url = `/api/permissions`

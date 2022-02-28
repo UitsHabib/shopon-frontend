@@ -1,7 +1,7 @@
 import { useRouteMatch } from "react-router-dom";
 import { Switch } from "react-router-dom";
-import PrivateRoute from "../../core/PrivateRoute";
 
+import PrivateRoute from "../../core/PrivateRoute";
 import Permissions from "./components/permissions.component";
 
 

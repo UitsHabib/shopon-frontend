@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 
 import { createPermission, getPermission, getServices, updatePermission } from "../permission.actions";
 import PermissionSchema from "../permission.schema";
 import CheckboxGroup from "./checkbox-group.component";
-import { toast } from "react-toastify";
 
 const PermissionForm = ({ permissionId, ...rest }) => {
     const dispatch = useDispatch();

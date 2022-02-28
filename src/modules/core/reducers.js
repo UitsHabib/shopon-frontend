@@ -1,4 +1,4 @@
 import { combineReducers } from "redux";
-import { userReducer, roleReducer, permissionReducer, profileReducer } from "../platform";
+import { userReducer, permissionReducer } from "../platform";
 
-export default combineReducers({ userReducer, roleReducer, permissionReducer, profileReducer });
+export default combineReducers({ userReducer, permissionReducer });
