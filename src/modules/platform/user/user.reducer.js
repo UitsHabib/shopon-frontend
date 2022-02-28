@@ -4,6 +4,7 @@ const initialState = {
     loggedInUser: null,
     user: null,
     users: [],
+    paginatedUsers: [],
     profiles: [],
     roles: [],
 };
@@ -19,11 +20,24 @@ export default function reducer(state = initialState, action) {
             };
         }
         case Types.GET_USERS_FULFILLED: {
-            return {
+             return {
                 ...state,
                 users: action.payload.data.users,
-            };
+                // userMetaData: action.payload.data.metaData
+                }
         }
+        case Types.GET_PAGINATED_USERS_FULFILLED: {
+            return {
+               ...state,
+               paginatedUsers: action.payload.data.users,
+               // userMetaData: action.payload.data.metaData
+               }
+           }
+        
+
+
+
+        
         case Types.GET_USER_FULFILLED: {
             console.log("in fulfilled :  ",action.payload.data.user);
             return {

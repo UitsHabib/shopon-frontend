@@ -1,13 +1,16 @@
 import { SignInSchema } from "../user.schema";
 import { Formik, Field, Form } from "formik";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { createUser, getProfiles, getRoles } from "../user.actions";
 
 const UserForm = (props) => {
     const [apiError, setapiError] = useState(null);
-    const [role, setrole] = useState([]);
-    const [profile, setprofile] = useState([]);
+    const dispatch = useDispatch();
+
+    const role = useSelector(state=> state.userReducer.roles);
+    const profile = useSelector(state => state.userReducer.profiles);
 
     const handleSubmit = async (values) => {
         const newAdmin = {
@@ -43,27 +46,9 @@ const UserForm = (props) => {
         }
     };
 
-    const getRolesFromApi = async () => {
-        try {
-            const response = await getRoles();
-            console.log(response.data);
-            setrole(response.data.roles);
-        } catch (e) {
-            console.log(e.response.data);
-        }
-    };
-    const getProfilesFromApi = async () => {
-        try {
-            const response = await getProfiles();
-            console.log(response.data);
-            setprofile(response.data.profiles);
-        } catch (e) {
-            console.log(e.response.data);
-        }
-    };
     useEffect(() => {
-        getRolesFromApi();
-        getProfilesFromApi();
+        dispatch(getProfiles());
+        dispatch(getRoles());
     }, []);
 
     return (

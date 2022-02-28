@@ -7,18 +7,17 @@ import Pagination from "../../../core/components/pagination.component";
 import _ from "lodash";
 import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
-import { getUsers, deleteUser, getUser } from "../user.actions";
+import { getUsers, getPaginatedUsers, deleteUser, getUser } from "../user.actions";
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
-    console.log(path)
     const dispatch = useDispatch();
 
     const [sortColumn, setSortColumn] = useState({
-        path: "profile_id",
+        path: "first_name",
         order: "asc",
     });
     const [activePage, setActivePage] = useState(1);
@@ -90,7 +89,6 @@ const Users = (props) => {
 
                         <Dropdown.Menu>
                             <Dropdown.Item>
-                            {console.log(profile.id)}
                                 <Link
                                     to={{
                                         pathname:
@@ -110,7 +108,6 @@ const Users = (props) => {
                             </Dropdown.Item>
                             <Dropdown.Item
                                 onClick={() => {
-                                    console.log(typeof profile.id);
                                     setDeletedUserId(profile.id);
                                     setDeleteModal(true);
                                 }}
@@ -130,7 +127,8 @@ const Users = (props) => {
     ];
 
     const users = useSelector((state) => state.userReducer.users);
-    console.log(users);
+    const paginatedUsers = useSelector((state) => state.userReducer.paginatedUsers);
+   
     users.map((user) => {
         if (user.phone === null) user.phone = "--";
     });
@@ -138,7 +136,10 @@ const Users = (props) => {
         (state) => state.userReducer.loggedInUser.id
     );
 
-    const handleSort = (sortColumn) => setSortColumn(sortColumn);
+    const handleSort = (sortColumn) => {
+        setSortColumn(sortColumn);
+        // dispatch(getUsers(activePage,sortColumn.path,sortColumn.order));
+    };
 
     const handleShowDetails = (id) => {
         setDetailsModal(true);
@@ -152,21 +153,20 @@ const Users = (props) => {
     const handleUserPermission = (id) => {
         try {
             getPermission(id).then((res) => {
-                console.log(res.data.permission_services);
                 setUserPermissions(res.data.permission_services);
             });
         } catch (err) {
             console.log("err getting user permission");
         }
     };
-    const sortUsers = (users) => {
-        const sortedUsers = _.orderBy(
-            users,
-            [sortColumn.path],
-            [sortColumn.order]
-        );
-        return sortedUsers;
-    };
+    // const sortUsers = (users) => {
+    //     const sortedUsers = _.orderBy(
+    //         users,
+    //         [sortColumn.path],
+    //         [sortColumn.order]
+    //     );
+    //     return sortedUsers;
+    // };
 
     async function handleDeleteUser() {
         try {
@@ -178,20 +178,53 @@ const Users = (props) => {
         }
     }
 
-    const handleClickPage = (activePage) => setActivePage(activePage);
-
-    const paginateUsers = () => {
-        const start = (activePage - 1) * pageCount;
-        const paginatedUsers = users.slice(start, start + pageCount);
-        return paginatedUsers;
+    const handleClickPage = (activePage) => {
+        setActivePage(activePage);
     };
+
+    // const paginateUsers = () => {
+    //     // const start = (activePage - 1) * pageCount;
+    //     // const paginatedUsers = users.slice(start, start + pageCount);
+    //     // return paginatedUsers;
+    //     dispatch(
+    //             getUsers(
+    //                 activePage,
+    //                 pageCount,
+    //                 sortColumn.path,
+    //                 sortColumn.order
+    //             )
+    //         );
+
+    // };
 
     useEffect(() => {
         dispatch(getUsers());
     }, [needToFetchUser]);
+    
+    useEffect(() => {
+         dispatch(
+            getPaginatedUsers(
+                activePage,
+                pageCount
+            )
+        );
+    }, [activePage]);
 
-    const paginatedUsers = paginateUsers();
-    const userList = sortUsers(paginatedUsers);
+//     useEffect(() => {
+//         dispatch(
+//            getPaginatedUsers(
+//                activePage,
+//                pageCount,
+//                sortColumn.path,
+//                sortColumn.order
+//            )
+//        );
+
+//    }, [sortColumn]);
+    
+
+    //  paginateUsers();
+    // const userList = sortUsers(users);
 
     return (
         <div className="container">
@@ -282,7 +315,7 @@ const Users = (props) => {
             </div>
 
             <Table
-                users={userList}
+                users={paginatedUsers}
                 columns={columns}
                 sortColumns={sortColumn}
                 onSort={handleSort}

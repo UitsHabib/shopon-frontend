@@ -44,9 +44,27 @@ export function getUsers() {
             method: "get",
             url: `${baseUrl}/api/users`,
             withCredentials: "true",
+        })
+    };
+}
+
+export function getPaginatedUsers(page, limit, orderBy, orderType) {
+    console.log(page, limit, orderBy, orderType);
+
+    const url =`${baseUrl}/api/users/?page=${page}` 
+    + (limit ? `&limit=${limit}` : "") 
+    + (orderBy ? `&orderBy=${orderBy}` : "") 
+    + (orderType ? `&orderType=${orderType}` : "");
+    return {
+        type: Types.GET_PAGINATED_USERS,
+        payload: axios({
+            method: "get",
+            url,
+            withCredentials: "true",
         }),
     };
 }
+
 
 export function deleteUser(userId) {
     return axios.delete(`${baseUrl}/api/users/${userId}`, {
