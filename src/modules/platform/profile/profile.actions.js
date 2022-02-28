@@ -1,10 +1,8 @@
 import axios from "axios";
 import Types from "./profile.types";
 
-const baseUrl = "http://localhost:5000";
-
 export function getProfiles(page, limit, orderBy, orderType) {
-    const url = `${baseUrl}/api/profiles`
+    const url = `/api/profiles`
         +(page ? `?page=${page}` : "")
         +(limit ? `&&limit=${limit}` : "")
         +(orderBy ? `&&orderBy=${orderBy}` : "")
@@ -14,8 +12,7 @@ export function getProfiles(page, limit, orderBy, orderType) {
         type: Types.GET_PROFILES,
         payload: axios({
             method: "get",
-            url,
-            withCredentials: "true",
+            url
         }),
     };
 }
@@ -25,15 +22,13 @@ export const getProfile = (id) => {
         type: Types.GET_PROFILE,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/profiles/${id}`,
-            withCredentials: true
+            url: `/api/profiles/${id}`,
         })
-        
     };
 }
 
 export function getPermissions() {
-	return axios.get(`${baseUrl}/api/permissions`, { withCredentials: "true" });
+	return axios.get(`/api/permissions`);
 }
 
 export const createProfile = (data) => {
@@ -41,9 +36,8 @@ export const createProfile = (data) => {
         type: Types.CREATE_PROFILE,
         payload: axios({
             method: "post",
-            url: `${baseUrl}/api/profiles`, 
-            data,  
-            withCredentials: true 
+            url: `/api/profiles`, 
+            data,   
         })
     };
 }
@@ -54,9 +48,8 @@ export const updateProfile = (id, title, description, permissions) => {
         type: Types.UPDATE_PROFILE,
         payload: axios({
             method: "patch",
-            url: `${baseUrl}/api/profiles/${id}`,
-            data,
-            withCredentials: true,
+            url: `/api/profiles/${id}`,
+            data
         })
     }
 }
@@ -66,8 +59,7 @@ export const deleteProfile = (id) => {
         type: Types.DELETE_PROFILE,
         payload: axios({
             method: "delete",
-            url: `${baseUrl}/api/profiles/${id}`, 
-            withCredentials: true 
+            url: `/api/profiles/${id}`,  
         })
     };
 }

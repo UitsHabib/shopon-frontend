@@ -1,5 +1,4 @@
-import { array } from 'yup';
-import { string, object } from 'yup';
+import { string, object, array } from 'yup';
 
 export const profileCreateSchema = object().shape({
 	title: string()
@@ -7,8 +6,9 @@ export const profileCreateSchema = object().shape({
 		.max(20, 'This field must be at most 20 characters long')
 		.required('This field must not be empty'),
 	description: string().required('This field must not be empty'),
-    permissions: array().of(string().required('This field must not be empty'))
-    .min(1, 'Select at least one permission.')
+    permissions: array()
+		.of(string().required('This field must not be empty'))
+		.min(1, 'Select at least one permission.')
 });
 
 export const profileUpdateSchema = object().shape({
@@ -17,6 +17,7 @@ export const profileUpdateSchema = object().shape({
 		.max(20, 'This field must be at most 20 characters long')
 		.required('This field must not be empty'),
 	description: string().required('This field must not be empty'),
-	permissions: array().of(string().required('This field must not be empty'))
-    .min(1, 'Select at least one permission.')
+	permissions: array()
+		.of(string().required('This field must not be empty'))
+    	.min(1, 'Select at least one permission.')
 });

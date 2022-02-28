@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Table from "./common/table.component";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import Pagination from "./common/pagination.component";
 import Dropdown from "react-bootstrap/Dropdown";
-import { profileCreateSchema, profileUpdateSchema } from "../profile.schema";
 import moment from "moment";
 import { toast } from "react-toastify";
+
+import Table from "./common/table.component";
+import Pagination from "./common/pagination.component";
+import { profileCreateSchema, profileUpdateSchema } from "../profile.schema";
 
 import {
 	createProfile,
