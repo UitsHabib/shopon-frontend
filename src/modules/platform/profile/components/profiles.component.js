@@ -1,42 +1,59 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Table from "./common/table.component";
-import _ from "lodash";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import Pagination from "./common/pagination.component";
 import Dropdown from "react-bootstrap/Dropdown";
-import { Link } from "react-router-dom";
-import { useRouteMatch } from "react-router-dom";
-import { updateSchema } from "../profile.schema";
+import { profileCreateSchema, profileUpdateSchema } from "../profile.schema";
 import moment from "moment";
 import { toast } from "react-toastify";
 
 import {
+	createProfile,
 	deleteProfile,
 	getPermissions,
 	getProfiles,
 	updateProfile,
-    activePageHandle,
-    sortingProfile
+	activePageHandle,
+	sortingProfile,
 } from "../profile.actions";
 
 const Profiles = () => {
-	const { path } = useRouteMatch();
 	const dispatch = useDispatch();
 
 	const [permissions, setPermissions] = useState([]);
 	const [update, setUpdate] = useState(null);
 	const [deleteInfo, setDeleteInfo] = useState(null);
 	const [detailInfo, setDetailInfo] = useState(null);
-    const [modal, setModal] = useState({detail: false, update: false, delete: false})
+	const [modal, setModal] = useState({
+		create: false,
+		detail: false,
+		update: false,
+		delete: false,
+	});
 
 	const [needToFetchProfile, setNeedToFetchProfile] = useState(true);
 
 	const profiles = useSelector((state) => state.profileReducer.profiles);
-    const activePage = useSelector(state => state.profileReducer.activePage);
-    const limit = useSelector(state => state.profileReducer.limit);
-    const total = useSelector(state => state.profileReducer.total);
-    const sorting = useSelector(state => state.profileReducer.sorting);
+	const activePage = useSelector((state) => state.profileReducer.activePage);
+	const limit = useSelector((state) => state.profileReducer.limit);
+	const total = useSelector((state) => state.profileReducer.total);
+	const sorting = useSelector((state) => state.profileReducer.sorting);
+
+    //create profile into database
+	async function handleSubmit(data) {
+		try {
+			await dispatch(createProfile(data));
+			toast.success("Profile Created Successfully", {
+				backgroundColor: "#8329C5",
+				color: "#ffffff",
+			});
+			setNeedToFetchProfile(!needToFetchProfile);
+			setModal({ ...modal, create: false });
+		} catch (error) {
+			alert("Profile already exits");
+		}
+	}
 
 	//fetch permission data from database
 	async function getPermissionList() {
@@ -51,10 +68,10 @@ const Profiles = () => {
 	//update profile data in database
 	async function updateProfileList({ id, title, description, permissions }) {
 		try {
-			dispatch(updateProfile(id, title, description, permissions));
+			await dispatch(updateProfile(id, title, description, permissions));
 			toast.success(`Successfully updated`);
-            setModal({...modal, update: false});
 			setNeedToFetchProfile(!needToFetchProfile);
+			setModal({ ...modal, update: false });
 		} catch {
 			console.log("error while updating profiles");
 		}
@@ -64,10 +81,10 @@ const Profiles = () => {
 	async function deleteProfileList() {
 		try {
 			const { id } = deleteInfo;
-            dispatch(deleteProfile(id));
+			await dispatch(deleteProfile(id));
 			toast.success(`Successfully deleted`);
-            setModal({...modal, delete: false})
 			setNeedToFetchProfile(!needToFetchProfile);
+			setModal({ ...modal, delete: false });
 		} catch (error) {
 			console.error("Error: ", error);
 		}
@@ -81,17 +98,9 @@ const Profiles = () => {
 		getPermissionList();
 	}, []);
 
-	//detail profile section
-	const handleDetail = (data) => {
-		// console.log(data);
-		let permissions = [];
-		data.profile_permissions.map((pt) =>
-			permissions.push(pt.permission.title)
-		);
-		const created_at = moment(data.created_at).format("lll");
-		const updated_at = moment(data.updated_at).format("lll");
-		setDetailInfo({ ...data, permissions, created_at, updated_at });
-        setModal({...modal, detail: true})
+    //create profile section
+	const handleCreate = () => {
+		setModal({ ...modal, create: true });
 	};
 
 	//update profile section
@@ -101,17 +110,29 @@ const Profiles = () => {
 			permissions.push(pt.permission.id.toString())
 		);
 		setUpdate({ ...data, permissions });
-        setModal({...modal, update: true})
+		setModal({ ...modal, update: true });
+	};
+
+    //detail profile section
+	const handleDetail = (data) => {
+		let permissions = [];
+		data.profile_permissions.map((pt) =>
+			permissions.push(pt.permission.title)
+		);
+		const created_at = moment(data.created_at).format("lll");
+		const updated_at = moment(data.updated_at).format("lll");
+		setDetailInfo({ ...data, permissions, created_at, updated_at });
+		setModal({ ...modal, detail: true });
 	};
 
 	//delete profile section
 	const handleDelete = (data) => {
 		setDeleteInfo(data);
-        setModal({...modal, delete: true})
+		setModal({ ...modal, delete: true });
 	};
 
-    const handleActivePage = value => dispatch(activePageHandle(value));
-    const handleSorting = value => dispatch(sortingProfile(value));
+	const handleActivePage = (value) => dispatch(activePageHandle(value));
+	const handleSorting = (value) => dispatch(sortingProfile(value));
 
 	const columns = [
 		{
@@ -210,17 +231,13 @@ const Profiles = () => {
 							marginRight: "20px",
 						}}
 					>
-						<Link
-							style={{ textDecoration: "none" }}
-							to={`${path}/create`}
+						<button
+							type="button"
+							className="btn btn-warning pull-right"
+							onClick={handleCreate}
 						>
-							<button
-								type="button"
-								className="btn btn-warning pull-right"
-							>
-								Create Profile
-							</button>
-						</Link>
+							Create Profile
+						</button>
 					</span>
 				</nav>
 			</div>
@@ -247,6 +264,183 @@ const Profiles = () => {
 						onClickPage={handleActivePage}
 					></Pagination>
 				</div>
+				{modal.create ? (
+					<div
+						className="modal"
+						style={{ display: modal.create ? "block" : "none" }}
+					>
+						<div
+							className="modal-backdrop"
+							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
+							onClick={() => {
+								// close modal when outside of modal is clicked
+								setModal({ ...modal, create: false });
+							}}
+						>
+							<div
+								className="modal-content"
+								onClick={(e) => {
+									// do not close modal if anything inside modal content is clicked
+									e.stopPropagation();
+								}}
+								style={{
+									textAlign: "left",
+									width: "60%",
+									marginLeft: "20%",
+									marginTop: "10%",
+									border: "1px solid gray",
+									boxShadow: "1px 1px 10px gray",
+									borderRadius: "10px",
+									padding: "20px",
+								}}
+							>
+								<h3 style={{ color: "gray" }}>
+									Create New Profile
+								</h3>
+								<hr />
+								<Formik
+									initialValues={{
+										title: "",
+										description: "",
+										permissions: [],
+									}}
+									validationSchema={profileCreateSchema}
+									onSubmit={(values, actions) => {
+										handleSubmit(values);
+										actions.setSubmitting(false);
+									}}
+								>
+									{(formikProps) => (
+										<Form
+											onSubmit={formikProps.handleSubmit}
+										>
+											<div className="form-group">
+												<label
+													className="form-label"
+													htmlFor="title"
+												>
+													Title{" "}
+													<span className="text-danger">
+														*
+													</span>
+												</label>
+												<Field
+													id="title"
+													name="title"
+													type="text"
+													className="form-control"
+												></Field>
+												<div className="invalid-feedback d-block">
+													<ErrorMessage name="title" />
+												</div>
+											</div>
+											<div className="form-group">
+												<label
+													className="form-label"
+													htmlFor="description"
+												>
+													Description{" "}
+													<span className="text-danger">
+														*
+													</span>
+												</label>
+												<Field
+													id="description"
+													name="description"
+													type="text"
+													className="form-control"
+												></Field>
+												<div className="invalid-feedback d-block">
+													<ErrorMessage name="description" />
+												</div>
+											</div>
+											<div id="checkbox-group">
+												<span
+													type="button"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="At least one permission is required"
+												>
+													Select Permission{" "}
+												</span>
+												<span className="text-danger">
+													*
+												</span>{" "}
+												<i
+													type="button"
+													className="bi bi-question-circle-fill"
+													data-toggle="tooltip"
+													data-placement="top"
+													title="At least one permission is required"
+												></i>
+											</div>
+											<div
+												role="group"
+												aria-labelledby="checkbox-group"
+												style={{ textAlign: "left" }}
+											>
+												{permissions.map(
+													(permission) => (
+														<React.Fragment
+															key={permission.id}
+														>
+															<label>
+																<Field
+																	type="checkbox"
+																	name="permissions"
+																	value={permission.id.toString()}
+																/>{" "}
+																{
+																	permission.title
+																}
+																<br />
+																<i
+																	style={{
+																		marginLeft:
+																			"40px",
+																	}}
+																>
+																	{
+																		permission.description
+																	}
+																</i>
+															</label>
+															<br />
+														</React.Fragment>
+													)
+												)}
+												<div className="invalid-feedback d-block">
+													<ErrorMessage name="permissions" />
+												</div>
+											</div>
+											<br />
+											<button
+												className="btn btn-primary"
+												type="submit"
+											>
+												Add Profile
+											</button>{" "}
+											<button
+												className="btn btn-danger"
+												type="button"
+												onClick={() =>
+													setModal({
+														...modal,
+														create: false,
+													})
+												}
+											>
+												Cancel
+											</button>
+										</Form>
+									)}
+								</Formik>
+							</div>
+						</div>
+					</div>
+				) : (
+					<div />
+				)}
 				{modal.update ? (
 					<div
 						className="modal"
@@ -257,7 +451,7 @@ const Profiles = () => {
 							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-                                setModal({...modal, update: false})
+								setModal({ ...modal, update: false });
 							}}
 						>
 							<div
@@ -284,9 +478,8 @@ const Profiles = () => {
 										description: update.description,
 										permissions: update.permissions,
 									}}
-									validationSchema={updateSchema}
+									validationSchema={profileUpdateSchema}
 									onSubmit={(values, actions) => {
-										console.log("se",values);
 										updateProfileList(values);
 										actions.setSubmitting(false);
 									}}
@@ -299,7 +492,12 @@ const Profiles = () => {
 												<button
 													type="button"
 													className="btn-close pull-right"
-													onClick={() => setModal({...modal, update: false})}
+													onClick={() =>
+														setModal({
+															...modal,
+															update: false,
+														})
+													}
 													aria-label="Close"
 												></button>
 												<label
@@ -421,7 +619,12 @@ const Profiles = () => {
 													color: "white",
 													marginRight: "10px",
 												}}
-												onClick={() => setModal({...modal, update: false})}
+												onClick={() =>
+													setModal({
+														...modal,
+														update: false,
+													})
+												}
 											>
 												Cancel
 											</button>
@@ -445,7 +648,7 @@ const Profiles = () => {
 							style={{ backgroundColor: "rgba(0, 0, 0, 0.1)" }}
 							onClick={() => {
 								// close modal when outside of modal is clicked
-                                setModal({...modal, delete: false})
+								setModal({ ...modal, delete: false });
 							}}
 						>
 							<div
@@ -469,7 +672,12 @@ const Profiles = () => {
 									<button
 										type="button"
 										className="btn-close pull-right"
-										onClick={() => setModal({...modal, delete: false})}
+										onClick={() =>
+											setModal({
+												...modal,
+												delete: false,
+											})
+										}
 										aria-label="Close"
 									></button>
 									<h1>Delete Account</h1>
@@ -490,7 +698,12 @@ const Profiles = () => {
 												color: "white",
 												marginRight: "10px",
 											}}
-											onClick={() => setModal({...modal, delete: false})}
+											onClick={() =>
+												setModal({
+													...modal,
+													delete: false,
+												})
+											}
 										>
 											Cancel
 										</button>
@@ -521,7 +734,7 @@ const Profiles = () => {
 							onClick={() => {
 								// close modal when outside of modal is clicked
 								// handleDetailModal();
-                                setModal({...modal, detail: false})
+								setModal({ ...modal, detail: false });
 							}}
 						>
 							<div
@@ -544,7 +757,12 @@ const Profiles = () => {
 									<button
 										type="button"
 										className="btn-close pull-right"
-										onClick={() => setModal({...modal, detail: false})}
+										onClick={() =>
+											setModal({
+												...modal,
+												detail: false,
+											})
+										}
 										aria-label="Close"
 									></button>
 
@@ -606,7 +824,12 @@ const Profiles = () => {
 											color: "white",
 											marginRight: "10px",
 										}}
-										onClick={() => setModal({...modal, detail: false})}
+										onClick={() =>
+											setModal({
+												...modal,
+												detail: false,
+											})
+										}
 									>
 										Close
 									</button>

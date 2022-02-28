@@ -19,6 +19,13 @@ export default function reducer(state = initialState, action) {
                 total: metaData.total
             };
         }
+        case Types.GET_PROFILE_FULFILLED: {
+            const profile = action.payload.data;
+            return { ...state, profile};
+        }
+        case Types.CREATE_PROFILE_FULFILLED: {
+            return { ...state };
+        }
         case Types.UPDATE_PROFILE_FULFILLED: {
             return { ...state };
         }
@@ -27,17 +34,14 @@ export default function reducer(state = initialState, action) {
         }
         case Types.SORT_PROFILE: {
             const sorting = action.payload;
-
             return { ...state, sorting }
         }
         case Types.ACTIVE_PAGE: {
             const activePage = action.payload;
-
             return { ...state, activePage }
         }
         case Types.PAGE_LIMIT: {
             const limit = action.payload;
-
             return { ...state, limit }
         }
     }

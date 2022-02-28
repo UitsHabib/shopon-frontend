@@ -20,6 +20,18 @@ export function getProfiles(page, limit, orderBy, orderType) {
     };
 }
 
+export const getProfile = (id) => {
+    return {
+        type: Types.GET_PROFILE,
+        payload: axios({
+            method: "get",
+            url: `${baseUrl}/api/profiles/${id}`,
+            withCredentials: true
+        })
+        
+    };
+}
+
 export const sortingProfile = (value) => {
     return {
         type: Types.SORT_PROFILE,
@@ -45,10 +57,16 @@ export function getPermissions() {
 	return axios.get(`${baseUrl}/api/permissions`, { withCredentials: "true" });
 }
 
-export function createProfile(data) {
-	return axios.post(`${baseUrl}/api/profiles`, data, {
-        withCredentials: true,
-    });
+export const createProfile = (data) => {
+    return {
+        type: Types.CREATE_PROFILE,
+        payload: axios({
+            method: "post",
+            url: `${baseUrl}/api/profiles`, 
+            data,  
+            withCredentials: true 
+        })
+    };
 }
 
 export const updateProfile = (id, title, description, permissions) => {
