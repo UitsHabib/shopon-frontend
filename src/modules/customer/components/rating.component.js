@@ -1,12 +1,14 @@
+import React from "react";
+
 const Rating = ({ rating }) => {
     return (
-        <ul style={{ margin: "0px", padding: "0px" }}>
+        <React.Fragment>
             <li className="fa fa-star"></li>
             <li className="fa fa-star"></li>
             <li className="fa fa-star"></li>
             <li className="fa fa-star"></li>
             <li className="fa fa-star-o"></li>
-        </ul>
+        </React.Fragment>
     );
 };
 

@@ -1,11 +1,27 @@
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import getLoggedInCustomer from "../service/getLoggedInCustomer";
+import { Formik, Form, Field } from "formik";
+import { useDispatch } from "react-redux";
 
 const CustomerNav = () => {
-    const loggedInCustomer = getLoggedInCustomer();
+    const dispatch = useDispatch();
+
+    const loggedInCustomer = useSelector(
+        (state) => state.customerReducer.loggedInCustomer
+    );
     const cartItem = useSelector((state) => state.customerReducer.cart);
-    const handleSearch = () => {};
+
+    const handleSearch = (text) => {
+        if (text.trim() === "") {
+            alert("sd");
+        } else {
+            dispatch({
+                type: "ADD_SEARCH_TEXT",
+                payload: text,
+            });
+        }
+    };
+
     return (
         <>
             <nav
@@ -17,31 +33,40 @@ const CustomerNav = () => {
                         <span className="h4">ShopOn</span>
                     </Link>
                 </div>
+                <Formik
+                    initialValues={{
+                        search: "",
+                    }}
+                    onSubmit={(values, actions) => {
+                        handleSearch(values.search);
+                        actions.setSubmitting(false);
+                    }}
+                >
+                    {(formikprops) => {
+                        return (
+                            <Form
+                                onSubmit={formikprops.handleSubmit}
+                                className="d-flex"
+                            >
+                                <Field
+                                    className="form-control me-2"
+                                    type="search"
+                                    name="search"
+                                    id="search"
+                                    placeholder="Search Product"
+                                    style={{ maxWidth: "500px" }}
+                                />
+                                <button
+                                    className="btn btn-outline-success"
+                                    type="submit"
+                                >
+                                    Search
+                                </button>
+                            </Form>
+                        );
+                    }}
+                </Formik>
 
-                <form onSubmit={handleSearch} className="d-flex">
-                    <input
-                        className="form-control me-2"
-                        type="search"
-                        name="search"
-                        id="Search"
-                        placeholder="Search Product"
-                        style={{ minWidth: "400px" }}
-                    />
-                    <button className="btn btn-outline-success" type="submit">
-                        Search
-                    </button>
-                </form>
-
-                {/* <div className="d-flex">
-                    <Link to={"/login"} className="btn">
-                        {" "}
-                        Login
-                    </Link>
-                    <Link to={"/signup"} className="btn">
-                        {" "}
-                        SignUp
-                    </Link>
-                </div> */}
                 {!loggedInCustomer && (
                     <div className="d-flex">
                         <Link to={"/login"} className="btn">
@@ -57,7 +82,7 @@ const CustomerNav = () => {
 
                 {loggedInCustomer && (
                     <div className="d-flex">
-                        <button type="button" class="position-relative">
+                        <button type="button" className="position-relative">
                             <span>
                                 <i
                                     style={{ fontSize: "25px" }}

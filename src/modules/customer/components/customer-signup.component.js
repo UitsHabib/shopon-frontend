@@ -2,10 +2,11 @@ import { Formik, Field, Form } from "formik";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { CustomerSignInSchema } from "../customer.schema";
-import { createCustomer } from "../customer.action";
+import { signUpCustomer } from "../customer.actions";
 
 const CustomerSignUp = (props) => {
     const [apiError, setapiError] = useState(null);
+
     const handleSubmit = async (values) => {
         const newCustomer = {
             username: values.username,
@@ -13,10 +14,9 @@ const CustomerSignUp = (props) => {
             password: values.password,
             confirm_password: values.confirm_password,
         };
-        console.log(newCustomer);
+
         try {
-            const response = await createCustomer(newCustomer);
-            // console.log(response);
+            const response = await signUpCustomer(newCustomer);
             if (response) {
                 toast("User Added Successfully", {
                     backgroundColor: "#8329C5",

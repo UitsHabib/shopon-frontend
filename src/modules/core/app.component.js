@@ -25,6 +25,7 @@ import {
     CustomerSignUp,
     CustomerLogout,
     CustomerProduct,
+    CustomerAction,
 } from "../customer";
 import { Complain } from "../complaint";
 import {
@@ -38,11 +39,13 @@ import {
 } from "../shop";
 const { getSignedInShopProfile } = shopActions;
 const { getSignedInUserProfile } = userActions;
+const { getSignedInCustomerProfile } = CustomerAction;
 
 function App() {
     const dispatch = useDispatch();
 
     useEffect(() => {
+        dispatch(getSignedInCustomerProfile());
         dispatch(getSignedInUserProfile());
         dispatch(getSignedInShopProfile());
     }, []);

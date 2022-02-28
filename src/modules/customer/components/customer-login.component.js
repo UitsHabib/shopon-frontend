@@ -4,33 +4,30 @@ import { useDispatch } from "react-redux";
 import { loginSchema } from "../customer.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import { customerLogin } from "../customer.action";
+import { customerLogin } from "../customer.actions";
 
 const CustomerLogin = (props) => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
     async function handleLogin(data) {
-        try {
-            const response = await customerLogin(data);
-            console.log(response);
-            localStorage.setItem(
-                "loggedInCustomer",
-                JSON.stringify(response.data)
-            );
-            props.location.state && props.location.state.from.pathname
-                ? history.push(props.location.state.from.pathname)
-                : history.push("/");
-            toast.success("Logged in Successfully", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
+        dispatch(customerLogin(data))
+            .then((response) => {
+                props.location.state && props.location.state.from.pathname
+                    ? history.push(props.location.state.from.pathname)
+                    : history.push("/");
+
+                toast.success("Logged in Successfully", {
+                    backgroundColor: "#8329C5",
+                    color: "#ffffff",
+                });
+            })
+            .catch((error) => {
+                toast.error(error.response.data, {
+                    backgroundColor: "#8329C5",
+                    color: "#ffffff",
+                });
             });
-        } catch (error) {
-            console.log(error.response.data);
-            toast.error(error.response.data, {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        }
     }
 
     return (
@@ -55,7 +52,7 @@ const CustomerLogin = (props) => {
                 >
                     <div className="card-body">
                         <h5 className="d-flex flex-wrap justify-content-center">
-                            Customrt Login Form
+                            Login Form
                         </h5>
                         <Formik
                             initialValues={{

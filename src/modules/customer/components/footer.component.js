@@ -66,17 +66,12 @@ const Footer = () => {
                     <h3 className="form-title">
                         Subscribe to our email newsletter
                     </h3>
-                    <form
-                        action="#"
-                        onsubmit="return false"
-                        className="subscribe-form"
-                    >
+                    <form action="#" className="subscribe-form">
                         <input
                             type="email"
                             name="email"
                             id="email"
                             className="email subscribe-input"
-                            autocomplete="off"
                             placeholder="Your email"
                         />
                         <button type="submit" className="subscribe-btn">

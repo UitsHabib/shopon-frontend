@@ -4,6 +4,7 @@ const initialState = {
     loggedInCustomer: null,
     publicProduct: [],
     cart: [],
+    search_text: null,
 };
 
 export default function reducer(state = initialState, action) {
@@ -36,6 +37,12 @@ export default function reducer(state = initialState, action) {
                 cart,
             };
         }
+        case Types.ADD_SEARCH_TEXT:
+            const search_text = action.payload;
+            return {
+                ...state,
+                search_text,
+            };
         default:
             return state;
     }

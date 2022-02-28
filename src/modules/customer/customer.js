@@ -1,26 +1,35 @@
-import { Carousel, Card, Button } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { Carousel } from "react-bootstrap";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import _ from "lodash";
+import Footer from "./components/footer.component";
+import { getPublicProduct } from "./customer.actions";
+import Rating from "./components/rating.component";
+
 import one from "./images/1.jpg";
 import two from "./images/2.jpg";
 import three from "./images/3.jpg";
 import four from "./images/4.webp";
 import five from "./images/5.webp";
 import six from "./images/6.webp";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getPublicProduct } from "./customer.action";
-import { toast } from "react-toastify";
-import getLoggedInCustomer from "./service/getLoggedInCustomer";
-import Footer from "./components/footer.component";
-import { Link } from "react-router-dom";
 
 const Customer = (props) => {
     const dispatch = useDispatch();
 
-    const loggedInCustomer = getLoggedInCustomer();
-    const imageItem = [four, five, six];
     const cartItem = useSelector((state) => state.customerReducer.cart);
     const product = useSelector((state) => state.customerReducer.publicProduct);
+    const loggedInCustomer = useSelector(
+        (state) => state.customerReducer.loggedInCustomer
+    );
+
+    const imageItem = [four, five, six];
     let cnt = 0;
+
+    const search_text = useSelector(
+        (state) => state.customerReducer.search_text
+    );
 
     const handleCardButton = (item) => {
         if (!loggedInCustomer) {
@@ -38,6 +47,16 @@ const Customer = (props) => {
             });
         }
     };
+
+    const filterProduct = (product) => {
+        console.log(search_text);
+        const x = _.filter(product, function (o) {
+            return _.includes(o.name, search_text);
+        });
+        return x;
+    };
+    const finalp = filterProduct(product.products);
+    console.log(finalp);
 
     useEffect(() => {
         dispatch(getPublicProduct());
@@ -114,11 +133,7 @@ const Customer = (props) => {
                                         </span>
                                         <div className="card_footer">
                                             <ul>
-                                                <li className="fa fa-star"></li>
-                                                <li className="fa fa-star"></li>
-                                                <li className="fa fa-star"></li>
-                                                <li className="fa fa-star"></li>
-                                                <li className="fa fa-star-o"></li>
+                                                <Rating rating={3.5} />
                                             </ul>
                                         </div>
                                     </div>

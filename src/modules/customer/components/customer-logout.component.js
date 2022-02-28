@@ -1,5 +1,10 @@
+import { useDispatch } from "react-redux";
+import { customerLogout } from "../customer.actions";
+
 function CustomerLogout(props) {
-    localStorage.removeItem("loggedInCustomer");
+    const dispatch = useDispatch();
+
+    dispatch(customerLogout());
     window.location.href = "/";
 }
 
