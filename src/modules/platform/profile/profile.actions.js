@@ -1,36 +1,65 @@
 import axios from "axios";
+import Types from "./profile.types";
 
-const baseUrl = "http://localhost:5000";
+export function getProfiles(page, limit, orderBy, orderType) {
+    const url = `/api/profiles`
+        +(page ? `?page=${page}` : "")
+        +(limit ? `&&limit=${limit}` : "")
+        +(orderBy ? `&&orderBy=${orderBy}` : "")
+        +(orderType ? `&&orderType=${orderType}` : "");
 
-export function getUsers() {
-	return axios.get(`${baseUrl}/api/users`, { withCredentials: "true" });
+    return {
+        type: Types.GET_PROFILES,
+        payload: axios({
+            method: "get",
+            url
+        }),
+    };
 }
 
-export function getProfiles() {
-	return axios.get(`${baseUrl}/api/profiles`, { withCredentials: "true" });
+export const getProfile = (id) => {
+    return {
+        type: Types.GET_PROFILE,
+        payload: axios({
+            method: "get",
+            url: `/api/profiles/${id}`,
+        })
+    };
 }
 
 export function getPermissions() {
-	return axios.get(`${baseUrl}/api/permissions`, { withCredentials: "true" });
+	return axios.get(`/api/permissions`);
 }
 
-export function createProfile(data) {
-	return axios.post(`${baseUrl}/api/profiles`, data, {
-        withCredentials: true,
-    });
+export const createProfile = (data) => {
+    return {
+        type: Types.CREATE_PROFILE,
+        payload: axios({
+            method: "post",
+            url: `/api/profiles`, 
+            data,   
+        })
+    };
 }
 
-export function updateProfile(id, title, description, permissions) {
-	return axios.patch(
-		`${baseUrl}/api/profiles/${id}`,
-		{ title, description, permissions },
-		{ withCredentials: true }
-	);
+export const updateProfile = (id, title, description, permissions) => {
+    const data = {title, description, permissions}
+    return {
+        type: Types.UPDATE_PROFILE,
+        payload: axios({
+            method: "patch",
+            url: `/api/profiles/${id}`,
+            data
+        })
+    }
 }
 
-export function deleteProfile(id) {
-	return axios.delete(
-        `${baseUrl}/api/profiles/${id}`,
-        { withCredentials: true }
-    );
+export const deleteProfile = (id) => {
+    return {
+        type: Types.DELETE_PROFILE,
+        payload: axios({
+            method: "delete",
+            url: `/api/profiles/${id}`,  
+        })
+    };
 }
