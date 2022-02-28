@@ -60,16 +60,6 @@ export const deletePermission = (id) => {
     };
 }
 
-export const getServices = () => {
-    return {
-        type: Types.GET_SERVICES,
-        payload: axios({
-            method: "get",
-            url: `/api/services`
-        })
-    }
-}
-
 
 export function getAllPermissions () {
     return {

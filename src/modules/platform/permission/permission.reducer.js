@@ -3,11 +3,6 @@ import Types from './permission.types';
 const initialState = {
     permissionData: {},
     permission: {},
-    
-    serviceData: {
-        services: [],
-        meta: {},
-    }
 }
 
 export default function reducer(state = initialState, action) {
@@ -22,12 +17,6 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 permission: action.payload.data
-            }
-        }
-        case Types.GET_SERVICES_FULFILLED: {
-            return {
-                ...state,
-                serviceData: action.payload.data
             }
         }
         default: 

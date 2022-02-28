@@ -4,7 +4,8 @@ import { toast } from "react-toastify";
 import { Modal } from "react-bootstrap";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 
-import { createPermission, getPermission, getServices, updatePermission } from "../permission.actions";
+import { createPermission, getPermission, updatePermission } from "../permission.actions";
+import { getServices } from "../../services/service.actions";
 import PermissionSchema from "../permission.schema";
 import CheckboxGroup from "./checkbox-group.component";
 
@@ -12,7 +13,7 @@ const PermissionForm = ({ permissionId, ...rest }) => {
     const dispatch = useDispatch();
 
     const permission = useSelector(state => state.permissionReducer.permission);
-    const serviceData = useSelector(state => state.permissionReducer.serviceData);
+    const serviceData = useSelector(state => state.serviceReducer.serviceData);
 
     useEffect(() => {
         if(permissionId) dispatch(getPermission(permissionId));
