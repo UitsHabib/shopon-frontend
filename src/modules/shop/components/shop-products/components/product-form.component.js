@@ -7,32 +7,33 @@ import Modal from "react-bootstrap/Modal";
 
 import { NewProductSchema } from "../products.schema";
 import { addNewProduct, getProduct, updateProduct } from "../products.actions";
+import ToggleList from "../../../../core/components/toggle-list.component"
 
-// const ToggleListSlider = (props) => (
-//     <ToggleList {...props}>
-//         {({ id, name, label, value, isChecked, onChange, disabled }) => (
-//             <label
-//                 key={id}
-//                 className="form-label d-flex justify-content-between align-items-center col-12 col-sm-6"
-//             >
-//                 <span className="switch-label">{label}</span>
-//                 <span className="switch">
-//                     <input
-//                         name={name}
-//                         className="form-check-input"
-//                         type="checkbox"
-//                         value={value}
-//                         id={id}
-//                         checked={isChecked}
-//                         onChange={onChange}
-//                         disabled={disabled}
-//                     />
-//                     <span className="slider round"></span>
-//                 </span>
-//             </label>
-//         )}
-//     </ToggleList>
-// );
+const ToggleListSlider = (props) => (
+    <ToggleList {...props}>
+        {({ id, name, label, value, isChecked, onChange, disabled }) => (
+            <label
+                key={id}
+                className="form-label d-flex justify-content-between align-items-center col-12 col-sm-6"
+            >
+                <span className="switch-label">{label}</span>
+                <span className="switch">
+                    <input
+                        name={name}
+                        className="form-check-input"
+                        type="checkbox"
+                        value={value}
+                        id={id}
+                        checked={isChecked}
+                        onChange={onChange}
+                        disabled={disabled}
+                    />
+                    <span className="slider round"></span>
+                </span>
+            </label>
+        )}
+    </ToggleList>
+);
 
 const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
     const dispatch = useDispatch();
