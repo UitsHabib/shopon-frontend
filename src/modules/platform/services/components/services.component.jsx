@@ -10,7 +10,7 @@ import ServiceDetails from "./serviceDetails.component";
 import servicesMetadata from "./services.metadata";
 
 const Services = ({ history, location: { search } }) => {
-	const queriedPage = new URLSearchParams(search).get("page");
+	const queriedPage = parseInt(new URLSearchParams(search).get("page"));
 	const paginate = { currentPage: queriedPage || 1, itemsPerPage: 2 };
 	// const [paginate, updatePage] = useState({ currentPage: 1, itemsPerPage: 2 });
 	const { services, meta } = useServices(paginate);
