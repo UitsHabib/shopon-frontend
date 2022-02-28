@@ -23,7 +23,6 @@ function Roles() {
         dispatch(getRoles());
     }, [action]);
 
-
     return (
         <>
             <div className="container-fluid">
