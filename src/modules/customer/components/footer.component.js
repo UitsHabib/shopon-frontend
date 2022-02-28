@@ -68,7 +68,7 @@ const Footer = () => {
                     </h3>
                     <form
                         action="#"
-                        onsubmit="return false"
+                        onSubmit={() => false}
                         className="subscribe-form"
                     >
                         <input
@@ -76,7 +76,7 @@ const Footer = () => {
                             name="email"
                             id="email"
                             className="email subscribe-input"
-                            autocomplete="off"
+                            autoComplete="off"
                             placeholder="Your email"
                         />
                         <button type="submit" className="subscribe-btn">

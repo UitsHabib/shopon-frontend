@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import store from './store';
 import { ToastContainer } from 'react-toastify';
 import join from 'url-join';
 
@@ -44,6 +45,7 @@ const { getSignedInUserProfile } = userActions;
 
 let refCount = 0;
 
+console.log(store);
 function setLoading(isLoading) {
     if (isLoading) {
         refCount++;
@@ -74,7 +76,7 @@ axios.interceptors.response.use(response => {
 axios.interceptors.response.use(
     response => response,
     error => {
-        const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
+        const loggedInUser = store.getState().userReducer.loggedInUser;
 
         if (error.response && error.response.status === 401 && loggedInUser) window.location = "/login";
 
