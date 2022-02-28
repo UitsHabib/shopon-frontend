@@ -1,57 +1,44 @@
-import React from "react";
-import _ from "lodash";
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
-const Pagination = (props) => {
-    const { itemsPerPage, totalItems, currentPage, onClickPage } = props;
-    const totalPages = Math.ceil(totalItems / itemsPerPage);
-    const pages = _.range(1, totalPages + 1, 1);
+export default function Pagination({ start, end, page, total, shouldChangeBrowserUrl = true, shouldScrollToTop = true, onPageChange, disabled }) {
+    const history = useHistory();
+    const location = useLocation();
+
+    const changePageTo = (page) => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        urlSearchParams.set('page', page);
+
+        const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
+
+        shouldChangeBrowserUrl && history.push(url);
+        shouldScrollToTop && window.scrollTo(0, 0);
+        onPageChange && onPageChange({ url, urlSearchParams });
+    }
+
+    const isPrevDisabled = () => (page <= 1) || disabled;
+    const isNextDisabled = () => (end === total) || disabled;
 
     return (
-        <>
-            <nav aria-label="Page navigation">
-                <ul className="pagination justify-content-center">
-                    <li
-                        className="page-item"
-                        onClick={() =>
-                            currentPage > 1
-                                ? onClickPage(currentPage - 1)
-                                : null
-                        }
-                    >
-                        <a className="page-link" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {pages.map((page) => (
-                        <li
-                            onClick={() => onClickPage(page)}
-                            className={
-                                page === currentPage
-                                    ? "page-item active"
-                                    : "page-item"
-                            }
-                            key={page}
-                        >
-                            <button className="page-link">{page}</button>
-                        </li>
-                    ))}
-                    <li
-                        className="page-item"
-                        onClick={() =>
-                            currentPage < totalPages
-                                ? onClickPage(currentPage + 1)
-                                : null
-                        }
-                    >
-                        <a className="page-link" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-        </>
-    );
-};
+        (end < total || page > 1) &&
+        <div className="pagination justify-content-end align-items-center border-top p-3">
+            <span className="cdp-text-primary fw-bold">{start + ' - ' + end}</span> <span className="text-muted ps-1 pe-2"> {' of ' + total}</span>
 
-export default Pagination;
-//nfn rafc rafce
+            <span className="pagination-btn"
+                onClick={() => !isPrevDisabled() && changePageTo(page - 1)}
+                disabled={isPrevDisabled()}
+                data-testid='Prev'
+            >
+                <i className="icon icon-arrow-down ms-2 prev"></i>
+            </span>
+
+            <span className="pagination-btn"
+                onClick={() => !isNextDisabled() && changePageTo(page + 1)}
+                disabled={isNextDisabled()}
+                data-testid='Next'
+            >
+                <i className="icon icon-arrow-down ms-2 next"></i>
+            </span>
+        </div>
+    )
+}

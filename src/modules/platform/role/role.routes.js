@@ -3,7 +3,6 @@ import { Switch, useRouteMatch } from 'react-router-dom';
 
 import Roles from './components/roles.component';
 import PrivateRoute from '../../core/PrivateRoute';
-import RoleUpdate from './components/role-update.component';
 
 function RoleRoutes() {
 	const { path } = useRouteMatch();
@@ -11,7 +10,6 @@ function RoleRoutes() {
 
 	return (
 		<Switch>
-			<PrivateRoute path={`${path}/roles/update/:id`} component={RoleUpdate} />
 			<PrivateRoute path={`${path}/roles`} component={Roles} />
 		</Switch>
 	);

@@ -34,6 +34,7 @@
     "redux-promise-middleware": "^6.1.2",
     "redux-thunk": "^2.4.1",
     "sass": "^1.49.7",
+    "url-join": "^4.0.1",
     "web-vitals": "^2.1.4",
     "xregexp": "^5.0.2",
     "yup": "^0.32.9"

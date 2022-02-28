@@ -10,6 +10,7 @@ const PermissionSchema = object().shape({
         .required("Description is required."),
 
     services: array()
+        .of(string())
         .min(1, 'At least one permission service is required.')
 });
 
