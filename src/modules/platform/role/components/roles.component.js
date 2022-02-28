@@ -154,7 +154,7 @@ function Roles() {
                     {roleData['roles'] && roleData['roles'].length === 0 &&
                         <><div className="row justify-content-center mt-5 pt-5 mb-3">
                             <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
-                                <i class="icon icon-team icon-6x text-secondary"></i>
+                                <i className="icon icon-team icon-6x text-secondary"></i>
                                 <h3 className="fw-bold text-primary pt-4">No Role Found!</h3>
                             </div>
                         </div></>

@@ -8,9 +8,16 @@ const middlewares = [promise, thunk, logger];
 
 let composeEnhancers = compose;
 
-if(window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
-    composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
+if (window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) {
+	composeEnhancers =
+		(window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ &&
+			window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__({
+				trace: true,
+				traceLimit: 25,
+			})) ||
+		compose;
 }
 
-export default composeEnhancers(applyMiddleware(...middlewares))(createStore)(reducers); 
-
+export default composeEnhancers(applyMiddleware(...middlewares))(createStore)(
+	reducers
+);

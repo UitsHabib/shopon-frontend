@@ -57,7 +57,7 @@ const CustomerNav = () => {
 
                 {loggedInCustomer && (
                     <div className="d-flex">
-                        <button type="button" class="position-relative">
+                        <button type="button" className="position-relative">
                             <span>
                                 <i
                                     style={{ fontSize: "25px" }}

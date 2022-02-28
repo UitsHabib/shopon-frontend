@@ -22,7 +22,7 @@ const CustomerProduct = (props) => {
                                 className="card_price"
                                 style={{ fontSize: "20px" }}
                             >
-                                <i class="bi bi-currency-dollar"></i> {10932}
+                                <i className="bi bi-currency-dollar"></i> {10932}
                             </span>
                         </div>
                         <hr />

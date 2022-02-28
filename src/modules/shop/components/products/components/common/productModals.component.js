@@ -34,44 +34,44 @@ export function ProductModals({ type, targetProduct, show, onHide, needToFetch, 
                             <Modal.Title>Product Details</Modal.Title>
                         </Modal.Header>
                         <Modal.Body>
-                            <ul class="list-group">
-                                <li class="list-group-item">
+                            <ul className="list-group">
+                                <li className="list-group-item">
                                     Product ID:{" "}
                                     {targetProduct.id !== null
                                         ? targetProduct.id
                                         : "--"}
                                 </li>
-                                <li class="list-group-item">
+                                <li className="list-group-item">
                                     Product Name:{" "}
                                     {targetProduct.name !== null
                                         ? targetProduct.name
                                         : "--"}
                                 </li>
-                                <li class="list-group-item">
+                                <li className="list-group-item">
                                     Category:{" "}
                                     {targetProduct.category_id !== null
                                         ? targetProduct.category_id
                                         : "--"}
                                 </li>
-                                <li class="list-group-item">
+                                <li className="list-group-item">
                                     Description:{" "}
                                     {targetProduct.description !== null
                                         ? targetProduct.description
                                         : "--"}
                                 </li>
-                                <li class="list-group-item">
+                                <li className="list-group-item">
                                     Price:{" "}
                                     {targetProduct.price !== null
                                         ? targetProduct.price
                                         : "--"}
                                 </li>
-                                <li class="list-group-item">
+                                <li className="list-group-item">
                                     Discount (%):{" "}
                                     {targetProduct.discount !== null
                                         ? targetProduct.discount
                                         : "--"}
                                 </li>
-                                <li class="list-group-item">
+                                <li className="list-group-item">
                                     Available Quantity:{" "}
                                     {targetProduct.stock_quantity !== null
                                         ? targetProduct.stock_quantity

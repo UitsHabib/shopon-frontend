@@ -281,11 +281,11 @@ const Users = (props) => {
                 contentLabel="Details Modal"
             >
                 <div>
-                <i class="fa-solid fa-circle-xmark"></i>
+                <i className="fa-solid fa-circle-xmark"></i>
                     <p>Are you sure you want to delete this user?</p>
                     <button
                         type="button"
-                        class="btn btn-warning"
+                        className="btn btn-warning"
                         onClick={() => {
                             handleDeleteUser();
                             setDeleteModal(false);
@@ -296,7 +296,7 @@ const Users = (props) => {
                     </button>
                     <button
                         type="button"
-                        class="btn btn-secondary"
+                        className="btn btn-secondary"
                         onClick={() => setDeleteModal(false)}
                     >
                         No
