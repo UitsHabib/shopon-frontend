@@ -83,7 +83,6 @@ function Roles() {
         dispatch(getRoles());
     }, [action]);
 
-
     return (
         <>
             <div className="container-fluid">
@@ -166,8 +165,7 @@ function Roles() {
                         onHide={() => setAction({})}
                         roleId={action.roleId} 
                     />
-
-                    
+                      
                 </div>
             </div>
             {/* {isLoaded ? (

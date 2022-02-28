@@ -1,31 +1,34 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { useDispatch } from "react-redux";
 import { loginSchema } from "../shop.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import { shopLogin } from '../shop.actions';
+
+import { shopLogin } from "../shop.actions";
 
 const ShopLogin = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
     function handleLogin(data) {
-        dispatch(shopLogin(data)).then(response => {
-            props.location.state && props.location.state.from.pathname
-                ? history.push(props.location.state.from.pathname)
-                : history.push("/shop-dashboard");
-                
-            toast.success("Logged in Successfully", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
+        dispatch(shopLogin(data))
+            .then((response) => {
+                props.location.state && props.location.state.from.pathname
+                    ? history.push(props.location.state.from.pathname)
+                    : history.push("/shop-dashboard");
+
+                toast.success("Logged in Successfully", {
+                    backgroundColor: "#8329C5",
+                    color: "#ffffff",
+                });
+            })
+            .catch((error) => {
+                toast.error(error.response.data, {
+                    backgroundColor: "#8329C5",
+                    color: "#ffffff",
+                });
             });
-        }).catch(error => {
-            toast.error(error.response.data, {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-        });
     }
 
     return (

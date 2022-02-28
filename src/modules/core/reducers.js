@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import { shopReducer } from "../shop";
+import { shopReducer, productsReducer } from "../shop";
 import { customerReducer } from "../customer";
 import {
     userReducer,
@@ -15,6 +15,7 @@ export default combineReducers({
     permissionReducer,
     shopReducer,
     profileReducer,
+    productsReducer,
 });
 // import { userReducer, roleReducer, permissionReducer, profileReducer } from "../platform";
 
