@@ -1,7 +1,7 @@
 import { Formik, Field, Form } from "formik";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { CustomerSignInSchema } from "../customer.schema";
+import { CustomerSignUpSchema } from "../customer.schema";
 import { signUpCustomer } from "../customer.actions";
 
 const CustomerSignUp = (props) => {
@@ -57,7 +57,7 @@ const CustomerSignUp = (props) => {
                             handleSubmit(values);
                             resetForm();
                         }}
-                        validationSchema={CustomerSignInSchema}
+                        validationSchema={CustomerSignUpSchema}
                     >
                         {({ errors }) => {
                             return (

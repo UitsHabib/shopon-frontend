@@ -27,13 +27,12 @@ const CustomerHome = (props) => {
     const loggedInCustomer = useSelector(
         (state) => state.customerReducer.loggedInCustomer
     );
-
-    const imageItem = [four, five, six, seven, eight, nine, ten];
-    let cnt = 0;
-
     const search_text = useSelector(
         (state) => state.customerReducer.search_text
     );
+
+    const imageItem = [four, five, six, seven, eight, nine, ten];
+    let cnt = 0;
 
     const handleCardButton = (item) => {
         if (!loggedInCustomer) {
@@ -52,17 +51,17 @@ const CustomerHome = (props) => {
         }
     };
 
-    const filterProduct = (product) => {
-        console.log(search_text);
-        const x = product.filter((o) => o.name.includes(search_text));
-        return x;
-    };
-    let finap = [];
-    console.log(product);
-    if (product == null) {
-        finap = filterProduct(product.products);
-        console.log(finap);
-    }
+    // const filterProduct = (product) => {
+    //     console.log(search_text);
+    //     const x = product.filter((o) => o.name.includes(search_text));
+    //     return x;
+    // };
+    // let finap = [];
+    // console.log(product);
+    // if (product == null) {
+    //     finap = filterProduct(product.products);
+    //     console.log(finap);
+    // }
 
     useEffect(() => {
         dispatch(getPublicProduct());
@@ -70,7 +69,7 @@ const CustomerHome = (props) => {
 
     return (
         <>
-            <div style={{ width: "100%", margin: "0px", padding: "0px" }}>
+            <div className="slide_carosel">
                 <Carousel>
                     <Carousel.Item>
                         <img
@@ -95,6 +94,7 @@ const CustomerHome = (props) => {
                     </Carousel.Item>
                 </Carousel>
             </div>
+
             <div className="row m-3">
                 <h5>Just For You</h5>
             </div>

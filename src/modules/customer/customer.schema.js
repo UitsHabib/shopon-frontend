@@ -223,7 +223,7 @@ export const updateUserSchema = object().shape({
     // role_id: string().required("This field must not be empty."),
 });
 
-export const CustomerSignInSchema = object().shape({
+export const CustomerSignUpSchema = object().shape({
     username: string()
         .trim()
         .min(2, "This field must be at least 2 character long.")

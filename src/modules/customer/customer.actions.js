@@ -1,15 +1,12 @@
 import axios from "axios";
 import Types from "./customer.type";
 
-const baseUrl = "http://localhost:5000";
-
 export function getPublicProduct() {
     return {
         type: Types.GET_PUBLIC_PRODUCT,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/products`,
-            withCredentials: "true",
+            url: `/api/products`,
         }),
     };
 }
@@ -19,8 +16,7 @@ export function customerLogin(data) {
         type: Types.CUSTOMER_LOGIN,
         payload: axios({
             method: "post",
-            url: `${baseUrl}/api/customers/login`,
-            withCredentials: "true",
+            url: `/api/customers/login`,
             data,
         }),
     };
@@ -31,23 +27,19 @@ export function customerlogout() {
         type: Types.CUSTOMER_LOGOUT,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/customers/logout`,
-            withCredentials: "true",
+            url: `/api/customers/logout`,
         }),
     };
 }
 export function signUpCustomer(customer) {
-    return axios.post(`${baseUrl}/api/customers`, customer, {
-        withCredentials: true,
-    });
+    return axios.post(`/api/customers`, customer);
 }
 export function getSignedInCustomerProfile() {
     return {
         type: Types.GET_CUSTOMER_PROFILE,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/customers/profile`,
-            withCredentials: "true",
+            url: `/api/customers/profile`,
         }),
     };
 }
@@ -57,8 +49,7 @@ export function customerLogout() {
         type: Types.CUSTOMER_LOGOUT,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/customers/logout`,
-            withCredentials: "true",
+            url: `/api/customers/logout`,
         }),
     };
 }
