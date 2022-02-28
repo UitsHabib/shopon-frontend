@@ -11,6 +11,7 @@ import { getUsers, deleteUser, getUser } from "../user.actions";
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
+import UpdateUser from "./updateUser.component";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
@@ -25,11 +26,14 @@ const Users = (props) => {
     const [pageCount, setPageCount] = useState(2);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
     const [detailsModal, setDetailsModal] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false);
     const [userDetails, setUserDetails] = useState({});
     const [userPermissions, setUserPermissions] = useState([]);
     const [showPermission, setShowPermission] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [deletedUserId, setDeletedUserId] = useState("1");
+    const [updateUserId, setUpdateUserId] = useState();
+
 
     const modalStyle = {
         content: {
@@ -89,14 +93,15 @@ const Users = (props) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item>
-                            {console.log(profile.id)}
-                                <Link
+                        <Dropdown.Item
+                                onClick={() => handleUpdateModal(profile.id)}
+                            >
+                                Update
+                                {/* <Link
                                     to={{
                                         pathname:
                                             path + "/" + profile.id + "/update",
                                         state: {
-                                            prevPath: props.location.pathname,
                                             data: profile.id,
                                         },
                                     }}
@@ -106,7 +111,7 @@ const Users = (props) => {
                                     }}
                                 >
                                     UPDATE
-                                </Link>
+                                </Link> */}
                             </Dropdown.Item>
                             <Dropdown.Item
                                 onClick={() => {
@@ -146,6 +151,15 @@ const Users = (props) => {
             getUser(id).then((res) => setUserDetails(res.data));
         } catch (err) {
             console.log("err getting user");
+        }
+    };
+    const handleUpdateModal = (id) => {
+        setUpdateModal(true);
+        try {
+            setUpdateUserId( id );
+            console.log("uuuupppppppppp");;
+        } catch (err) {
+            console.log("err updating");
         }
     };
 
@@ -243,6 +257,17 @@ const Users = (props) => {
                 </div>
             </Modal>
             <Modal
+                isOpen={updateModal}
+                // style={modalStyle}
+                contentLabel="Update Modal"
+            >
+                <button onClick={() => setUpdateModal(false)} 
+                style={{ margin: "20px", marginLeft: "85%" }}>close</button>
+                <UpdateUser id = {updateUserId} setUpdateModal={setUpdateModal} 
+                setNeedToFetchUser={setNeedToFetchUser} needToFetchUser={needToFetchUser}/>
+                            
+            </Modal>
+            <Modal
                 isOpen={deleteModal}
                 style={modalStyle}
                 contentLabel="Details Modal"
@@ -287,12 +312,16 @@ const Users = (props) => {
                 sortColumns={sortColumn}
                 onSort={handleSort}
             />
-            <Pagination
+            {
+                updateModal ? null
+                : <Pagination
                 totalUsers={users.length}
                 pageCount={pageCount}
                 activePage={activePage}
                 onClickPage={handleClickPage}
             />
+            }
+            
         </div>
     );
 };

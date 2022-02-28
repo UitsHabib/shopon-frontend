@@ -10,7 +10,8 @@ import { getProfiles, getRoles, getUser, updateUser } from "../user.actions";
 const UpdateUser = (props) => {
     const { path } = useRouteMatch();
     const dispatch = useDispatch();
-    const userID = props.location.state.data;
+    const userID = props.id;
+    const {setUpdateModal , setNeedToFetchUser , needToFetchUser} = props;
     
     const [dataImported, setDataImported] = useState(false);
    
@@ -33,7 +34,9 @@ const UpdateUser = (props) => {
             
             toast.success(`User ${user.first_name} ${user.last_name} updated`, 
             { backgroundColor: '#8329C5', color: '#ffffff', });
-            props.history.push("/platform/users");
+            setUpdateModal(false);
+            setNeedToFetchUser(!needToFetchUser);
+            // props.history.push("/platform/users");
         } catch (error) {
             console.log(error);
             toast.warning(error.response, { backgroundColor: '#8329C5', color: '#ffffff', })
@@ -52,7 +55,7 @@ const UpdateUser = (props) => {
     
     return (
         <>
-            <button
+            {/* <button
                 className="btn btn-success"
                 onClick={() => {
                     setDataImported(false);
@@ -61,7 +64,7 @@ const UpdateUser = (props) => {
                 style={{ margin: "20px", marginLeft: "85%" }}
                 >
                 Go Back
-            </button>
+            </button> */}
             <br />
             <div className="mx-5 text-center">
                 <h3>Update User</h3>
@@ -258,7 +261,7 @@ const UpdateUser = (props) => {
             ) : (
                 <div className="mx-auto text-center w-50">
                     <p className="text-white bg-dark text-xl font-weight-bold">
-                        User Not Found!
+                        User Not Found! {userID}
                     </p>
                 </div>
             )}
