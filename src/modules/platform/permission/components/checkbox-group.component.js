@@ -9,11 +9,12 @@ const CheckboxGroup = ({ options, name, value, ...rest }) => {
                         <input
                             {...field}
                             id={option.id}
+                            className="m-1"
                             type="checkbox"
                             value={option.id}
-                            checked={field.value.includes(option.id.toString())}
+                            checked={field.value.includes(option.id)}
                         />
-                        {option.title}
+                        <span> {option.title}</span>
                     </label>
                 ));
             }}
