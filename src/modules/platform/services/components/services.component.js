@@ -8,8 +8,9 @@ import { Table, Pagination } from "../common/components";
 import ServiceDetails from "./serviceDetails.component";
 import { getServices } from "../service.actions";
 
-const Services = ({ history, location: { search } }) => {
-	const location = useLocation();
+const Services = (props) => {
+	const history = useHistory();
+    const location = useLocation();
 	const dispatch = useDispatch();
 
 	const [action, setAction] = useState({});
@@ -18,17 +19,25 @@ const Services = ({ history, location: { search } }) => {
 
 	const query = new URLSearchParams(location.search);
 	const page = query.get('page');
+	const limit = query.get('limit');
 	const orderBy = query.get('orderBy');
 	const orderType = query.get('orderType');
-	const limit = query.get('limit');
 
-	function urlChange() {
+	const changeUrl = query => {
+        const { orderBy, orderType, page, limit } = query || {};
 
+        const search = new URLSearchParams();
+
+        orderBy && search.append('orderBy', orderBy);
+        orderType && search.append('orderType', orderType);
+        page && search.append('page', page);
+
+        history.push(location.pathname + search ? `?${search.toString()}` : '');
 	}
 
 	useEffect(() => {
-		dispatch(getServices());
-	}, []);
+		dispatch(getServices(page, limit, orderBy, orderType));
+	}, [location]);
 
 	return (
 		<>
@@ -46,9 +55,9 @@ const Services = ({ history, location: { search } }) => {
                                 <table className="table">
                                     <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
                                         <tr>
-                                            <th scope="col" width="20%"><span onClick={() => urlChange(1, 'title')}>Title</span></th>
-                                            <th scope="col" width="20%"><span onClick={() => urlChange(1, 'created_by')}>Created By</span></th>
-                                            <th scope="col" width="20%"><span onClick={() => urlChange(1, 'created_at')}>Creation Date</span></th>
+                                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'title', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Title</span></th>
+                                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'created_by', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Created By</span></th>
+                                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'created_at', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Creation Date</span></th>
                                             <th scope="col" width="20%">Action</th>
                                         </tr>
                                     </thead>
