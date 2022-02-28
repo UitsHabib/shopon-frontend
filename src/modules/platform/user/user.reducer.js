@@ -18,7 +18,7 @@ export default function reducer(state = initialState, action) {
         case Types.GET_USERS_FULFILLED: {
             return {
                 ...state,
-                users: action.payload.data
+                users: action.payload.data.users
             };
         }
     }
