@@ -1,20 +1,21 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { loginSchema } from "../user.schema";
+import { loginSchema } from "../shop.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import { login } from '../user.actions';
 
-const Login = (props) => {
+import { shopLogin } from '../shop.actions';
+
+const ShopLogin = (props) => {
     const history = useHistory();
     const dispatch = useDispatch();
 
     function handleLogin(data) {
-        dispatch(login(data)).then(response => {
+        dispatch(shopLogin(data)).then(response => {
             props.location.state && props.location.state.from.pathname
                 ? history.push(props.location.state.from.pathname)
-                : history.push("/");
+                : history.push("/shop-dashboard");
                 
             toast.success("Logged in Successfully", {
                 backgroundColor: "#8329C5",
@@ -126,4 +127,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default ShopLogin;
