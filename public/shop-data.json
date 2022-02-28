@@ -1,0 +1,323 @@
+{
+	"shop_categories": [
+		"All Shops",
+		"Clothing",
+		"Shoes",
+		"Computers",
+		"Tools",
+		"Home",
+		"Outdoors",
+		"Grocery",
+		"Kids",
+		"Garden",
+		"Health",
+		"Games",
+		"Electronics",
+		"Jewelry",
+		"Books",
+        "Industrial",
+        "Automotive"
+	],
+
+	"shops": [{
+        "shop_id": 1,
+        "shop_name": "Walsh",
+        "shop_type": "Health",
+        "date_created": "26/06/2017",
+        "shop_owner": "Walsh Ornells"
+      }, {
+        "shop_id": 2,
+        "shop_name": "Allin",
+        "shop_type": "Computers",
+        "date_created": "01/04/2013",
+        "shop_owner": "Allin Kemmett"
+      }, {
+        "shop_id": 3,
+        "shop_name": "Elysha",
+        "shop_type": "Clothing",
+        "date_created": "24/03/2016",
+        "shop_owner": "Elysha Lidgley"
+      }, {
+        "shop_id": 4,
+        "shop_name": "Kalila",
+        "shop_type": "Electronics",
+        "date_created": "14/03/2006",
+        "shop_owner": "Kalila Gatward"
+      }, {
+        "shop_id": 5,
+        "shop_name": "Kathleen",
+        "shop_type": "Games",
+        "date_created": "03/11/2003",
+        "shop_owner": "Kathleen Cardinal"
+      }, {
+        "shop_id": 6,
+        "shop_name": "Prudi",
+        "shop_type": "Electronics",
+        "date_created": "17/10/2005",
+        "shop_owner": "Prudi Beadon"
+      }, {
+        "shop_id": 7,
+        "shop_name": "Nikkie",
+        "shop_type": "Tools",
+        "date_created": "12/02/2018",
+        "shop_owner": "Nikkie Swindin"
+      }, {
+        "shop_id": 8,
+        "shop_name": "Gayelord",
+        "shop_type": "Industrial",
+        "date_created": "01/04/2003",
+        "shop_owner": "Gayelord Jancar"
+      }, {
+        "shop_id": 9,
+        "shop_name": "Winnie",
+        "shop_type": "Industrial",
+        "date_created": "08/02/2015",
+        "shop_owner": "Winnie Cornilleau"
+      }, {
+        "shop_id": 10,
+        "shop_name": "Rod",
+        "shop_type": "Industrial",
+        "date_created": "19/06/2011",
+        "shop_owner": "Rod Hinchshaw"
+      }, {
+        "shop_id": 11,
+        "shop_name": "Gabriele",
+        "shop_type": "Games",
+        "date_created": "27/09/2012",
+        "shop_owner": "Gabriele O'Kane"
+      }, {
+        "shop_id": 12,
+        "shop_name": "Morten",
+        "shop_type": "Garden",
+        "date_created": "12/09/2016",
+        "shop_owner": "Morten Sertin"
+      }, {
+        "shop_id": 13,
+        "shop_name": "Emmalynn",
+        "shop_type": "Kids",
+        "date_created": "08/06/2010",
+        "shop_owner": "Emmalynn Orwell"
+      }, {
+        "shop_id": 14,
+        "shop_name": "Betteann",
+        "shop_type": "Home",
+        "date_created": "13/10/2014",
+        "shop_owner": "Betteann Fickling"
+      }, {
+        "shop_id": 15,
+        "shop_name": "Winonah",
+        "shop_type": "Games",
+        "date_created": "08/10/2012",
+        "shop_owner": "Winonah Brinkley"
+      }, {
+        "shop_id": 16,
+        "shop_name": "Zerk",
+        "shop_type": "Books",
+        "date_created": "22/10/2010",
+        "shop_owner": "Zerk Tilston"
+      }, {
+        "shop_id": 17,
+        "shop_name": "Shamus",
+        "shop_type": "Tools",
+        "date_created": "01/06/2008",
+        "shop_owner": "Shamus Glennie"
+      }, {
+        "shop_id": 18,
+        "shop_name": "Anderea",
+        "shop_type": "Music",
+        "date_created": "09/05/2020",
+        "shop_owner": "Anderea Alam"
+      }, {
+        "shop_id": 19,
+        "shop_name": "Renaud",
+        "shop_type": "Grocery",
+        "date_created": "11/10/2003",
+        "shop_owner": "Renaud Clew"
+      }, {
+        "shop_id": 20,
+        "shop_name": "Pincas",
+        "shop_type": "Automotive",
+        "date_created": "14/12/2014",
+        "shop_owner": "Pincas King"
+      }, {
+        "shop_id": 21,
+        "shop_name": "Sharleen",
+        "shop_type": "Jewelry",
+        "date_created": "16/10/2003",
+        "shop_owner": "Sharleen Mitchely"
+      }, {
+        "shop_id": 22,
+        "shop_name": "Towny",
+        "shop_type": "Kids",
+        "date_created": "21/02/2018",
+        "shop_owner": "Towny Wilcox"
+      }, {
+        "shop_id": 23,
+        "shop_name": "Lissie",
+        "shop_type": "Books",
+        "date_created": "16/05/2007",
+        "shop_owner": "Lissie Joslow"
+      }, {
+        "shop_id": 24,
+        "shop_name": "Mala",
+        "shop_type": "Health",
+        "date_created": "28/01/2016",
+        "shop_owner": "Mala Sach"
+      }, {
+        "shop_id": 25,
+        "shop_name": "Ethelin",
+        "shop_type": "Games",
+        "date_created": "05/12/2016",
+        "shop_owner": "Ethelin Brackstone"
+      }, {
+        "shop_id": 26,
+        "shop_name": "Jodi",
+        "shop_type": "Shoes",
+        "date_created": "22/01/2015",
+        "shop_owner": "Jodi Manders"
+      }, {
+        "shop_id": 27,
+        "shop_name": "Mateo",
+        "shop_type": "Kids",
+        "date_created": "15/03/2017",
+        "shop_owner": "Mateo Flahive"
+      }, {
+        "shop_id": 28,
+        "shop_name": "Mabel",
+        "shop_type": "Kids",
+        "date_created": "31/05/2000",
+        "shop_owner": "Mabel Lemonby"
+      }, {
+        "shop_id": 29,
+        "shop_name": "Christine",
+        "shop_type": "Jewelry",
+        "date_created": "14/01/2010",
+        "shop_owner": "Christine Fitzer"
+      }, {
+        "shop_id": 30,
+        "shop_name": "Cozmo",
+        "shop_type": "Garden",
+        "date_created": "19/05/2017",
+        "shop_owner": "Cozmo Kidder"
+      }, {
+        "shop_id": 31,
+        "shop_name": "Chiquita",
+        "shop_type": "Grocery",
+        "date_created": "27/11/2008",
+        "shop_owner": "Chiquita Chazelle"
+      }, {
+        "shop_id": 32,
+        "shop_name": "Sheila",
+        "shop_type": "Kids",
+        "date_created": "15/10/2001",
+        "shop_owner": "Sheila Marcone"
+      }, {
+        "shop_id": 33,
+        "shop_name": "Stacey",
+        "shop_type": "Automotive",
+        "date_created": "04/09/2017",
+        "shop_owner": "Stacey Durrell"
+      }, {
+        "shop_id": 34,
+        "shop_name": "Rudy",
+        "shop_type": "Sports",
+        "date_created": "06/05/2021",
+        "shop_owner": "Rudy Richmond"
+      }, {
+        "shop_id": 35,
+        "shop_name": "Aili",
+        "shop_type": "Outdoors",
+        "date_created": "02/10/2009",
+        "shop_owner": "Aili Ulyat"
+      }, {
+        "shop_id": 36,
+        "shop_name": "Hugues",
+        "shop_type": "Outdoors",
+        "date_created": "21/07/2008",
+        "shop_owner": "Hugues Boniface"
+      }, {
+        "shop_id": 37,
+        "shop_name": "Rudd",
+        "shop_type": "Grocery",
+        "date_created": "05/07/2003",
+        "shop_owner": "Rudd Bascombe"
+      }, {
+        "shop_id": 38,
+        "shop_name": "Leanna",
+        "shop_type": "Clothing",
+        "date_created": "25/07/2014",
+        "shop_owner": "Leanna Michelet"
+      }, {
+        "shop_id": 39,
+        "shop_name": "Constance",
+        "shop_type": "Tools",
+        "date_created": "11/02/2017",
+        "shop_owner": "Constance Heaton"
+      }, {
+        "shop_id": 40,
+        "shop_name": "Mollee",
+        "shop_type": "Industrial",
+        "date_created": "09/09/2005",
+        "shop_owner": "Mollee Tenny"
+      }, {
+        "shop_id": 41,
+        "shop_name": "Scarface",
+        "shop_type": "Industrial",
+        "date_created": "31/07/2009",
+        "shop_owner": "Scarface Tander"
+      }, {
+        "shop_id": 42,
+        "shop_name": "Nikola",
+        "shop_type": "Tools",
+        "date_created": "01/03/2010",
+        "shop_owner": "Nikola Davenell"
+      }, {
+        "shop_id": 43,
+        "shop_name": "Orson",
+        "shop_type": "Automotive",
+        "date_created": "25/07/2003",
+        "shop_owner": "Orson Shapira"
+      }, {
+        "shop_id": 44,
+        "shop_name": "Filippa",
+        "shop_type": "Grocery",
+        "date_created": "16/09/2007",
+        "shop_owner": "Filippa Extill"
+      }, {
+        "shop_id": 45,
+        "shop_name": "Kendal",
+        "shop_type": "Games",
+        "date_created": "15/11/2011",
+        "shop_owner": "Kendal Beeze"
+      }, {
+        "shop_id": 46,
+        "shop_name": "Luther",
+        "shop_type": "Books",
+        "date_created": "15/04/2002",
+        "shop_owner": "Luther Hamberstone"
+      }, {
+        "shop_id": 47,
+        "shop_name": "Anatollo",
+        "shop_type": "Automotive",
+        "date_created": "30/01/2017",
+        "shop_owner": "Anatollo Furtado"
+      }, {
+        "shop_id": 48,
+        "shop_name": "Isabella",
+        "shop_type": "Shoes",
+        "date_created": "19/05/2021",
+        "shop_owner": "Isabella Satterlee"
+      }, {
+        "shop_id": 49,
+        "shop_name": "Lindie",
+        "shop_type": "Movies",
+        "date_created": "01/01/2022",
+        "shop_owner": "Lindie Billing"
+      }, {
+        "shop_id": 50,
+        "shop_name": "Kamila",
+        "shop_type": "Movies",
+        "date_created": "12/01/2004",
+        "shop_owner": "Kamila Ingham"
+      }]      
+}

@@ -1,45 +1,46 @@
-import { Link } from "react-router-dom";
-import getLoggedInUser from "../service/get-logged-in-user";
+import { Link } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 const Navbar = (props) => {
-    return (
-        <>
-            <nav
-                className="d-flex flex-wrap justify-content-between px-4 navbar navbar-light"
-                style={{ backgroundColor: "#e3f2fd" }}
-            >
-                <div className="d-flex flex-wrap justify-content-start px-4">
-                    <Link className="navbar-brand" to="/">
-                        ShopOn
-                    </Link>
+	const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
 
-                    <Link className="navbar-brand" to="/platform">
-                        Platform
-                    </Link>
-                </div>
+	return (
+		<>
+			<nav
+				className="navbar navbar-light px-3"
+				style={{ backgroundColor: '#e3f2fd', height: '90px' }}
+			>
+				<div className="d-flex flex-row align-items-center">
+					<Link className="navbar-brand my-0" to="/">
+						<span className="h4">ShopOn</span>
+					</Link>
+				</div>
 
-                {!getLoggedInUser() && (
-                    <Link className="navbar-brand" to="/login">
-                        Login
-                    </Link>
-                )}
+				{!loggedInUser && (
+					<Link className="navbar-brand btn btn-outline-success" to="/login">
+						Login
+					</Link>
+				)}
 
-                {getLoggedInUser() && (
-                    <div className="d-flex flex-wrap justify-content-end mt-3">
-                        <div>
-                            <p className="navbar-brand">
-                                {`${getLoggedInUser().first_name} ${getLoggedInUser().last_name}` }
-                            </p>
-                        </div>
+				{loggedInUser && (
+					<div className="d-flex flex-row align-items-center">
+						<span className="h5 my-0 mx-4">
+							<i className="bi bi-person-circle mx-1" />
+							<Link to="/my-profile">
+								{' '}
+								{`${loggedInUser.first_name} ${loggedInUser.last_name
+									}`}
+							</Link>
+						</span>
 
-                        <Link className="navbar-brand" to="/logout">
-                            Log Out
-                        </Link>
-                    </div>
-                )}
-            </nav>
-        </>
-    );
+						<Link className="btn btn-outline-success" to="/logout">
+							<span className="h6">Log Out</span>
+						</Link>
+					</div>
+				)}
+			</nav>
+		</>
+	);
 };
 
 export default Navbar;

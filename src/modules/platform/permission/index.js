@@ -1,5 +1,14 @@
-import Permissions from "./components/permissions.component.js";
+import PermissionRoutes from "./permission.routes";
+import permissionReducer from './permission.reducer';
+import * as permissionActions from './permission.actions';
 
+export const PermissionClientRoutes = (props) => {
+    return (
+        <PermissionRoutes path={props.path} />
+    );
+}
+ 
 export {
-    Permissions
+    permissionReducer,
+    permissionActions
 }

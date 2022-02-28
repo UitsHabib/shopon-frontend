@@ -1,27 +1,36 @@
 import React from "react";
-import { Route, Redirect } from "react-router-dom";
-import Navbar from "./components/navbar.component";
+import { Route, Redirect, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-import getLoggedInUser from "./service/get-logged-in-user";
+import IdleTimerContainer from "./components/idle-timer.component";
+import Navbar from "./components/navbar.component";
+import Breadcrumbs from "./components/breadcrumb.component";
 
 export default function PrivateRoute({ component: Component, ...rest }) {
-    const loggedInUser = getLoggedInUser();
-    
+    const loggedInUser = useSelector(state => state.userReducer.loggedInUser);
+    const currentPathname = useLocation().pathname;
+
     return (
-        <Route {...rest} render={props => {
-            return (
-                loggedInUser ? (
+        <Route
+            {...rest}
+            render={(props) => {
+                return loggedInUser ? (
                     <>
-                        <Navbar />
-                        <Component {...props}/>
+                        <Navbar path={rest.path} />
+                        <IdleTimerContainer currentPathname={currentPathname} />
+                        <Breadcrumbs />
+                        <Component {...props} />
                     </>
                 ) : (
-                    <Redirect push to={{
-                        pathname: "/login",
-                        state: { from: props.location }
-                    }} />
-                )
-            );
-        }}/>
-    )
+                    <Redirect
+                        push
+                        to={{
+                            pathname: "/login",
+                            state: { from: props.location },
+                        }}
+                    />
+                );
+            }}
+        />
+    );
 }
