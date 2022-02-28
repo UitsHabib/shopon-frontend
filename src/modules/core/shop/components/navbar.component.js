@@ -11,7 +11,7 @@ const ShopNavbar = (props) => {
                 style={{ backgroundColor: "#e3f2fd", height: "90px" }}
             >
                 <div className="d-flex flex-row align-items-center">
-                    <Link className="navbar-brand my-0" to="/">
+                    <Link className="navbar-brand my-0" to="/shop-dashboard">
                         <span className="h4">ShopOn</span>
                     </Link>
                 </div>

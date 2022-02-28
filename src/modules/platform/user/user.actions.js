@@ -15,6 +15,7 @@ export function getSignedInUserProfile() {
 }
 
 export function login(data) {
+    console.log(data);
     return {
         type: Types.LOGIN,
         payload: axios({
