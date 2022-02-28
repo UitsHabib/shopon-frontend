@@ -71,6 +71,19 @@ export function getUser(user_id) {
     };
 }
 
+
+export function getProfiles() {
+    const url = `/api/profiles`;
+
+    return {
+        type: Types.GET_PROFILES,
+        payload: axios({
+            method: "get",
+            url
+        }),
+    };
+}
+
 export function updateUser(usersID, data) {
     return {
         type: Types.UPDATE_USER,

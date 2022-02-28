@@ -4,6 +4,7 @@ const initialState = {
     loggedInUser: null,
     userData: [],
     user: {},
+    profileData:[],
 };
 
 export default function reducer(state = initialState, action) {
@@ -29,12 +30,12 @@ export default function reducer(state = initialState, action) {
                 user: action.payload.data,
             };
         }
-        // case Types.GET_PROFILES_FULFILLED: {
-        //     return {
-        //         ...state,
-        //         profiles: action.payload.data.profiles,
-        //     };
-        // }
+        case Types.GET_PROFILES_FULFILLED: {
+            return {
+                ...state,
+                profileData: action.payload.data,
+            };
+        }
         // case Types.GET_ROLES_FULFILLED: {
         //     return {
         //         ...state,

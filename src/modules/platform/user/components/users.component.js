@@ -146,6 +146,7 @@ const Users = (props) => {
         } catch (err) {
             console.log("err updating");
         }
+        toggleNeedToFecthUsers();
     };
 
     const handleUserPermission = (id) => {

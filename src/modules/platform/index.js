@@ -6,7 +6,7 @@ import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPasswo
 import { ProfileClientRoutes, Profiles, profileReducer, profileActions } from './profile';
 import { PermissionClientRoutes, permissionReducer, permissionActions } from './permission';
 import { RoleClientRoutes, Roles, roleReducer, roleActions } from './role';
-import ServicesClientRoutes from './services';
+import { ServiceClientRoutes, serviceReducer, serviceActions } from './services';
 
 export function PlatformRoutes() {
     const { path } = useRouteMatch(); // /platform
@@ -16,7 +16,7 @@ export function PlatformRoutes() {
             <UserClientRoutes path={path} />
             <RoleClientRoutes path={path} />
             <ProfileClientRoutes path={path} />
-            <ServicesClientRoutes path={path} />
+            <ServiceClientRoutes path={path} />
             <PermissionClientRoutes path={path} />
         </Route>
     );
@@ -33,5 +33,7 @@ export {
     roleReducer,
     roleActions,
     permissionActions,
-    permissionReducer
+    permissionReducer,
+    serviceReducer,
+    serviceActions
 };

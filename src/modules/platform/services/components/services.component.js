@@ -1,62 +1,70 @@
 import React, { useEffect, useState } from "react";
-import _ from "lodash";
-import Dropdown from "react-bootstrap/Dropdown";
+import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-
-import Pagination from "./common/pagination.component";
-import { getRoles, deleteRole } from "../role.actions";
-import RoleForm from './role-form.component';
-
-function Roles() {
-    const dispatch = useDispatch();
-
-    const [action, setAction] = useState({});
-    
-    const roleData = useSelector((state) => state.roleReducer.roleData);
-
-    function urlChange() {
-
-    }
-
-    useEffect(() => {
-        dispatch(getRoles());
-    }, [action]);
+import Dropdown from "react-bootstrap/Dropdown";
 
 
-    return (
-        <>
-            <div className="container-fluid">
+import { Table, Pagination } from "../common/components";
+import ServiceDetails from "./serviceDetails.component";
+import { getServices } from "../service.actions";
+
+const Services = (props) => {
+	const history = useHistory();
+    const location = useLocation();
+	const dispatch = useDispatch();
+
+	const [action, setAction] = useState({});
+
+	const serviceData = useSelector(state => state.serviceReducer.serviceData);
+
+	const query = new URLSearchParams(location.search);
+	const page = query.get('page');
+	const limit = query.get('limit');
+	const orderBy = query.get('orderBy');
+	const orderType = query.get('orderType');
+
+	const changeUrl = query => {
+        const { orderBy, orderType, page, limit } = query || {};
+
+        const search = new URLSearchParams();
+
+        orderBy && search.append('orderBy', orderBy);
+        orderType && search.append('orderType', orderType);
+        page && search.append('page', page);
+
+        history.push(location.pathname + search ? `?${search.toString()}` : '');
+	}
+
+	useEffect(() => {
+		dispatch(getServices(page, limit, orderBy, orderType));
+	}, [location]);
+
+	return (
+		<>
+			<div className="container-fluid">
                 <div className="row">
                     <div className="d-sm-flex justify-content-between align-items-center py-3">
                         <h4 className="mb-2 mb-sm-0 cdp-text-primary fw-bold mb-0 mb-sm-0 d-flex align-items-end pe-2">
-                            Role list
+                            Service list
                         </h4>
-                        <button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0" onClick={() => setAction({ create: true })}>
-                            <span className="d-none d-sm-inline-block ps-1">Create new role</span>
-                        </button>
                     </div>
 
-                    {roleData['roles'] && roleData['roles'].length > 0 &&
+                    {serviceData['services'] && serviceData['services'].length > 0 &&
                         <React.Fragment>
                             <div>
                                 <table className="table">
                                     <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
                                         <tr>
-                                            <th scope="col" width="12%"><span onClick={() => urlChange(1, 'title')}>Title</span></th>
-                                            <th scope="col" width="20%"><span onClick={() => urlChange(1, 'description')}>Description</span></th>
-                                            <th scope="col" width="12%"><span onClick={() => urlChange(1, 'type')}>Type</span></th>
-                                            <th scope="col" width="12%"><span onClick={() => urlChange(1, 'created_by')}>Created By</span></th>
-                                            <th scope="col" width="10%"><span onClick={() => urlChange(1, 'created_at')}>Creation Date</span></th>
-                                            <th scope="col" width="10%">Action</th>
+                                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'title', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Title</span></th>
+                                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'created_by', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Created By</span></th>
+                                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'created_at', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Creation Date</span></th>
+                                            <th scope="col" width="20%">Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {roleData.roles.map(row => (
+                                        {serviceData.services.map(row => (
                                             <tr key={row.id}>
                                                 <td className="text-break">{row.title}</td>
-                                                <td className="text-break">{row.description}</td>
-                                                <td className="text-break">{row.type}</td>
                                                 <td>{`${row.createdByUser?.first_name} ${row.createdByUser?.last_name}`}</td>
                                                 <td>{(new Date(row.created_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>
                                                 <td data-for="Action">
@@ -69,9 +77,7 @@ function Roles() {
                                                         </Dropdown.Toggle>
 
                                                         <Dropdown.Menu>
-                                                            <Dropdown.Item onClick={() => setAction({ details: true, roleId: row.id })} > Details </Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => setAction({ update: true, roleId: row.id })} > Edit </Dropdown.Item>
-                                                            <Dropdown.Item onClick={() => setAction({ deleteWarn: true, roleId: row.id })}> Delete </Dropdown.Item>
+                                                            <Dropdown.Item onClick={() => setAction({ details: true, serviceId: row.id })} > Details </Dropdown.Item>
                                                         </Dropdown.Menu>
                                                     </Dropdown>
                                                 </td>
@@ -81,35 +87,29 @@ function Roles() {
                                 </table>
 
                                 <div>
-                                    <Pagination
+                                    {/* <Pagination
                                         start={roleData.start}
                                         end={roleData.end}
                                         page={roleData.page}
                                         total={roleData.total}
-                                    />
+                                    /> */}
                                 </div>
                             </div>
                         </React.Fragment>
                     }
 
-                    {roleData['roles'] && roleData['roles'].length === 0 &&
+                    {serviceData['services'] && serviceData['services'].length === 0 &&
                         <><div className="row justify-content-center mt-5 pt-5 mb-3">
                             <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
                                 <i class="icon icon-team icon-6x text-secondary"></i>
-                                <h3 className="fw-bold text-primary pt-4">No Role Found!</h3>
+                                <h3 className="fw-bold text-primary pt-4">No Service Found!</h3>
                             </div>
                         </div></>
                     }
-
-                    <RoleForm 
-                        show={action.create || action.update}
-                        onHide={() => setAction({})}
-                        roleId={action.roleId} 
-                    />
                 </div>
             </div>
-        </>
-    );
-}
+		</>
+	);
+};
 
-export default Roles;
+export default Services;

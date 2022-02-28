@@ -1,97 +1,163 @@
 import { useEffect, useState } from "react";
-import _ from "lodash";
+import { useDispatch, useSelector } from "react-redux";
+import { Dropdown } from "react-bootstrap";
 import {toast} from "react-toastify";
 
 import { getPermissions, deletePermission } from "../permission.actions";
-import PermissionsTable from "./permissions-table.component";
+import Table from "./common/table.component";
 import Pagination from "./common/pagination.component";
-import DeleteModal from "./common/delete-modal.component"
+import PermissionForm from "./permission-form.component";
+import DeleteModal from "./common/delete-modal.component";
+import PermissionDetails from "./permission-details.component";
 
 const Permissions = () => {
-    const [permissions, setPermissions] = useState([]);
-    const [fetchData, setFetchData] = useState(true);
-    const [isDelete, setIsDelete] = useState(false);
-    const [deletePermissionId, setDeletePermissionId] = useState(null);
+    const dispatch = useDispatch();
+
+    const [action, setAction] = useState({});
+    const permissionData = useSelector(state => state.permissionReducer.permissionData)
+
     const [sorting, setSorting] = useState({ path: "id", order: "asc" });
-    const [activePage, setActivePage] = useState(1);
-    const [count, setCount] = useState(3);
 
-    const handleDeleteButton = (id) => {
-        setIsDelete(true);
-        setDeletePermissionId(id)
-    }
+    const columns = [
+        {
+            label: "Title",
+            path: "title",
+            sort: true,
+            content: (data, path) => <td>{data[path]}</td>,
+        },
+        {
+            label: "Description",
+            path: "description",
+            sort: true,
+            content: (data, path) => <td>{data[path]}</td>,
+        },
+        {
+            label: "Type",
+            path: "type",
+            sort: true,
+            content: (data, path) => <td>{data[path]}</td>,
+        },
+        {
+            label: "Created Date",
+            path: "created_at",
+            sort: true,
+            content: (data, path) => <td>{(new Date(data[path])).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>,
+        },
+        {
+            label: "Updated Date",
+            path: "updated_at",
+            sort: true,
+            content: (data, path) => <td>{(new Date(data[path])).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>,
+        },
+        {
+            label: "Action",
+            path: "",
+            content: (data) => (
+                <td data-for="Action">
+                    <Dropdown className="ms-auto dropdown-customize">
+                        <Dropdown.Toggle
+                            variant=""
+                            className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
+                        >
+                            <i className="bi bi-chevron-down fa-lg"></i>
+                        </Dropdown.Toggle>
 
-    const handleCancelDelete = () => {
-        setIsDelete(false);
-        setDeletePermissionId(null);
-    }
+                        <Dropdown.Menu>
+                            <Dropdown.Item onClick={() => setAction({ details: true, permissionId: data.id })} > Details </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setAction({ update: true, permissionId: data.id })} > Edit </Dropdown.Item>
+                            <Dropdown.Item onClick={() => setAction({ deleteWarn: true, permissionId: data.id })}> Delete </Dropdown.Item>
+                        </Dropdown.Menu>
+                    </Dropdown>
+                </td>
+            ),
+        },
+    ];
 
-    const handleDeletePermission = async () => {
-        try {
-            await deletePermission(deletePermissionId);
-            setIsDelete(false);
-            setFetchData(prev => !prev);
-            toast('Permission Deleted Successfully', { background: '#8329C5', color: '#ffffff' })
-        } catch (error) {
-            setIsDelete(false);
-            toast.warning(error.response.data, { background: '#8329C5', color: '#ffffff' })
-        }
-    };
-
-    const handleChangeCount = (value) => {
-        setCount(value);
-        setActivePage(1);
-    };
-
-    const handleActivePage = value => setActivePage(value);
-
-    const getPermissionList = async () => {
-        try {
-            const { data } = await getPermissions();
-            setPermissions(data);
-        } catch (error) {
-            console.log(error);
-        }
+    const handleDelete = () => {
+        dispatch(deletePermission(action.permissionId))
+            .then(response => {
+                toast(
+                    'Permission Deleted Successfully', 
+                    { background: '#8329C5', color: '#ffffff' }
+                )
+                setAction({});
+            })
+            .catch(error => {
+                toast.error(
+                    'Error happened',
+                    { background: '#8329C5', color: '#ffffff' }
+                );
+                setAction({});
+            })
     };
 
     useEffect(() => {
-        getPermissionList();
-    }, [fetchData]);
-
-    const sortPermissions = _.orderBy(permissions, [sorting.path], [sorting.order]);
-
-    const paginatePremissions = (permissions) => {
-        const start = (activePage - 1) * count;
-        return permissions.slice(start, start + count);
-    };
-
-    const paginatedPermissions = paginatePremissions(sortPermissions);
+        dispatch(getPermissions())
+    }, [action])
 
     return (
-        <div className="permissions">
-            <PermissionsTable
-                permissions={paginatedPermissions}
-                sorting={sorting}
-                onClickDeleteButton={handleDeleteButton}
-                onClickSort={setSorting}
-            />
-            <div className="d-flex justify-content-center">
-                <Pagination
-                    totalLength={sortPermissions.length}
-                    count={count}
-                    activePage={activePage}
-                    onClickActive={handleActivePage}
-                    onChangeCount={handleChangeCount}
-                />
-            </div>
+        <>
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="d-sm-flex justify-content-between align-items-center py-3">
+                        <h4 className="mb-2 mb-sm-0 cdp-text-primary fw-bold mb-0 mb-sm-0 d-flex align-items-end pe-2">
+                            Permission list
+                        </h4>
+                        <button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0" onClick={() => setAction({ create: true })}>
+                            <span className="d-none d-sm-inline-block ps-1">Create new permission</span>
+                        </button>
+                    </div>
 
-            {
-                isDelete && <DeleteModal 
-                    onClickCancel={handleCancelDelete} 
-                    onClickDelete={handleDeletePermission}
-                />
-            }
-        </div>
+                    {permissionData['permissions'] && permissionData['permissions'].length > 0 &&
+                        <div>
+                            <Table 
+                                columns={columns}
+                                items={permissionData.permissions}
+                                sorting={sorting}
+                                // onClickSort={onClickSort}
+                            />
+
+                            <div>
+                                <Pagination
+                                    start={permissionData.metaData.start}
+                                    end={permissionData.metaData.end}
+                                    page={permissionData.metaData.page}
+                                    total={permissionData.metaData.total}
+                                />
+                            </div>
+                        </div>
+                    }
+
+                    <PermissionDetails
+                        show={action.details}
+                        permissionId={action.permissionId}
+                        onHide={() => setAction({})}
+                    />
+
+                    <PermissionForm 
+                        show={action.create || action.update}
+                        permissionId={action.permissionId} 
+                        onHide={() => setAction({})}
+                    />
+
+                    <DeleteModal 
+                        show={action.deleteWarn}
+                        onClickDelete={handleDelete}
+                        onHide={() => setAction({})}
+                    /> 
+
+                    {permissionData['permissions'] && permissionData['permissions'].length === 0 &&
+                        <div className="row justify-content-center mt-5 pt-5 mb-3">
+                            <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
+                                <i class="icon icon-team icon-6x text-secondary"></i>
+                                <h3 className="fw-bold text-primary pt-4">No Permission Found!</h3>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>
+            </div>
+        </>
     );
 };
 

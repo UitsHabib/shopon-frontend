@@ -1,6 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-plusplus */
-import propTypes, { object } from 'prop-types';
 import React, { useState } from 'react';
 
 const TableBody = ({ data, metadata }) => {
@@ -35,11 +33,6 @@ const TableBody = ({ data, metadata }) => {
 			))}
 		</tbody>
 	);
-};
-
-TableBody.propTypes = {
-	data: propTypes.arrayOf(object).isRequired,
-	metadata: object.isRequired,
 };
 
 TableBody.nonce = 0;

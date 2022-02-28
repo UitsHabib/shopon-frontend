@@ -5,9 +5,9 @@ import { useRouteMatch } from "react-router-dom";
 import {toast} from "react-toastify";
 
 import { updateUserSchema } from "../user.schema";
-import { getUser, updateUser } from "../user.actions";
+import { getUser, updateUser,getProfiles } from "../user.actions";
 import {getRoles} from "../../role/role.actions"
-import {getProfiles} from "../../profile/profile.actions"
+// import {getProfiles} from "../../profile/profile.actions"
 
 const UpdateUser = (props) => {
     const { path } = useRouteMatch();
@@ -19,7 +19,8 @@ const UpdateUser = (props) => {
    
     const roles = useSelector((state) => state.roleReducer.roleData.roles);
     const user = useSelector((state) => state.userReducer.user);
-    const profiles = useSelector((state) => state.profileReducer.profileData.profiles);
+    const profiles = useSelector((state) => state.userReducer?.loggedInUser.profiles);
+    // const profiles = useSelector((state) => state.profileReducer?.profileData.profiles);
     
     async function handleUpdateUser(data) {
         try {

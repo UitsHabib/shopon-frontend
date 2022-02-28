@@ -1,7 +1,7 @@
-import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React from "react";
+import { Modal, Button } from "react-bootstrap";
 
-import { formatRelative } from 'date-fns';
+import { formatRelative } from "date-fns";
 
 const ServiceDetails = ({ service, onHide }) => {
 	const {
@@ -10,6 +10,7 @@ const ServiceDetails = ({ service, onHide }) => {
 		created_at: createdAt,
 		updated_at: updatedAt,
 		updated_by: updatedBy,
+		slug,
 	} = service;
 
 	return (
@@ -49,6 +50,10 @@ const ServiceDetails = ({ service, onHide }) => {
 									? formatRelative(Date.parse(updatedAt), new Date())
 									: null}
 							</td>
+						</tr>
+						<tr>
+							<th scope="row">Slug</th>
+							<td>{slug}</td>
 						</tr>
 					</tbody>
 				</table>
