@@ -20,10 +20,6 @@ const Products = (props) => {
 
     const totalItems = useSelector((state) => state.productsReducer.totalProducts);
     const products = useSelector((state) => state.productsReducer.productList);
-    
-    //const productData = useSelector((state) => state.productsReducer.productData);
-    //const totalItems = productData.metaData.total ? productData.metaData.total : 0;
-    //const products = productData.products ? productData.products : [];
 
     const productsPerPage = 5;
 
@@ -53,9 +49,11 @@ const Products = (props) => {
 
     return (
         <>
-            <div className="d-flex flex-wrap justify-content-between mx-5">
-                <h5 className="my-3">Shop Table</h5>
-                <Button className="my-3" variant="success" onClick={() => setAction({ addNewProduct: true })}>Add New Product</Button>
+            <div className="d-flex flex-wrap justify-content-between mx-5 my-3">
+                <h5>Shop Table</h5>
+                <Button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0" onClick={() => setAction({ addNewProduct: true })}>
+                    <span className="d-none d-sm-inline-block ps-1">Add New Product</span>
+                </Button>
                 <ProductForm show={action.addNewProduct || action.updateDetail} onHide={() => setAction({})} needToFetch={needToFetch} fetch={setNeedToFetch} />
             </div>
             

@@ -50,7 +50,7 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
         <Modal {...rest} size="lg" centered>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    <h3>{productId ? "Update Product" : "Create Product"}</h3>
+                    <h3>{productId ? "Update Product" : "Add Product"}</h3>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -204,7 +204,7 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                     </div>
 
                                     <button type="submit" className="btn btn-block text-white btn-secondary mt-4 p-2">
-                                        {productId ? "Update" : "Create"}
+                                        {productId ? "Update" : "Add"}
                                     </button>
                                 </Form>
                             );
