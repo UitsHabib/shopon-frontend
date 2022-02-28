@@ -34,7 +34,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
                             <Redirect
                                 push
                                 to={{
-                                    pathname: "/login",
+                                    pathname: "/admin/login",
                                     state: { from: props.location },
                                 }}
                             />

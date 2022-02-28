@@ -1,31 +1,37 @@
 import React from "react";
 import { useHistory, Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginSchema } from "../user.schema";
+import { loginSchema } from "../customer.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
-import { login } from "../user.actions";
+import { customerLogin } from "../customer.action";
 
-const Login = (props) => {
+const CustomerLogin = (props) => {
     const history = useHistory();
-    const dispatch = useDispatch();
 
-    function handleLogin(data) {
-        dispatch(login(data)).then(response => {
+    async function handleLogin(data) {
+        try {
+            const response = await customerLogin(data);
+            console.log(response);
+            localStorage.setItem(
+                "loggedInCustomer",
+                JSON.stringify(response.data)
+            );
             props.location.state && props.location.state.from.pathname
                 ? history.push(props.location.state.from.pathname)
                 : history.push("/");
-                
             toast.success("Logged in Successfully", {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
-        }).catch(error => {
+        } catch (error) {
+            console.log(error.response.data);
             toast.error(error.response.data, {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
-    });
+        }
+    }
 
     return (
         <>
@@ -49,7 +55,7 @@ const Login = (props) => {
                 >
                     <div className="card-body">
                         <h5 className="d-flex flex-wrap justify-content-center">
-                            Login Form
+                            Customrt Login Form
                         </h5>
                         <Formik
                             initialValues={{
@@ -125,4 +131,4 @@ const Login = (props) => {
     );
 };
 
-export default Login;
+export default CustomerLogin;

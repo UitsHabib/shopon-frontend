@@ -1,222 +1,134 @@
-import React, { useEffect, useState } from "react";
-import CustomerData from "./data/customer";
-import { useRouteMatch } from "react-router-dom";
-import Table from "./components/common/table.component";
-import Pagination from "./components/common/pagination.component";
-import Dropdown from "react-bootstrap/Dropdown";
-import _ from "lodash";
-import ConfirmDelete from "./components/confirmdelete.component";
-import UpdateCustomer from "./components/updateCustomer.component";
+import { Carousel, Card, Button } from "react-bootstrap";
+import one from "./images/1.jpg";
+import two from "./images/2.jpg";
+import three from "./images/3.jpg";
+import four from "./images/4.webp";
+import five from "./images/5.webp";
+import six from "./images/6.webp";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getPublicProduct } from "./customer.action";
+import { toast } from "react-toastify";
+import getLoggedInCustomer from "./service/getLoggedInCustomer";
+import Footer from "./components/footer.component";
+import { Link } from "react-router-dom";
 
-const Customer = () => {
-    const [customer, setcustomer] = useState([]);
-    const [sortColumn, setSortColumn] = useState({
-        path: "id",
-        order: "asc",
-    });
-    const [activePage, setActivePage] = useState(1);
-    const [pageCount, setPageCount] = useState(10);
+const Customer = (props) => {
+    const dispatch = useDispatch();
 
-    const [isDelete, setisDelete] = useState(false);
-    const [customerToBeDeleted, setcustomerToBeDeleted] = useState(null);
-    const [isUpdated, setisUpdated] = useState(false);
-    const [customerToBeUpdated, setcustomerToBeUpdated] = useState(null);
+    const loggedInCustomer = getLoggedInCustomer();
+    const imageItem = [four, five, six];
+    const cartItem = useSelector((state) => state.customerReducer.cart);
+    const product = useSelector((state) => state.customerReducer.publicProduct);
+    let cnt = 0;
 
-    const columns = [
-        {
-            label: "Id",
-            path: "id",
-            sorting: true,
-            content: (customer, key) => (
-                <td style={{ color: "#136CB2" }}> {customer[key]}</td>
-            ),
-        },
-        {
-            label: "first Name",
-            path: "first_name",
-            sorting: true,
-            content: (customer, key) => (
-                <td style={{ color: "#136CB2" }}>{customer[key]}</td>
-            ),
-        },
-        {
-            label: "Last Name",
-            path: "last_name",
-            sorting: true,
-            content: (customer, key) => (
-                <td style={{ color: "#136CB2" }}>{customer[key]}</td>
-            ),
-        },
-        {
-            label: "Email",
-            path: "email",
-            sorting: true,
-            content: (customer, key) => (
-                <td style={{ color: "#136CB2" }}>{customer[key]}</td>
-            ),
-        },
-        {
-            label: "Gender",
-            path: "gender",
-            sorting: true,
-            content: (customer, key) => (
-                <td style={{ color: "#136CB2" }}>{customer[key]}</td>
-            ),
-        },
-        {
-            label: "ip_address",
-            path: "ip_address",
-            sorting: true,
-            content: (customer, key) => (
-                <td style={{ color: "#136CB2" }}>{customer[key]}</td>
-            ),
-        },
-
-        {
-            label: "Action",
-            path: "action",
-            content: (customer, key) => (
-                <td>
-                    <Dropdown>
-                        <Dropdown.Toggle
-                            variant="secondary"
-                            id="dropdown-basic"
-                        >
-                            <i className="bi bi-pencil-square"></i>
-                        </Dropdown.Toggle>
-
-                        <Dropdown.Menu>
-                            <Dropdown.Item
-                                onClick={() => {
-                                    setcustomerToBeUpdated(customer);
-                                    setisUpdated(true);
-                                }}
-                            >
-                                Edit
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => {
-                                    setcustomerToBeDeleted(customer);
-                                    setisDelete(true);
-                                }}
-                            >
-                                Delete
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </td>
-            ),
-        },
-    ];
-
-    async function getCustomer() {
-        try {
-            setcustomer(CustomerData);
-        } catch (error) {
-            console.log("abuj", error);
+    const handleCardButton = (item) => {
+        if (!loggedInCustomer) {
+            toast.error("Log in to add Cart", {
+                backgroundColor: "#8329C5",
+                color: "#ffffff",
+            });
+        } else {
+            let cartItemCopy = [...cartItem];
+            cartItemCopy.push(item);
+            dispatch({ type: "ADD_PRODUCT_CART", payload: cartItemCopy });
+            toast.success("Add to Cart", {
+                backgroundColor: "#8329C5",
+                color: "#ffffff",
+            });
         }
-    }
-
-    const handleSort = (sortColumn) => {
-        setSortColumn(sortColumn);
-    };
-
-    const handleClickPage = (activePage) => {
-        setActivePage(activePage);
-    };
-
-    const paginateCustomer = (Customer) => {
-        const start = (activePage - 1) * pageCount;
-        const paginateCustomer = Customer.slice(start, start + pageCount);
-        return paginateCustomer;
-    };
-
-    const sortCustomer = (Customer) => {
-        const sortedCustomer = _.orderBy(
-            Customer,
-            [sortColumn.path],
-            [sortColumn.order]
-        );
-        return sortedCustomer;
-    };
-
-    const paginatedCustomer = paginateCustomer(customer);
-    const sortedCustomer = sortCustomer(paginatedCustomer);
-
-    // delete a customer
-    const handleDeleteCustomer = (singleCustomer) => {
-        const copyCus = [...customer];
-        const newCus = copyCus.filter((item) => item.id !== singleCustomer.id);
-        setcustomer(newCus);
-        setisDelete(false);
-    };
-    const handleCalceldelete = () => {
-        console.log("cancel button pressed");
-        setisDelete(false);
-    };
-
-    //Update a Customer
-
-    const handleUpdateProfile = (item) => {
-        const copyCus = [...customer];
-        let foundIndex = copyCus.findIndex((x) => x.id === item.id);
-        copyCus[foundIndex] = item;
-        console.log(foundIndex);
-        setcustomer(copyCus);
-        setisUpdated(false);
-        customerToBeUpdated(null);
-    };
-    const handleCloseUpdatedModal = () => {
-        setisUpdated(false);
-        customerToBeUpdated(null);
     };
 
     useEffect(() => {
-        getCustomer();
+        dispatch(getPublicProduct());
     }, []);
 
     return (
         <>
-            <div>
-                <nav className="navbar navbar-light bg-light">
-                    <h1 className="navbar-brand" style={{ marginLeft: "20px" }}>
-                        Customer List
-                    </h1>
-                </nav>
+            <div style={{ width: "100%", margin: "0px", padding: "0px" }}>
+                <Carousel>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100 h-50"
+                            src={one}
+                            alt="First slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100 h-50"
+                            src={two}
+                            alt="Second slide"
+                        />
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <img
+                            className="d-block w-100 h-50"
+                            src={three}
+                            alt="Third slide"
+                        />
+                    </Carousel.Item>
+                </Carousel>
             </div>
-            <div style={{ display: "flex" }}>
-                <div className="container">
-                    <Table
-                        items={sortedCustomer}
-                        columns={columns}
-                        onSort={handleSort}
-                        sortColumn={sortColumn}
-                    ></Table>
-
-                    <Pagination
-                        totalItems={customer.length}
-                        pageCount={pageCount}
-                        activePage={activePage}
-                        onClickPage={handleClickPage}
-                    ></Pagination>
-                </div>
-                {customerToBeDeleted && (
-                    <ConfirmDelete
-                        handleCancel={handleCalceldelete}
-                        deleteProfile={handleDeleteCustomer}
-                        isDelete={isDelete}
-                        item={customerToBeDeleted}
-                    />
-                )}
-                {customerToBeUpdated && (
-                    <UpdateCustomer
-                        onUpdateProfile={handleUpdateProfile}
-                        isUpdate={isUpdated}
-                        item={customerToBeUpdated}
-                        onCloseModal={handleCloseUpdatedModal}
-                    />
-                )}
+            <div className="row m-3">
+                <h5>Just For You</h5>
             </div>
+            <div className="d-flex">
+                {product.products &&
+                    product.products.map((item) => {
+                        return (
+                            <div key={item.id}>
+                                <div className="card_box-wrapper">
+                                    <Link
+                                        style={{
+                                            textDecoration: "none",
+                                            color: "#000",
+                                        }}
+                                        to={`/product/${item.id}`}
+                                    >
+                                        <img
+                                            className="card_img"
+                                            src={imageItem[cnt++ % 3]}
+                                            alt="rhcp"
+                                        />
+                                    </Link>
+                                    <div className="card_box-content">
+                                        <div
+                                            onClick={() =>
+                                                handleCardButton(item)
+                                            }
+                                            className="card_buy"
+                                        >
+                                            <span>
+                                                <i className="fa fa-cart-plus"></i>
+                                            </span>
+                                        </div>
+                                        <div className="card_title">
+                                            {item.name.slice(0, 17)}
+                                        </div>
+                                        <div className="card_desc">
+                                            Lorem ipsum dolor sit amet.
+                                        </div>
+                                        <span className="card_price">
+                                            {item.price}$
+                                        </span>
+                                        <div className="card_footer">
+                                            <ul>
+                                                <li className="fa fa-star"></li>
+                                                <li className="fa fa-star"></li>
+                                                <li className="fa fa-star"></li>
+                                                <li className="fa fa-star"></li>
+                                                <li className="fa fa-star-o"></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div className="card_success"></div>
+                                </div>
+                            </div>
+                        );
+                    })}
+            </div>
+            <Footer />
         </>
     );
 };
