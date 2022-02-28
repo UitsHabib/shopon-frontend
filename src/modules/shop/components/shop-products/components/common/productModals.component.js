@@ -4,17 +4,7 @@ import { toast } from "react-toastify";
 import { deleteProduct } from "../../products.actions";
 import ProductForm from "../product-form.component";
 
-export function ProductModals(props) {
-    const {
-        type,
-        targetProduct,
-        setAction,
-        show,
-        onHide,
-        needToFetch,
-        fetch,
-    } = props;
-
+export function ProductModals({ type, targetProduct, show, onHide, needToFetch, fetch }) {
     const dispatch = useDispatch();
 
     const handleDeleteDetail = () => {
@@ -32,7 +22,7 @@ export function ProductModals(props) {
                     color: "#ffffff",
                 });
             });
-        setAction({});
+        onHide();
     };
 
     return (

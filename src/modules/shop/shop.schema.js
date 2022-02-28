@@ -68,15 +68,7 @@ export const loginSchema = object().shape({
 });
 
 const userSchema = {
-    first_name: string()
-        .matches(
-            XRegExp("^[\\pL.]+(?:\\s[\\pL]+)*$"),
-            "This field should contain letters only"
-        )
-        .min(2, "This field must be at least 2 characters long")
-        .max(50, "This field must be at most 50 characters long")
-        .required("This field must not be empty"),
-    last_name: string()
+    name: string()
         .matches(
             XRegExp("^[\\pL.]+(?:\\s[\\pL]+)*$"),
             "This field should contain letters only"
@@ -93,6 +85,8 @@ const userSchema = {
             "The part before @ of the email can be maximum 64 characters ",
             (email) => isEmailLengthValid(email)
         ),
+    description: string()
+        .required("This field must not be empty.")
 };
 
 export const registerSchema = object().shape({
@@ -163,7 +157,7 @@ export const forgotPasswordSchema = object().shape({
 });
 
 export const updateMyProfileSchema = object().shape({
-    name: userSchema.first_name,
+    name: userSchema.name,
     email: userSchema.email,
 });
 

@@ -7,6 +7,7 @@ export function getProducts(page, limit, orderBy, orderType) {
         (limit ? `&limit=${limit}` : "") +
         (orderBy ? `&orderBy=${orderBy}` : "") +
         (orderType ? `&orderType=${orderType}` : "");
+        //console.log(url);
 
     return {
         type: Types.GET_PRODUCTS,

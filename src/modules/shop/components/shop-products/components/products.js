@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Dropdown } from "react-bootstrap";
 
-import { getProducts, getProduct } from "../products.actions";
 import Pagination from "./common/pagination.component";
-import Table from "./common/table.component";
-import { ProductModals } from "./common/productModals.component";
 import ProductForm from "./product-form.component";
+import { getProducts, getProduct } from "../products.actions";
+import { ProductModals } from "./common/productModals.component";
 
 const Products = (props) => {
     const dispatch = useDispatch();
@@ -21,123 +20,13 @@ const Products = (props) => {
     const [action, setAction] = useState({});
 
     const totalItems = useSelector((state) => state.productsReducer.totalProducts);
-    const sortedProducts = useSelector((state) => state.productsReducer.productList);
-    const targetProduct = useSelector((state) => state.productsReducer.product);
+    const products = useSelector((state) => state.productsReducer.productList);
+    
+    //const productData = useSelector((state) => state.productsReducer.productData);
+    // const totalItems = productData ? productData.metaData.total : 0;
+    // const products = productData ? productData.products : [];
 
     const productsPerPage = 5;
-    const columns = [
-        {
-            label: "ID",
-            path: "id",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Product Name",
-            path: "name",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Category ID",
-            path: "category_id",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Description",
-            path: "description",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Price",
-            path: "price",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Discount",
-            path: "discount",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Available Quantity",
-            path: "stock_quantity",
-            sorting: true,
-            content: (products, key) => (
-                <td class="text-center">
-                    {products[key] === null ? "--" : products[key]}
-                </td>
-            ),
-        },
-        {
-            label: "Action",
-            path: "action",
-            content: (targetProduct) => (
-                <Dropdown>
-                    <Dropdown.Toggle
-                        variant="outline-success"
-                        id="dropdown-basic"
-                    >
-                        <i className="bi bi-pencil-square"></i>
-                    </Dropdown.Toggle>
-
-                    <Dropdown.Menu>
-                        <Dropdown.Item
-                            onClick={() => {
-                                setAction({ showDetail: true });
-                                dispatch(getProduct(targetProduct.id));
-                            }}
-                        >
-                            Product Details
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => {
-                                setAction({ updateDetail: true });
-                                dispatch(getProduct(targetProduct.id));
-                            }}
-                        >
-                            Update
-                        </Dropdown.Item>
-                        <Dropdown.Item
-                            onClick={() => {
-                                setAction({ deleteDetailModal: true });
-                                dispatch(getProduct(targetProduct.id));
-                            }}
-                        >
-                            Delete
-                        </Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-            ),
-        },
-    ];
 
     function handleClickPage(activePage) {
         setActivePage(activePage);
@@ -157,6 +46,11 @@ const Products = (props) => {
             )
         );
     }, [sortColumn, activePage, needToFetch]);
+
+    useEffect(() => {
+        if(action.targetProduct)
+            dispatch(getProduct(action.targetProduct.id))
+    }, [action])
 
     return (
         <>
@@ -179,23 +73,74 @@ const Products = (props) => {
             <div className="d-flex flex-wrap justify-content-center">
                 <div className="card" style={{ width: "80rem" }}>
                     <div className="card-body d-flex flex-wrap justify-content-center">
-                        {sortedProducts.length > 0 ? (
+                        {products.length > 0 && (
                             <>
-                                <Table
-                                    items={sortedProducts}
-                                    columns={columns}
-                                    sortColumn={sortColumn}
-                                    onSort={handleSort}
-                                />
-                                <Pagination
-                                    totalItems={totalItems}
-                                    pageCount={productsPerPage}
-                                    activePage={activePage}
-                                    onClickPage={handleClickPage}
-                                />
+                                <React.Fragment>
+                                    <div className="d-flex flex-wrap justify-content-center">
+                                        <table className="table">
+                                            <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
+                                                <tr>
+                                                    <th scope="col" width="18%"><span onClick={() => handleSort({ path: "id", order: sortColumn.order === "asc" ? "desc" : "asc"})}>ID</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => handleSort({ path: "name", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Name</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => handleSort({ path: "category_id", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Category</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => handleSort({ path: "description", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Description</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => handleSort({ path: "price", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Price</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => handleSort({ path: "discount", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Discount</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => handleSort({ path: "stock_quantity", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Available Quantity</span></th>
+                                                    <th scope="col" width="10%">Action</th>
+
+                                                    {/* <th scope="col" width="20%"><span onClick={() => urlChange(1, 'description')}>Description</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => urlChange(1, 'type')}>Type</span></th>
+                                                    <th scope="col" width="12%"><span onClick={() => urlChange(1, 'created_by')}>Created By</span></th>
+                                                    <th scope="col" width="10%"><span onClick={() => urlChange(1, 'created_at')}>Creation Date</span></th>
+                                                    <th scope="col" width="10%">Action</th> */}
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {products.map(row => (
+                                                    <tr key={row.id}>
+                                                        <td className="text-break">{row.id ? row.id : '--'}</td>
+                                                        <td className="text-break">{row.name ? row.name : '--'}</td>
+                                                        <td className="text-break">{row.category_id ? row.category_id : '--'}</td>
+                                                        <td className="text-break">{row.description ? row.description : '--'}</td>
+                                                        <td className="text-break">{row.price ? row.price : '--'}</td>
+                                                        <td className="text-break">{row.discount ? row.discount : '--'}</td>
+                                                        <td className="text-break">{row.stock_quantity ? row.stock_quantity : '--'}</td>
+                                                        <td data-for="Action">
+                                                            <Dropdown>
+                                                                <Dropdown.Toggle variant="" className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle ">
+                                                                <i className="bi bi-chevron-down fa-lg"></i>
+                                                                </Dropdown.Toggle>
+
+                                                                <Dropdown.Menu>
+                                                                    <Dropdown.Item onClick={() => { setAction({ showDetail: true, targetProduct: row }) }}>
+                                                                        Product Details
+                                                                    </Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => { setAction({ updateDetail: true, targetProduct: row }) }}>
+                                                                        Update
+                                                                    </Dropdown.Item>
+                                                                    <Dropdown.Item onClick={() => { setAction({ deleteDetailModal: true, targetProduct: row }) }}>
+                                                                        Delete
+                                                                    </Dropdown.Item>
+                                                                </Dropdown.Menu>
+                                                            </Dropdown>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+
+                                        <div>
+                                            <Pagination
+                                                totalItems={totalItems}
+                                                pageCount={productsPerPage}
+                                                activePage={activePage}
+                                                onClickPage={handleClickPage}
+                                            />
+                                        </div>
+                                    </div>
+                                </React.Fragment>
                             </>
-                        ) : (
-                            ""
                         )}
                     </div>
                 </div>
@@ -204,7 +149,7 @@ const Products = (props) => {
             {action.showDetail ? (
                 <ProductModals
                     type="show"
-                    targetProduct={targetProduct}
+                    targetProduct={action.targetProduct}
                     show={action.showDetail}
                     onHide={() => setAction({})}
                 />
@@ -213,7 +158,7 @@ const Products = (props) => {
             {action.updateDetail ? (
                 <ProductModals
                     type="update"
-                    targetProduct={targetProduct}
+                    targetProduct={action.targetProduct}
                     show={action.addNewProduct || action.updateDetail}
                     onHide={() => setAction({})}
                     needToFetch={needToFetch}
@@ -224,7 +169,7 @@ const Products = (props) => {
             {action.deleteDetailModal ? (
                 <ProductModals
                     type="delete"
-                    targetProduct={targetProduct}
+                    targetProduct={action.targetProduct}
                     show={action.deleteDetailModal}
                     onHide={() => setAction({})}
                     needToFetch={needToFetch}

@@ -3,6 +3,8 @@ import Types from "./products.types";
 const initialState = {
     productList: [],
     totalProducts: 0,
+
+    productData: {},
     product: {}
 };
 
@@ -11,10 +13,12 @@ export default function reducer(state = initialState, action) {
         case Types.GET_PRODUCTS_FULFILLED: {
             const productList = action.payload.data.products;
             const totalProducts = action.payload.data.metaData.total;
+            const productData = action.payload.data;
             return {
                 ...state,
                 totalProducts,
-                productList
+                productList,
+                productData
             };
         }
         case Types.GET_PRODUCT_FULFILLED: {
