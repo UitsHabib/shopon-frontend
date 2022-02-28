@@ -9,7 +9,7 @@ export function getSignedInUserProfile() {
         payload: axios({
             method: 'get',
             url: `${baseUrl}/api/users/profile`,
-            withCredentials: "true",
+            withCredentials: true,
         })
     };
 }
@@ -21,7 +21,7 @@ export function login(data) {
             method: 'post',
             url: `${baseUrl}/api/login`,
             data,
-            withCredentials: "true",
+            withCredentials: true,
         })
     };
 }
@@ -32,7 +32,7 @@ export function logout() {
         payload: axios({
             method: 'get',
             url: `${baseUrl}/api/logout`,
-            withCredentials: "true",
+            withCredentials: true,
         })
     };
 }
@@ -60,7 +60,7 @@ export function getPaginatedUsers(page, limit, orderBy, orderType) {
         payload: axios({
             method: "get",
             url,
-            withCredentials: "true",
+            withCredentials: true,
         }),
     };
 }

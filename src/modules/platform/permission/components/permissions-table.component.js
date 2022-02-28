@@ -1,4 +1,5 @@
 import { Link, useRouteMatch } from "react-router-dom";
+import moment from "moment";
 import { Dropdown } from "react-bootstrap";
 
 import Table from "./common/table.component";
@@ -13,24 +14,11 @@ const PermissionsTable = ({ permissions, sorting, onClickSort, onClickDeleteButt
         {
             label: "ID",
             path: "id",
-            sort: true,
             content: (data, path) => <td>{data[path]}</td>,
         },
         {
             label: "Title",
             path: "title",
-            sort: true,
-            content: (data, path) => <td>{data[path]}</td>,
-        },
-        {
-            label: "Slug",
-            path: "slug",
-            sort: true,
-            content: (data, path) => <td>{data[path]}</td>,
-        },
-        {
-            label: "Type",
-            path: "type",
             sort: true,
             content: (data, path) => <td>{data[path]}</td>,
         },
@@ -41,16 +29,27 @@ const PermissionsTable = ({ permissions, sorting, onClickSort, onClickDeleteButt
             content: (data, path) => <td>{data[path]}</td>,
         },
         {
-            label: "Created",
-            path: "created_by",
+            label: "Type",
+            path: "type",
             sort: true,
             content: (data, path) => <td>{data[path]}</td>,
         },
         {
-            label: "Updated",
-            path: "updated_by",
+            label: "Slug",
+            path: "slug",
             sort: true,
             content: (data, path) => <td>{data[path]}</td>,
+        },
+        {
+            label: "Created",
+            path: "created_at",
+            sort: true,
+            content: (data) => <td>{moment(data.created_at).format("lll")}</td>,
+        },
+        {
+            label: "Updated",
+            path: "updated_at",
+            content: (data) => <td>{moment(data.updated_at).format("lll")}</td>,
         },
         {
             label: "Action",
@@ -66,7 +65,7 @@ const PermissionsTable = ({ permissions, sorting, onClickSort, onClickDeleteButt
                             <Link className="dropdown-item" to={{ pathname: `${path}/${data.id}`, data: data }}>
                                 Details
                             </Link>
-                            <Link className="dropdown-item" to={{ pathname: `${path}/update/${data.id}`, data: data }}>
+                            <Link className="dropdown-item" to={{ pathname: `${path}/${data.id}/update`, data: data }}>
                                 Edit
                             </Link>
 							<Dropdown.Item onClick={() => onClickDeleteButton(data.id)}>

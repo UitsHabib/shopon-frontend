@@ -7,6 +7,10 @@ export const PermissionClientRoutes = (props) => {
         <PermissionRoutes path={props.path} />
     );
 }
+
+export {
+    permissionReducer
+}
  
 export {
     permissionReducer,

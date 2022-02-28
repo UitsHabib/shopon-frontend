@@ -5,7 +5,7 @@ import { UserClientRoutes, Login, Logout, Dashboard, ForgotPassword, ResetPasswo
 
 import { ProfileClientRoutes, Profiles, profileReducer, profileActions } from './profile';
 import { PermissionClientRoutes, permissionReducer, permissionActions } from './permission';
-import { RoleClientRoutes, Roles, roleReducer, roleActions } from './role';
+import { RoleClientRoutes, roleReducer, roleActions } from './role';
 import ServicesClientRoutes from './services';
 
 export function PlatformRoutes() {

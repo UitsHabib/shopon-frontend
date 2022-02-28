@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 
 import { getServices } from "../permission.actions";
@@ -6,20 +7,13 @@ import PermissionSchema from "../permission.schema";
 import CheckboxGroup from "./checkbox-group.component";
 
 const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
-    const [services, setServices] = useState([]);
+    const dispatch = useDispatch();
 
-    const getserviceData = async () => {
-        try {
-            const { data } = await getServices();
-            setServices(data.services);
-        } catch (error) {
-            console.log(error);
-        }
-    };
+    const services = useSelector(state => state.permissionReducer.services);
 
     useEffect(() => {
-        getserviceData();
-    }, []);
+        dispatch(getServices());
+    }, [dispatch]);
 
     return (
         <div className="row justify-content-center">
@@ -36,9 +30,13 @@ const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
                 >
                     {(formikProps) => (
                         <Form onSubmit={formikProps.handleSubmit}>
+                            <label htmlFor="title" className="mb-1">
+                                <b>Title</b> 
+                                <span className="text-danger"> *</span>
+                            </label>
                             <Field
                                 className="form-control"
-                                as="textarea"
+                                id="title"
                                 placeholder="Title"
                                 name="title"
                             />
@@ -46,8 +44,13 @@ const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
                                 <ErrorMessage name="title" />
                             </div>
 
+                            <label htmlFor="description" className="mb-1">
+                                <b>Description </b>
+                                <span className="text-danger"> *</span>
+                            </label>
                             <Field
                                 className="form-control"
+                                id="description"
                                 as="textarea"
                                 placeholder="Description"
                                 name="description"
@@ -56,7 +59,10 @@ const PermissionForm = ({ onSubmit, initialValues, buttonName }) => {
                                 <ErrorMessage name="description" />
                             </div>
 
-                            <div>Services</div>
+                            <label htmlFor="title" className="mb-1">
+                                <b>Services</b> 
+                                <span className="text-danger"> *</span>
+                            </label>
                             <CheckboxGroup name="services" options={services} />
                             <div className="invalid-feedback d-block mb-3">
                                 <ErrorMessage name="services" />
