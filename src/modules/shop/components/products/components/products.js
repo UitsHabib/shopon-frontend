@@ -17,9 +17,8 @@ const Products = (props) => {
     });
     const [needToFetch, setNeedToFetch] = useState(false);
     const [action, setAction] = useState({});
-
-    const totalItems = useSelector((state) => state.productsReducer.totalProducts);
-    const products = useSelector((state) => state.productsReducer.productList);
+    
+    const productData = useSelector((state) => state.productsReducer.productData);
 
     const productsPerPage = 5;
 
@@ -60,7 +59,7 @@ const Products = (props) => {
             <div className="d-flex flex-wrap justify-content-center">
                 <div className="card" style={{ width: "80rem" }}>
                     <div className="card-body d-flex flex-wrap justify-content-center">
-                        {products.length > 0 && (
+                        {productData.products && productData.products.length > 0 && (
                             <React.Fragment>
                                 <div className="d-flex flex-wrap justify-content-center">
                                     <table className="table">
@@ -83,7 +82,7 @@ const Products = (props) => {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {products.map(row => (
+                                            {productData.products && productData.products.map(row => (
                                                 <tr key={row.id}>
                                                     <td className="text-break">{row.id ? row.id : '--'}</td>
                                                     <td className="text-break">{row.name ? row.name : '--'}</td>
@@ -118,7 +117,7 @@ const Products = (props) => {
 
                                     <div>
                                         <Pagination
-                                            totalItems={totalItems}
+                                            totalItems={productData.metaData.total}
                                             pageCount={productsPerPage}
                                             activePage={activePage}
                                             onClickPage={handleClickPage}

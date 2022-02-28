@@ -1,23 +1,22 @@
 import Types from "./products.types";
 
 const initialState = {
-    productList: [],
-    totalProducts: 0,
-    product: {},
-
     productData: {},
+    product: {},
 };
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
         case Types.GET_PRODUCTS_FULFILLED: {
-            const productList = action.payload.data.products;
-            const totalProducts = action.payload.data.metaData.total;
-            const productData = action.payload.data;
+            const productData = {products: action.payload.data.products, metaData: {
+                page: action.payload.data.metaData.page,
+                limit: action.payload.data.metaData.limit,
+                total: action.payload.data.metaData.total,
+                start: action.payload.data.metaData.start,
+                end: action.payload.data.metaData.end
+            }};
             return {
                 ...state,
-                totalProducts,
-                productList,
                 productData
             };
         }
