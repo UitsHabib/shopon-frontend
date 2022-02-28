@@ -1,7 +1,7 @@
 import axios from "axios";
 import Types from "./user.types";
 
-const baseUrl = "http://localhost:5000";
+// const baseUrl = "http://localhost:5000";
 
 export function getSignedInUserProfile() {
     return {
@@ -73,29 +73,29 @@ export function getUser(user_id) {
     };
 }
 
-export function getProfiles() {
-    console.log("in action profile");
-  return {
-      type: Types.GET_PROFILES,
-      payload: axios({
-          method: "get",
-          url: `${baseUrl}/api/profiles`,
-          withCredentials: "true",
-      }),
-  };
-}
+// export function getProfiles() {
+//     console.log("in action profile");
+//   return {
+//       type: Types.GET_PROFILES,
+//       payload: axios({
+//           method: "get",
+//           url: `${baseUrl}/api/profiles`,
+//           withCredentials: "true",
+//       }),
+//   };
+// }
 
-export function getRoles() {
-    console.log("in action roles");
-  return {
-      type: Types.GET_ROLES,
-      payload: axios({
-          method: "get",
-          url: `${baseUrl}/api/roles`,
-          withCredentials: "true",
-      }),
-  };
-}
+// export function getRoles() {
+//     console.log("in action roles");
+//   return {
+//       type: Types.GET_ROLES,
+//       payload: axios({
+//           method: "get",
+//           url: `${baseUrl}/api/roles`,
+//           withCredentials: "true",
+//       }),
+//   };
+// }
 
 
 
