@@ -128,14 +128,14 @@ const Users = (props) => {
 
     const page = userMetaData?.page;
     const limit = userMetaData?.limit;
-    // const start = userMetaData?.start;
-    // const end = userMetaData?.end;
     const total = userMetaData?.total;
 
-    // console.log(page, limit, start, end, total);
-    const handleSort = (sortColumn) => setSortColumn(sortColumn);
+    const handleSort = (sortColumn) => {
+        setSortColumn(sortColumn);
+        const queryParams = `/?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
+        history.push(location.pathname + queryParams || ``);
+    }
 
-    // const handleClickPage = (activePage) => setActivePage(activePage);
     const handleClickPage = (activePage) => {
         setActivePage(activePage);
         const queryParams = `/?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
@@ -184,28 +184,9 @@ const Users = (props) => {
         }
     }
 
-    
-
-    // const paginateUsers = () => {
-    //     const start = (activePage - 1) * pageCount;
-    //     const paginatedUsers = users?.slice(start, start + pageCount);
-    //     return paginatedUsers;
-    // };
-
     useEffect(() => {
         dispatch(getUsers(activePage,pageCount,sortColumn.path,sortColumn.order));
-    }, [location]);
-
-    // useEffect(() => {
-    //      dispatch(
-    //         getPaginatedUsers(
-    //             activePage,
-    //             pageCount,
-    //             sortColumn.path,
-    //             sortColumn.order
-    //         )
-    //     );
-    // }, [activePage , sortColumn]);
+    }, [needToFetchUser, location]);
 
     return (
         <div className="container">
