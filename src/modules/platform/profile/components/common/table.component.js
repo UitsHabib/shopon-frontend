@@ -1,17 +1,18 @@
-import TableBody from './table-body.component';
-import TableHeader from './table-header.component';
 
-const Table = ({ items, columns, onSort, sortColumn }) => {
-	return (
-		<table className="table">
-			<TableHeader
-				columns={columns}
-				onSort={onSort}
-				sortColumn={sortColumn}
-			></TableHeader>
-			<TableBody items={items} columns={columns}></TableBody>
-		</table>
-	);
-};
+import TableHead from "./table-header.component";
+import TableBody from "./table-body.component";
 
+const Table = ({ columns, sorting, onClickSort, items }) => {
+    return (
+        <table className="table">
+            <TableHead
+                columns={columns}
+                sorting={sorting}
+                onClickSort={onClickSort}
+            />
+            <TableBody items={items} columns={columns} />
+        </table>
+    );
+}
+ 
 export default Table;

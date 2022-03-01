@@ -1,23 +1,21 @@
-import React from "react";
+import { Fragment } from "react";
 
-const TableBody = ({ columns, items }) => {
-	return (
-		<tbody>
-			{items.map((item) => {
-				return (
-					<tr key={item.id}>
-						{columns.map((column) => {
-							return (
-								<React.Fragment key={column.path}>
-									{column.content(item, column.path)}
-								</React.Fragment>
-							);
-						})}
-					</tr>
-				);
-			})}
-		</tbody>
-	);
+const TableBody = ({ items, columns }) => {
+    let count = 0;
+
+    return (
+        <tbody>
+            {items?.map(item => (
+                <tr key={item.id}>
+                    {columns.map(column => (
+                        <Fragment key={count++}>
+                            {column.content(item, column.path)}
+                        </Fragment>
+                    ))}
+                </tr>
+            ))}
+        </tbody>
+    );
 };
 
 export default TableBody;

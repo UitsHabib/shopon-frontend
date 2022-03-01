@@ -88,11 +88,11 @@ const RoleDetails = ({ roleId, ...rest }) => {
                                                 <div className="row">
                                                     <div className="form-group">
                                                         <label className="form-label fw-bold">Select Permissions</label> <span className="text-danger">*</span>
-                                                        {permissionData.permissions?.length ?
+                                                        {getAllPermissions.permissions?.length ?
                                                             <div className="row">
                                                                 <ToggleListSlider 
                                                                     name="permissions" 
-                                                                    options={permissionData.permissions} 
+                                                                    options={getAllPermissions.permissions} 
                                                                     valueExtractor={item => item.id} 
                                                                     idExtractor={item => item.id} 
                                                                     labelExtractor={item => item.title} 

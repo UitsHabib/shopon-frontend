@@ -1,18 +1,9 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Modal } from "react-bootstrap";
+import moment from "moment";
 
-import { getPermission } from "../permission.actions";
-
-
-const PermissionDetails = ({ permissionId, ...rest }) => {
-    const dispatch = useDispatch();
-
-    const permission = useSelector(state => state.permissionReducer.permission)
-
-    useEffect(() => {
-        if(permissionId) dispatch(getPermission(permissionId));
-    }, [dispatch, permissionId]);
+const ProfileDetails = ({ permissionId, ...rest }) => {
+    const profile = useSelector(state => state.profileReducer.profile)
 
     return (
         <Modal 
@@ -23,55 +14,51 @@ const PermissionDetails = ({ permissionId, ...rest }) => {
             <Modal.Header closeButton>
                 <Modal.Title>
                     <h3>Details</h3>
-                    <p style={{fontSize: "15px"}}>Here is permission details.</p>
+                    <p style={{fontSize: "15px"}}>Here is profiles details.</p>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <div>
                     <label>
                         <strong>Title:</strong>{" "}
-                        {permission.title}
+                        {profile.title}
                         <br />
                         <br />
                         <strong>
                             Description:
                         </strong>{" "}
-                        {permission.description}
-                        <br />
-                        <br />
-                        <strong>Type:</strong>{" "}
-                        {permission.type}
+                        {profile.description}
                         <br />
                         <br />
                         <strong>Slug:</strong>{" "}
-                        {permission.slug}
+                        {profile.slug}
                         <br />
                         <br />
                         <strong>
                             Created At:
                         </strong>{" "}
-                        {permission.created_at}
+                        {moment(profile.created_at).format("lll")}
                         <br />
                         <br />
                         <strong>
                             Updated At:
                         </strong>{" "}
-                        {permission.updated_at}
+                        {moment(profile.updated_at).format("lll")}
                         <br />
                         <br />
                         <strong>
                             Profile Permissions:
                         </strong>
-                        {permission?.permission_services?.map(
-                            (permission_service) => (
+                        {profile?.profile_permissions?.map(
+                            (profile_permissions) => (
                                 <p
-                                    key={permission_service.id}
+                                    key={profile_permissions.id}
                                     style={{
                                         marginLeft:
                                             "50px",
                                     }}
                                 >
-                                    {permission_service.service.title}
+                                    {profile_permissions.permission.title}
                                 </p>
                             )
                         )}
@@ -83,4 +70,4 @@ const PermissionDetails = ({ permissionId, ...rest }) => {
     );
 };
 
-export default PermissionDetails;
+export default ProfileDetails;

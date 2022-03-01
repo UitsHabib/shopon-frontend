@@ -9,11 +9,11 @@ const DeleteModal = ({ onClickCancel, onClickDelete, ...rest }) => {
         >
             <Modal.Header closeButton>
                 <Modal.Title>
-                    <h1>Delete Permission</h1>
+                    <h1>Delete Profile</h1>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Are you sure you want to delete this Permission?</p>
+                <p>Are you sure you want to delete this Profile?</p>
             </Modal.Body>
             <Modal.Footer>
                 <button
