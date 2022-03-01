@@ -11,7 +11,7 @@ const UserForm = (props) => {
 
     const handleSubmit = async (values) => {
         const newAdmin = {
-            profile_id: 1,
+            profile_id: values.profile_id,
             first_name: values.firstName,
             last_name: values.lastName,
             email: values.email,

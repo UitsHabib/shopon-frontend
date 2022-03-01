@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from "react";
 import { Route, Redirect, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -11,7 +10,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
     const loggedInUser = useSelector((state) => state.userReducer.loggedInUser);
     const loggedInShop = useSelector((state) => state.shopReducer.loggedInShop);
 
-    const loggedInAs = loggedInShop ? "shop" : loggedInUser ? 'user' : "";
+    const loggedInAs = loggedInShop ? "shop" : loggedInUser ? "user" : "";
 
     const currentPathname = useLocation().pathname;
 
@@ -34,7 +33,7 @@ export default function PrivateRoute({ component: Component, ...rest }) {
                             <Redirect
                                 push
                                 to={{
-                                    pathname: "/login",
+                                    pathname: "/admin/login",
                                     state: { from: props.location },
                                 }}
                             />

@@ -1,12 +1,14 @@
 import { combineReducers } from "redux";
-
+import { userReducer, permissionReducer, roleReducer, serviceReducer } from "../platform";
 import { shopReducer, productsReducer } from "../shop";
-import { userReducer, roleReducer, permissionReducer, profileReducer } from "../platform";
+import { customerReducer } from "../customer";
 
 export default combineReducers({
-    userReducer,
-    roleReducer,
-    permissionReducer,
+    userReducer, 
+    permissionReducer, 
+    roleReducer, 
+    serviceReducer,
+    customerReducer,
     shopReducer,
     productsReducer,
 });

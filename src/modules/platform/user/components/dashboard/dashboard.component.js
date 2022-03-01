@@ -1,14 +1,14 @@
 import DashboardItem from "./DashboardItem.component";
 
 const Dashboard = (props) => {
-	return (
-		<div className="d-flex flex-wrap justify-content-start">
-			<DashboardItem title="Platform" link="/platform" />
-			<DashboardItem title="Customer" link="/customer" />
-			<DashboardItem title="Shop" link="/shop" />
-			<DashboardItem title="Complaint" link="/complaint" />
-		</div>
-	);
+    return (
+        <div className="d-flex flex-wrap justify-content-start">
+            <DashboardItem title="Platform" link="/admin/platform" />
+            <DashboardItem title="Customer" link="/admin/customer" />
+            <DashboardItem title="Shop" link="/admin/shop" />
+            <DashboardItem title="Complaint" link="/admin/complaint" />
+        </div>
+    );
 };
 
 export default Dashboard;

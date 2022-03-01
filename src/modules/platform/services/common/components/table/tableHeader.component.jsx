@@ -1,5 +1,4 @@
 /* eslint-disable jsx-a11y/mouse-events-have-key-events */
-/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-plusplus */
 import propTypes from 'prop-types';
 import React from 'react';
@@ -40,15 +39,6 @@ const TableHeader = ({ columns, sort, updateSort }) => {
 			</tr>
 		</thead>
 	);
-};
-
-TableHeader.propTypes = {
-	columns: propTypes.object.isRequired,
-	sort: propTypes.shape({
-		column: propTypes.string,
-		order: propTypes.oneOf(['asc', 'desc']),
-	}).isRequired,
-	updateSort: propTypes.func.isRequired,
 };
 
 export default TableHeader;

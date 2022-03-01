@@ -1,5 +1,12 @@
-import ServicesRoutes from './routes/services.routes';
+import ServicesRoutes from "./service.routes";
+import serviceReducer from './service.reducer';
+import * as serviceActions from './service.actions';
 
-export default function ServiceClientRoutes(props) {
+export function ServiceClientRoutes(props) {
 	return <ServicesRoutes path={props.path} />;
+}
+
+export {
+    serviceReducer,
+    serviceActions
 }
