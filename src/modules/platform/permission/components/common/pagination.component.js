@@ -30,6 +30,7 @@ export default function Pagination({ start, end, page, total, shouldChangeBrowse
                 data-testid='Prev'
             >
                 <i className="icon icon-arrow-down ms-2 prev"></i>
+                Prev
             </span>
 
             <span className="pagination-btn"
@@ -38,6 +39,7 @@ export default function Pagination({ start, end, page, total, shouldChangeBrowse
                 data-testid='Next'
             >
                 <i className="icon icon-arrow-down ms-2 next"></i>
+                Next
             </span>
         </div>
     )

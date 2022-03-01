@@ -9,6 +9,7 @@ import Pagination from "./common/pagination.component";
 import PermissionForm from "./permission-form.component";
 import DeleteModal from "./common/delete-modal.component";
 import PermissionDetails from "./permission-details.component";
+import { useLocation } from "react-router-dom";
 
 const Permissions = () => {
     const dispatch = useDispatch();
@@ -16,6 +17,8 @@ const Permissions = () => {
     const [action, setAction] = useState({});
     const permissionData = useSelector(state => state.permissionReducer.permissionData)
 
+    const location = useLocation();
+    console.log(location.search);
     const [sorting, setSorting] = useState({ path: "id", order: "asc" });
 
     const columns = [
@@ -91,9 +94,17 @@ const Permissions = () => {
             })
     };
 
+    const handelPageChange = (url) => {
+        dispatch(getPermissions(url));
+    }
+
     useEffect(() => {
-        dispatch(getPermissions())
-    }, [action])
+        if(location.search) {
+            dispatch(getPermissions(location.search))
+        } else {
+            dispatch(getPermissions())
+        }
+    }, [action, location])
 
     return (
         <>
@@ -123,6 +134,7 @@ const Permissions = () => {
                                     end={permissionData.metaData.end}
                                     page={permissionData.metaData.page}
                                     total={permissionData.metaData.total}
+                                    onPageChange={handelPageChange}
                                 />
                             </div>
                         </div>
