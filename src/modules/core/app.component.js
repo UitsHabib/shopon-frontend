@@ -37,7 +37,7 @@ import {
     ShopLogin,
     ShopLogout,
     UpdateMyShopProfile,
-} from "../shop";
+} from "../vendor";
 const { getSignedInShopProfile } = shopActions;
 const { getSignedInUserProfile } = userActions;
 const { getSignedInCustomerProfile } = CustomerAction;

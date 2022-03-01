@@ -5,8 +5,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form, Field, ErrorMessage  } from "formik";
 
-import { updateMyProfileSchema } from "../../shop.schema";
-import { updateShopProfile } from "../../shop.actions";
+import { updateMyProfileSchema } from "../shop.schema";
+import { updateShopProfile } from "../shop.actions";
 
 const UpdateMyShopProfile = (props) => {
     const dispatch = useDispatch();

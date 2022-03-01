@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { forgotPasswordSchema } from '../shop.schema';
+import { forgotPasswordSchema } from './shop.schema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 const ForgotPassword = (props) => {

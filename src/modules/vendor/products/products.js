@@ -4,7 +4,7 @@ import { Button, Dropdown } from "react-bootstrap";
 
 import Pagination from "./common/pagination.component";
 import ProductForm from "./product-form.component";
-import { getProducts, getProduct } from "../products.actions";
+import { getProducts, getProduct } from "../products/products.actions";
 import { ProductModals } from "./common/productModals.component";
 
 const Products = (props) => {

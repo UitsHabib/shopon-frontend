@@ -5,9 +5,9 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Modal from "react-bootstrap/Modal";
 
-import { NewProductSchema } from "../products.schema";
-import { addNewProduct, getProduct, updateProduct } from "../products.actions";
-import ToggleList from "../../../../core/components/toggle-list.component"
+import { NewProductSchema } from "./products.schema";
+import { addNewProduct, getProduct, updateProduct } from "../products/products.actions";
+import ToggleList from "../../core/components/toggle-list.component"
 
 const ToggleListSlider = (props) => (
     <ToggleList {...props}>
