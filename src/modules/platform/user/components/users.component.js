@@ -6,7 +6,7 @@ import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
-import { getUsers, getPaginatedUsers, deleteUser, getUser } from "../user.actions";
+import { getUsers, deleteUser, getUser } from "../user.actions";
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
@@ -159,14 +159,14 @@ const Users = (props) => {
         setNeedToFetchUser(!needToFetchUser);
     }
 
-    const sortUsers = (users) => {
-        const sortedUsers = _.orderBy(
-            users,
-            [sortColumn.path],
-            [sortColumn.order]
-        );
-        return sortedUsers;
-    };
+    // const sortUsers = (users) => {
+    //     const sortedUsers = _.orderBy(
+    //         users,
+    //         [sortColumn.path],
+    //         [sortColumn.order]
+    //     );
+    //     return sortedUsers;
+    // };
 
     async function handleDeleteUser() {
         try {
@@ -191,16 +191,16 @@ const Users = (props) => {
         dispatch(getUsers());
     }, [needToFetchUser]);
     
-    useEffect(() => {
-         dispatch(
-            getPaginatedUsers(
-                activePage,
-                pageCount,
-                sortColumn.path,
-                sortColumn.order
-            )
-        );
-    }, [activePage , sortColumn]);
+    // useEffect(() => {
+    //      dispatch(
+    //         getPaginatedUsers(
+    //             activePage,
+    //             pageCount,
+    //             sortColumn.path,
+    //             sortColumn.order
+    //         )
+    //     );
+    // }, [activePage , sortColumn]);
 
     return (
         <div className="container">
@@ -304,7 +304,7 @@ const Users = (props) => {
             </div>
 
             <Table
-                users={paginatedUsers}
+                users={users}
                 columns={columns}
                 sortColumns={sortColumn}
                 onSort={handleSort}
