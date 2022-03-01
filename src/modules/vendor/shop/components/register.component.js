@@ -4,12 +4,10 @@ import { registerSchema } from "../shop.schema";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 
-import { shopLogin, shopRegister } from "../shop.actions";
-import { useDispatch } from "react-redux";
+import { shopRegister } from "../shop.actions";
 
 const ShopRegister = (props) => {
     const history = useHistory();
-    const dispatch = useDispatch();
 
     async function handleRegister(data) {
         const newShop = {
@@ -21,15 +19,9 @@ const ShopRegister = (props) => {
         };
         try {
             await shopRegister(newShop);
-            dispatch(shopLogin({ email: newShop.email, password: newShop.password }))
-                .then((response) => {
-                    props.location.state && props.location.state.from.pathname
-                        ? history.push(props.location.state.from.pathname)
-                        : history.push("/shop-dashboard");
-                })
-            // props.location.state && props.location.state.from.pathname
-            //     ? history.push(props.location.state.from.pathname)
-            //     : history.push("/shop-login");
+            props.location.state && props.location.state.from.pathname
+                ? history.push(props.location.state.from.pathname)
+                : history.push("/shop-login");
             toast.success("Shop Registered Successfully", {
                 backgroundColor: "#8329C5",
                 color: "#ffffff",

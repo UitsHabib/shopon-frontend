@@ -12,7 +12,6 @@ export default function PublicRoute({ component: Component, ...rest }) {
     const [loggedInAs, setLoggedInAs] = useState("");
 
     const currentPathname = useLocation().pathname;
-    console.log(currentPathname);
 
     useEffect(() => {
         if (currentPathname === "/shop-login") setLoggedInAs("shop");
