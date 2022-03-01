@@ -11,6 +11,8 @@ const Login = (props) => {
     const dispatch = useDispatch();
 
     function handleLogin(data) {
+        console.log(data);
+        console.log('sdfs')
         dispatch(login(data)).then(response => {
             props.location.state && props.location.state.from.pathname
                 ? history.push(props.location.state.from.pathname)

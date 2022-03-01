@@ -35,31 +35,32 @@ export function logout() {
     };
 }
 
-export function getUsers() {
+// export function getUsers() {
+//     return {
+//         type: Types.GET_USERS,
+//         payload: axios({
+//             method: "get",
+//             url: `/api/users`,
+//         })
+//     };
+// }
+
+export function getUsers(page, limit, orderBy, orderType) {
+
+    const url =`api/users/?page=${page}` 
+    + (limit ? `&limit=${limit}` : "") 
+    + (orderBy ? `&orderBy=${orderBy}` : "") 
+    + (orderType ? `&orderType=${orderType}` : "");
+
+    console.log(url);
     return {
         type: Types.GET_USERS,
         payload: axios({
             method: "get",
-            url: `/api/users`,
-        })
+            url,
+        }),
     };
 }
-
-// export function getPaginatedUsers(page, limit, orderBy, orderType) {
-
-//     const url =`${baseUrl}/api/users/?page=${page}` 
-//     + (limit ? `&limit=${limit}` : "") 
-//     + (orderBy ? `&orderBy=${orderBy}` : "") 
-//     + (orderType ? `&orderType=${orderType}` : "");
-//     return {
-//         type: Types.GET_PAGINATED_USERS,
-//         payload: axios({
-//             method: "get",
-//             url,
-//             withCredentials: "true",
-//         }),
-//     };
-// }
 
 
 export function deleteUser(userId) {

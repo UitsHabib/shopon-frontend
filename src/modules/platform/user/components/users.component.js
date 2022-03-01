@@ -5,7 +5,7 @@ import Modal from "react-modal";
 import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import { Link } from "react-router-dom";
-import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
+import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { getUsers, deleteUser, getUser } from "../user.actions";
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
@@ -14,14 +14,16 @@ import UpdateUser from "./updateUser.component";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
+    const history = useHistory();
+    const location = useLocation();
     const dispatch = useDispatch();
-    
-    const pageCount = 4;
+
+    const pageCount = 2;
     const [sortColumn, setSortColumn] = useState({
         path: "first_name",
         order: "asc",
     });
-    
+
     const [activePage, setActivePage] = useState(1);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
     const [detailsModal, setDetailsModal] = useState(false);
@@ -32,7 +34,6 @@ const Users = (props) => {
     const [deleteModal, setDeleteModal] = useState(false);
     const [deletedUserId, setDeletedUserId] = useState("1");
     const [updateUserId, setUpdateUserId] = useState();
-
 
     const modalStyle = {
         content: {
@@ -81,7 +82,6 @@ const Users = (props) => {
         {
             label: "Actions",
             content: (profile, detail) => (
-                
                 <td>
                     <Dropdown>
                         <Dropdown.Toggle
@@ -92,10 +92,10 @@ const Users = (props) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                        <Dropdown.Item
+                            <Dropdown.Item
                                 onClick={() => handleUpdateModal(profile.id)}
                             >
-                                Update                               
+                                Update
                             </Dropdown.Item>
                             <Dropdown.Item
                                 onClick={() => {
@@ -118,14 +118,29 @@ const Users = (props) => {
     ];
 
     const users = useSelector((state) => state.userReducer.userData.users);
-    console.log(users);
+    const userMetaData = useSelector(
+        (state) => state.userReducer.userData.metaData
+    );
+
     users?.map((user) => {
         if (user.phone === null) user.phone = "--";
     });
 
-    const handleSort = (sortColumn) => setSortColumn(sortColumn); 
+    const page = userMetaData?.page;
+    const limit = userMetaData?.limit;
+    // const start = userMetaData?.start;
+    // const end = userMetaData?.end;
+    const total = userMetaData?.total;
 
+    // console.log(page, limit, start, end, total);
+    const handleSort = (sortColumn) => setSortColumn(sortColumn);
 
+    // const handleClickPage = (activePage) => setActivePage(activePage);
+    const handleClickPage = (activePage) => {
+        setActivePage(activePage);
+        const queryParams = `/?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
+        history.push(location.pathname + queryParams || ``);
+    }
     const handleShowDetails = (id) => {
         setDetailsModal(true);
         try {
@@ -137,8 +152,8 @@ const Users = (props) => {
     const handleUpdateModal = (id) => {
         setUpdateModal(true);
         try {
-            setUpdateUserId( id );
-            console.log("uuuupppppppppp");;
+            setUpdateUserId(id);
+            console.log("uuuupppppppppp");
         } catch (err) {
             console.log("err updating");
         }
@@ -155,18 +170,9 @@ const Users = (props) => {
         }
     };
 
-    const toggleNeedToFecthUsers = () =>{
+    const toggleNeedToFecthUsers = () => {
         setNeedToFetchUser(!needToFetchUser);
-    }
-
-    // const sortUsers = (users) => {
-    //     const sortedUsers = _.orderBy(
-    //         users,
-    //         [sortColumn.path],
-    //         [sortColumn.order]
-    //     );
-    //     return sortedUsers;
-    // };
+    };
 
     async function handleDeleteUser() {
         try {
@@ -178,19 +184,18 @@ const Users = (props) => {
         }
     }
 
-    const handleClickPage = (activePage) => setActivePage(activePage);
-
-    const paginateUsers = () => {
-        const start = (activePage - 1) * pageCount;
-        const paginatedUsers = users?.slice(start, start + pageCount);
-        return paginatedUsers;
-    };
     
+
+    // const paginateUsers = () => {
+    //     const start = (activePage - 1) * pageCount;
+    //     const paginatedUsers = users?.slice(start, start + pageCount);
+    //     return paginatedUsers;
+    // };
 
     useEffect(() => {
-        dispatch(getUsers());
-    }, [needToFetchUser]);
-    
+        dispatch(getUsers(activePage,pageCount,sortColumn.path,sortColumn.order));
+    }, [location]);
+
     // useEffect(() => {
     //      dispatch(
     //         getPaginatedUsers(
@@ -204,123 +209,138 @@ const Users = (props) => {
 
     return (
         <div className="container">
-            { users ?
-            <>
-            <Modal
-                isOpen={detailsModal}
-                style={modalStyle}
-                contentLabel="Details Modal"
-            >
-                <button onClick={() => setDetailsModal(false)}>close</button>
-                <div>
-                    <ul>
-                        {
-                            <>
-                                <li>ID: {userDetails.id}</li>
-                                <li>First Name: {userDetails.first_name}</li>
-                                <li>Last Name: {userDetails.last_name}</li>
-                                <li>Email: {userDetails.email}</li>
-                                <li>Phone No: {userDetails.phone}</li>
-                                <li>Profile Slug: {userDetails.profile_id}</li>
-                            </>
-                        }
-                    </ul>
-                    <div>
-                        <button
-                            onClick={() => {
-                                handleUserPermission(
-                                    userDetails.profile.profile_permissions[0]
-                                        .permission_id
-                                );
-                                setShowPermission(!showPermission);
-                            }}
-                        >
-                            {showPermission === false
-                                ? "Show Permissions"
-                                : "Close"}
+            {users ? (
+                <>
+                    <Modal
+                        isOpen={detailsModal}
+                        style={modalStyle}
+                        contentLabel="Details Modal"
+                    >
+                        <button onClick={() => setDetailsModal(false)}>
+                            close
                         </button>
-                        {showPermission === true ? (
+                        <div>
                             <ul>
-                                {userPermissions.map((permission) => {
-                                    return (
-                                        <li key={permission.service.id}>
-                                            {permission.service.title}
+                                {
+                                    <>
+                                        <li>ID: {userDetails.id}</li>
+                                        <li>
+                                            First Name: {userDetails.first_name}
                                         </li>
-                                    );
-                                })}
+                                        <li>
+                                            Last Name: {userDetails.last_name}
+                                        </li>
+                                        <li>Email: {userDetails.email}</li>
+                                        <li>Phone No: {userDetails.phone}</li>
+                                        <li>
+                                            Profile Slug:{" "}
+                                            {userDetails.profile_id}
+                                        </li>
+                                    </>
+                                }
                             </ul>
-                        ) : null}
+                            <div>
+                                <button
+                                    onClick={() => {
+                                        handleUserPermission(
+                                            userDetails.profile
+                                                .profile_permissions[0]
+                                                .permission_id
+                                        );
+                                        setShowPermission(!showPermission);
+                                    }}
+                                >
+                                    {showPermission === false
+                                        ? "Show Permissions"
+                                        : "Close"}
+                                </button>
+                                {showPermission === true ? (
+                                    <ul>
+                                        {userPermissions.map((permission) => {
+                                            return (
+                                                <li key={permission.service.id}>
+                                                    {permission.service.title}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                ) : null}
+                            </div>
+                        </div>
+                    </Modal>
+                    <Modal
+                        isOpen={updateModal}
+                        // style={modalStyle}
+                        contentLabel="Update Modal"
+                    >
+                        <button
+                            onClick={() => setUpdateModal(false)}
+                            style={{ margin: "20px", marginLeft: "85%" }}
+                        >
+                            close
+                        </button>
+                        <UpdateUser
+                            id={updateUserId}
+                            setUpdateModal={setUpdateModal}
+                            toggleNeedToFecthUsers={toggleNeedToFecthUsers}
+                        />
+                    </Modal>
+                    <Modal
+                        isOpen={deleteModal}
+                        style={modalStyle}
+                        contentLabel="Details Modal"
+                    >
+                        <div>
+                            <i class="fa-solid fa-circle-xmark"></i>
+                            <p>Are you sure you want to delete this user?</p>
+                            <button
+                                type="button"
+                                class="btn btn-warning"
+                                onClick={() => {
+                                    handleDeleteUser();
+                                    setDeleteModal(false);
+                                }}
+                                style={{ marginRight: "10px" }}
+                            >
+                                Yes
+                            </button>
+                            <button
+                                type="button"
+                                class="btn btn-secondary"
+                                onClick={() => setDeleteModal(false)}
+                            >
+                                No
+                            </button>
+                        </div>
+                    </Modal>
+
+                    <div style={{display: "flex",justifyContent: "space-between"}}>
+                        <div></div>
+                        <Link
+                            to="/platform/users/create"
+                            className="btn btn-primary m-2"
+                        >
+                            Create User{" "}
+                        </Link>
                     </div>
-                </div>
-            </Modal>
-            <Modal
-                isOpen={updateModal}
-                // style={modalStyle}
-                contentLabel="Update Modal"
-            >
-                <button onClick={() => setUpdateModal(false)} 
-                style={{ margin: "20px", marginLeft: "85%" }}>close</button>
-                <UpdateUser id = {updateUserId} setUpdateModal={setUpdateModal} 
-                toggleNeedToFecthUsers={toggleNeedToFecthUsers}/>
-                            
-            </Modal>
-            <Modal
-                isOpen={deleteModal}
-                style={modalStyle}
-                contentLabel="Details Modal"
-            >
-                <div>
-                <i class="fa-solid fa-circle-xmark"></i>
-                    <p>Are you sure you want to delete this user?</p>
-                    <button
-                        type="button"
-                        class="btn btn-warning"
-                        onClick={() => {
-                            handleDeleteUser();
-                            setDeleteModal(false);
-                        }}
-                        style={{ marginRight: "10px" }}
-                    >
-                        Yes
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-secondary"
-                        onClick={() => setDeleteModal(false)}
-                    >
-                        No
-                    </button>
-                </div>
-            </Modal>
 
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-                <div></div>
-                <Link
-                    to="/platform/users/create"
-                    className="btn btn-primary m-2"
-                >
-                    Create User{" "}
-                </Link>
-            </div>
-
-            <Table
-                users={users}
-                columns={columns}
-                sortColumns={sortColumn}
-                onSort={handleSort}
-            />
-            {
-                updateModal ? null
-                : <Pagination
-                totalUsers={users.length}
-                pageCount={pageCount}
-                activePage={activePage}
-                onClickPage={handleClickPage}
-            />
-            }
-            </>
-        
-        : null }    </div>
+                    <Table
+                        users={users}
+                        columns={columns}
+                        sortColumns={sortColumn}
+                        onSort={handleSort}
+                    />
+                    {updateModal ? null : (
+                        <Pagination
+                            totalUsers={total}
+                            pageCount={pageCount}
+                            activePage={activePage}
+                            onClickPage={handleClickPage}
+                        />
+                    )}
+                </>
+            ) : null}{" "}
+        </div>
     );
 };
 

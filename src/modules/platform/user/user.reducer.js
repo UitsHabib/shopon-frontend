@@ -23,17 +23,6 @@ export default function reducer(state = initialState, action) {
                 userData: action.payload.data,
             };
         }
-        case Types.GET_PAGINATED_USERS_FULFILLED: {
-            return {
-               ...state,
-               paginatedUsers: action.payload.data.users,
-               // userMetaData: action.payload.data.metaData
-               }
-           }
-        
-
-
-
         
         case Types.GET_USER_FULFILLED: {
             console.log("in fulfilled :  ",action.payload.data);
@@ -48,12 +37,6 @@ export default function reducer(state = initialState, action) {
                 profileData: action.payload.data,
             };
         }
-        // case Types.GET_ROLES_FULFILLED: {
-        //     return {
-        //         ...state,
-        //         roles: action.payload.data.roles,
-        //     };
-        // }
     }
     return state;
 }
