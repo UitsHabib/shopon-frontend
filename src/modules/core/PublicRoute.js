@@ -16,6 +16,8 @@ export default function PublicRoute({ component: Component, ...rest }) {
 
     useEffect(() => {
         if (currentPathname === "/shop-login") setLoggedInAs("shop");
+        if (currentPathname === "/shop-register") setLoggedInAs("shop");
+        if (currentPathname === "/sell") setLoggedInAs("shop");
         else if (currentPathname === "/") setLoggedInAs("customer");
         else if (currentPathname === "/admin/login") setLoggedInAs("user");
         else if (currentPathname === "/login") setLoggedInAs("customer");

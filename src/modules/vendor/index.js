@@ -1,4 +1,6 @@
-import ShopLogin from './shop/components/login.component'
+import Home from './shop/components/home.component';
+import ShopRegister from './shop/components/register.component';
+import ShopLogin from './shop/components/login.component';
 import ShopLogout from './shop/components/logout.component';
 import ShopDashboard from './shop/components/dashboard/dashboard.component';
 import ForgotPassword from './shop/components/forgot-password.component';
@@ -11,6 +13,8 @@ import * as productActions from './products/product.actions';
 import * as shopActions from './shop/shop.actions';
 
 export {
+    Home,
+    ShopRegister,
 	ShopLogin,
 	ShopLogout,
 	ShopDashboard,

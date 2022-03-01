@@ -34,9 +34,11 @@ import {
     Products,
     shopActions,
     ShopDashboard,
+    ShopRegister,
     ShopLogin,
     ShopLogout,
     UpdateMyShopProfile,
+    Home,
 } from "../vendor";
 const { getSignedInShopProfile } = shopActions;
 const { getSignedInUserProfile } = userActions;
@@ -135,7 +137,9 @@ function App() {
                 <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
                 <PrivateRoute path="/update-my-profile" component={UpdateMyProfile} />
                 <PrivateRoute path="/service-list" component={ServiceList} />
-
+                
+                <PublicRoute path="/sell" component={Home}/>
+                <PublicRoute path="/shop-register" component={ShopRegister}/>
                 <PublicRoute path="/shop-login" component={ShopLogin} />
                 <PrivateRoute path="/shop-logout" component={ShopLogout} />
                 <PrivateRoute path="/shop-dashboard" component={ShopDashboard} />

@@ -3,23 +3,6 @@ import XRegExp from "xregexp";
 import * as Yup from "yup";
 import PhoneNumber from "awesome-phonenumber";
 
-const PHONE_MAX_LENGTH = 25;
-
-const isPhoneMaxLengthValid = (parent) => {
-    const { country_callingCode, phone } = parent;
-    if (!phone || !country_callingCode) return true;
-    const phonenumberWithCountryCode = phone;
-    return phonenumberWithCountryCode.length <= PHONE_MAX_LENGTH;
-};
-
-const isPhoneNumberValid = (parent) => {
-    const { country_code, phone } = parent;
-    if (!phone) return true;
-    const pn = PhoneNumber(phone, country_code);
-    if (pn.a.number.e164 !== pn.a.number.input) return false;
-    return pn.isValid();
-};
-
 function validatePassword(password) {
     const minLength = 8;
     const maxLength = 50;
@@ -86,24 +69,21 @@ const userSchema = {
             (email) => isEmailLengthValid(email)
         ),
     description: string()
-        .required("This field must not be empty.")
+        .min(2, "This field must be at least 2 character long.")
+        .max(50, "This field must be at most 50 character long.")
+        .required("This field must not be empty."),
 };
 
 export const registerSchema = object().shape({
-    first_name: userSchema.first_name,
-    last_name: userSchema.last_name,
+    name: userSchema.name,
     email: userSchema.email,
-    phone: string()
-        .matches(/^[0-9\+]*$/, "This field only contains digits")
-        .test(
-            "is-phoneNumber-valid",
-            `This field must contain a valid phone number`,
-            function () {
-                return isPhoneNumberValid(this.parent);
-            }
-        ),
-    profile: string().required("Must select at least one profile"),
-    role: string(),
+    password: string()
+        .max(50, "This field must be at most 50 character long.")
+        .required("This field must not be empty."),
+    confirm_password: string()
+        .oneOf([ref("password"), null], "Passwords must match")
+        .required("This field must not be empty."),
+    license_number: string().required("This field must not be empty."),
 });
 
 export const changePasswordSchema = object().shape({
@@ -156,11 +136,6 @@ export const forgotPasswordSchema = object().shape({
         .required("This field must not be empty"),
 });
 
-export const updateMyProfileSchema = object().shape({
-    name: userSchema.name,
-    email: userSchema.email,
-});
-
 export const SignInSchema = Yup.object().shape({
     email: Yup.string()
         .trim()
@@ -186,14 +161,8 @@ export const SignInSchema = Yup.object().shape({
         .notOneOf(["choose"], "Please Select A Profile"),
 });
 
-export const updateUserSchema = object().shape({
-    first_name: string()
-        .trim()
-        .min(2, "This field must be at least 2 character long.")
-        .max(20, "This field must be at most 20 character long.")
-        .required("This field must not be empty."),
-
-    last_name: string()
+export const updateMyProfileSchema = object().shape({
+    name: string()
         .trim()
         .min(2, "This field must be at least 2 character long.")
         .max(20, "This field must be at most 20 character long.")
@@ -218,6 +187,4 @@ export const updateUserSchema = object().shape({
         .min(2, "This field must be at least 2 character long.")
         .max(50, "This field must be at most 50 character long.")
         .required("This field must not be empty."),
-
-    // role_id: string().required("This field must not be empty."),
 });

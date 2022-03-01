@@ -1,8 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const ShopNavbar = (props) => {
     const loggedInShop = useSelector((state) => state.shopReducer.loggedInShop);
+    const history = useHistory();
+    const url = history.location.pathname === '/sell' ? '/sell' : null;
 
     return (
         <>
@@ -16,7 +18,27 @@ const ShopNavbar = (props) => {
                     </Link>
                 </div>
 
-                {!loggedInShop && (
+                { url && (
+                    <>
+                        <div className="d-flex flex-row align-items-center">
+                            <Link
+                                className="navbar-brand btn btn-outline-success"
+                                to="/shop-login"
+                            >
+                                Login
+                            </Link>
+
+                            <Link
+                                className="navbar-brand btn btn-outline-success"
+                                to="/shop-register"
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    </>
+                )}
+
+                {!url && !loggedInShop && (
                     <Link
                         className="navbar-brand btn btn-outline-success"
                         to="/shop-login"
@@ -25,7 +47,7 @@ const ShopNavbar = (props) => {
                     </Link>
                 )}
 
-                {loggedInShop && (
+                {!url && loggedInShop && (
                     <div className="d-flex flex-row align-items-center">
                         <span className="h5 my-0 mx-4">
                             <i className="bi bi-person-circle mx-1" />

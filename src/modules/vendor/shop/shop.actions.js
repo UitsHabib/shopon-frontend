@@ -42,3 +42,7 @@ export function updateShopProfile(updatedShop) {
         })
     };
 }
+
+export function shopRegister(newShop) {
+    return axios.post(`/api/shops`, newShop);
+}
