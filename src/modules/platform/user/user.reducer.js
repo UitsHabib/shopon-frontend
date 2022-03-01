@@ -3,7 +3,7 @@ import Types from "./user.types";
 const initialState = {
     loggedInUser: null,
     user: null,
-    users: [],
+    users: {},
     paginatedUsers: [],
     profiles: [],
     roles: [],
@@ -22,7 +22,10 @@ export default function reducer(state = initialState, action) {
         case Types.GET_USERS_FULFILLED: {
              return {
                 ...state,
-                users: action.payload.data.users,
+                users: {
+                    users: action.payload.data.users,
+                    userMetaData: action.payload.data.metaData
+                },
                 // userMetaData: action.payload.data.metaData
                 }
         }

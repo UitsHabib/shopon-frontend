@@ -49,7 +49,6 @@ export function getUsers() {
 }
 
 export function getPaginatedUsers(page, limit, orderBy, orderType) {
-    console.log(page, limit, orderBy, orderType);
 
     const url =`${baseUrl}/api/users/?page=${page}` 
     + (limit ? `&limit=${limit}` : "") 

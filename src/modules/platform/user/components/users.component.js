@@ -4,7 +4,6 @@ import Modal from "react-modal";
 
 import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
-import _ from "lodash";
 import { Link } from "react-router-dom";
 import { useRouteMatch } from "react-router-dom/cjs/react-router-dom.min";
 import { getUsers, getPaginatedUsers, deleteUser, getUser } from "../user.actions";
@@ -15,13 +14,14 @@ import { toast } from "react-toastify";
 const Users = (props) => {
     const { path } = useRouteMatch();
     const dispatch = useDispatch();
-
+    
+    const pageCount = 4;
     const [sortColumn, setSortColumn] = useState({
         path: "first_name",
         order: "asc",
     });
+    
     const [activePage, setActivePage] = useState(1);
-    const [pageCount, setPageCount] = useState(2);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
     const [detailsModal, setDetailsModal] = useState(false);
     const [userDetails, setUserDetails] = useState({});
@@ -126,20 +126,16 @@ const Users = (props) => {
         },
     ];
 
-    const users = useSelector((state) => state.userReducer.users);
+    const users = useSelector((state) => state.userReducer.users.users);
+    const metaData = useSelector((state) => state.userReducer.users.userMetaData);
     const paginatedUsers = useSelector((state) => state.userReducer.paginatedUsers);
    
-    users.map((user) => {
+    users?.map((user) => {
         if (user.phone === null) user.phone = "--";
     });
-    const loggedInUser = useSelector(
-        (state) => state.userReducer.loggedInUser.id
-    );
 
-    const handleSort = (sortColumn) => {
-        setSortColumn(sortColumn);
-        // dispatch(getUsers(activePage,sortColumn.path,sortColumn.order));
-    };
+    const handleSort = (sortColumn) => setSortColumn(sortColumn); 
+
 
     const handleShowDetails = (id) => {
         setDetailsModal(true);
@@ -159,14 +155,6 @@ const Users = (props) => {
             console.log("err getting user permission");
         }
     };
-    // const sortUsers = (users) => {
-    //     const sortedUsers = _.orderBy(
-    //         users,
-    //         [sortColumn.path],
-    //         [sortColumn.order]
-    //     );
-    //     return sortedUsers;
-    // };
 
     async function handleDeleteUser() {
         try {
@@ -178,24 +166,8 @@ const Users = (props) => {
         }
     }
 
-    const handleClickPage = (activePage) => {
-        setActivePage(activePage);
-    };
-
-    // const paginateUsers = () => {
-    //     // const start = (activePage - 1) * pageCount;
-    //     // const paginatedUsers = users.slice(start, start + pageCount);
-    //     // return paginatedUsers;
-    //     dispatch(
-    //             getUsers(
-    //                 activePage,
-    //                 pageCount,
-    //                 sortColumn.path,
-    //                 sortColumn.order
-    //             )
-    //         );
-
-    // };
+    const handleClickPage = (activePage) => setActivePage(activePage);
+   
 
     useEffect(() => {
         dispatch(getUsers());
@@ -205,26 +177,12 @@ const Users = (props) => {
          dispatch(
             getPaginatedUsers(
                 activePage,
-                pageCount
+                pageCount,
+                sortColumn.path,
+                sortColumn.order
             )
         );
-    }, [activePage]);
-
-//     useEffect(() => {
-//         dispatch(
-//            getPaginatedUsers(
-//                activePage,
-//                pageCount,
-//                sortColumn.path,
-//                sortColumn.order
-//            )
-//        );
-
-//    }, [sortColumn]);
-    
-
-    //  paginateUsers();
-    // const userList = sortUsers(users);
+    }, [activePage , sortColumn]);
 
     return (
         <div className="container">
@@ -321,7 +279,7 @@ const Users = (props) => {
                 onSort={handleSort}
             />
             <Pagination
-                totalUsers={users.length}
+                totalUsers={users?.length}
                 pageCount={pageCount}
                 activePage={activePage}
                 onClickPage={handleClickPage}
