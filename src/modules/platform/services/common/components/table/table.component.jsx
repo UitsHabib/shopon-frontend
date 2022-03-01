@@ -1,6 +1,4 @@
-/* eslint-disable react/forbid-prop-types */
 import React, { useState } from 'react';
-import propTypes, { object } from 'prop-types';
 import _ from 'lodash';
 
 import TableHeader from './tableHeader.component';
@@ -50,11 +48,6 @@ const Table = (props) => {
 			</table>
 		</div>
 	);
-};
-
-Table.propTypes = {
-	data: propTypes.arrayOf(object).isRequired,
-	metadata: object.isRequired,
 };
 
 export default Table;

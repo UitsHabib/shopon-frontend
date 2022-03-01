@@ -2,11 +2,9 @@ import Types from "./user.types";
 
 const initialState = {
     loggedInUser: null,
-    user: null,
-    users: {},
-    paginatedUsers: [],
-    profiles: [],
-    roles: [],
+    userData: [],
+    user: {},
+    profileData:[],
 };
 
 export default function reducer(state = initialState, action) {
@@ -22,12 +20,8 @@ export default function reducer(state = initialState, action) {
         case Types.GET_USERS_FULFILLED: {
              return {
                 ...state,
-                users: {
-                    users: action.payload.data.users,
-                    userMetaData: action.payload.data.metaData
-                },
-                // userMetaData: action.payload.data.metaData
-                }
+                userData: action.payload.data,
+            };
         }
         case Types.GET_PAGINATED_USERS_FULFILLED: {
             return {
@@ -42,7 +36,7 @@ export default function reducer(state = initialState, action) {
 
         
         case Types.GET_USER_FULFILLED: {
-            console.log("in fulfilled :  ",action.payload.data.user);
+            console.log("in fulfilled :  ",action.payload.data);
             return {
                 ...state,
                 user: action.payload.data,
@@ -51,15 +45,15 @@ export default function reducer(state = initialState, action) {
         case Types.GET_PROFILES_FULFILLED: {
             return {
                 ...state,
-                profiles: action.payload.data.profiles,
+                profileData: action.payload.data,
             };
         }
-        case Types.GET_ROLES_FULFILLED: {
-            return {
-                ...state,
-                roles: action.payload.data.roles,
-            };
-        }
+        // case Types.GET_ROLES_FULFILLED: {
+        //     return {
+        //         ...state,
+        //         roles: action.payload.data.roles,
+        //     };
+        // }
     }
     return state;
 }

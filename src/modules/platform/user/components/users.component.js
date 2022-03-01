@@ -10,6 +10,7 @@ import { getUsers, getPaginatedUsers, deleteUser, getUser } from "../user.action
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
+import UpdateUser from "./updateUser.component";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
@@ -24,11 +25,14 @@ const Users = (props) => {
     const [activePage, setActivePage] = useState(1);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
     const [detailsModal, setDetailsModal] = useState(false);
+    const [updateModal, setUpdateModal] = useState(false);
     const [userDetails, setUserDetails] = useState({});
     const [userPermissions, setUserPermissions] = useState([]);
     const [showPermission, setShowPermission] = useState(false);
     const [deleteModal, setDeleteModal] = useState(false);
     const [deletedUserId, setDeletedUserId] = useState("1");
+    const [updateUserId, setUpdateUserId] = useState();
+
 
     const modalStyle = {
         content: {
@@ -88,23 +92,10 @@ const Users = (props) => {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu>
-                            <Dropdown.Item>
-                                <Link
-                                    to={{
-                                        pathname:
-                                            path + "/" + profile.id + "/update",
-                                        state: {
-                                            prevPath: props.location.pathname,
-                                            data: profile.id,
-                                        },
-                                    }}
-                                    style={{
-                                        textDecoration: "none",
-                                        color: "black",
-                                    }}
-                                >
-                                    UPDATE
-                                </Link>
+                        <Dropdown.Item
+                                onClick={() => handleUpdateModal(profile.id)}
+                            >
+                                Update                               
                             </Dropdown.Item>
                             <Dropdown.Item
                                 onClick={() => {
@@ -126,10 +117,8 @@ const Users = (props) => {
         },
     ];
 
-    const users = useSelector((state) => state.userReducer.users.users);
-    const metaData = useSelector((state) => state.userReducer.users.userMetaData);
-    const paginatedUsers = useSelector((state) => state.userReducer.paginatedUsers);
-   
+    const users = useSelector((state) => state.userReducer.userData.users);
+    console.log(users);
     users?.map((user) => {
         if (user.phone === null) user.phone = "--";
     });
@@ -145,6 +134,16 @@ const Users = (props) => {
             console.log("err getting user");
         }
     };
+    const handleUpdateModal = (id) => {
+        setUpdateModal(true);
+        try {
+            setUpdateUserId( id );
+            console.log("uuuupppppppppp");;
+        } catch (err) {
+            console.log("err updating");
+        }
+        toggleNeedToFecthUsers();
+    };
 
     const handleUserPermission = (id) => {
         try {
@@ -156,9 +155,22 @@ const Users = (props) => {
         }
     };
 
+    const toggleNeedToFecthUsers = () =>{
+        setNeedToFetchUser(!needToFetchUser);
+    }
+
+    const sortUsers = (users) => {
+        const sortedUsers = _.orderBy(
+            users,
+            [sortColumn.path],
+            [sortColumn.order]
+        );
+        return sortedUsers;
+    };
+
     async function handleDeleteUser() {
         try {
-            await deleteUser(deletedUserId);
+            deleteUser(deletedUserId);
             toast.success(`Successfully deleted`);
             setNeedToFetchUser(!needToFetchUser);
         } catch (error) {
@@ -167,7 +179,13 @@ const Users = (props) => {
     }
 
     const handleClickPage = (activePage) => setActivePage(activePage);
-   
+
+    const paginateUsers = () => {
+        const start = (activePage - 1) * pageCount;
+        const paginatedUsers = users?.slice(start, start + pageCount);
+        return paginatedUsers;
+    };
+    
 
     useEffect(() => {
         dispatch(getUsers());
@@ -186,6 +204,8 @@ const Users = (props) => {
 
     return (
         <div className="container">
+            { users ?
+            <>
             <Modal
                 isOpen={detailsModal}
                 style={modalStyle}
@@ -234,6 +254,17 @@ const Users = (props) => {
                 </div>
             </Modal>
             <Modal
+                isOpen={updateModal}
+                // style={modalStyle}
+                contentLabel="Update Modal"
+            >
+                <button onClick={() => setUpdateModal(false)} 
+                style={{ margin: "20px", marginLeft: "85%" }}>close</button>
+                <UpdateUser id = {updateUserId} setUpdateModal={setUpdateModal} 
+                toggleNeedToFecthUsers={toggleNeedToFecthUsers}/>
+                            
+            </Modal>
+            <Modal
                 isOpen={deleteModal}
                 style={modalStyle}
                 contentLabel="Details Modal"
@@ -278,13 +309,18 @@ const Users = (props) => {
                 sortColumns={sortColumn}
                 onSort={handleSort}
             />
-            <Pagination
-                totalUsers={users?.length}
+            {
+                updateModal ? null
+                : <Pagination
+                totalUsers={users.length}
                 pageCount={pageCount}
                 activePage={activePage}
                 onClickPage={handleClickPage}
             />
-        </div>
+            }
+            </>
+        
+        : null }    </div>
     );
 };
 

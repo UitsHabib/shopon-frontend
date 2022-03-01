@@ -1,14 +1,14 @@
 import axios from "axios";
 import Types from "./user.types";
 
-const baseUrl = "http://localhost:5000";
+// const baseUrl = "http://localhost:5000";
 
 export function getSignedInUserProfile() {
     return {
         type: Types.GET_PROFILE,
         payload: axios({
             method: 'get',
-            url: `${baseUrl}/api/users/profile`,
+            url: `/api/users/profile`,
             withCredentials: "true",
         })
     };
@@ -19,9 +19,8 @@ export function login(data) {
         type: Types.LOGIN,
         payload: axios({
             method: 'post',
-            url: `${baseUrl}/api/login`,
+            url: `/api/login`,
             data,
-            withCredentials: "true",
         })
     };
 }
@@ -31,8 +30,7 @@ export function logout() {
         type: Types.LOGOUT,
         payload: axios({
             method: 'get',
-            url: `${baseUrl}/api/logout`,
-            withCredentials: "true",
+            url: `/api/logout`,
         })
     };
 }
@@ -42,33 +40,36 @@ export function getUsers() {
         type: Types.GET_USERS,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/users`,
-            withCredentials: "true",
+            url: `/api/users`,
         })
     };
 }
 
-export function getPaginatedUsers(page, limit, orderBy, orderType) {
+// export function getPaginatedUsers(page, limit, orderBy, orderType) {
 
-    const url =`${baseUrl}/api/users/?page=${page}` 
-    + (limit ? `&limit=${limit}` : "") 
-    + (orderBy ? `&orderBy=${orderBy}` : "") 
-    + (orderType ? `&orderType=${orderType}` : "");
-    return {
-        type: Types.GET_PAGINATED_USERS,
-        payload: axios({
-            method: "get",
-            url,
-            withCredentials: "true",
-        }),
-    };
-}
+//     const url =`${baseUrl}/api/users/?page=${page}` 
+//     + (limit ? `&limit=${limit}` : "") 
+//     + (orderBy ? `&orderBy=${orderBy}` : "") 
+//     + (orderType ? `&orderType=${orderType}` : "");
+//     return {
+//         type: Types.GET_PAGINATED_USERS,
+//         payload: axios({
+//             method: "get",
+//             url,
+//             withCredentials: "true",
+//         }),
+//     };
+// }
 
 
 export function deleteUser(userId) {
-    return axios.delete(`${baseUrl}/api/users/${userId}`, {
-        withCredentials: true,
-    });
+    return {
+        type: Types.UPDATE_USERS,
+        payload: axios({
+            method: "delete",
+            url: `/api/users/${userId}`
+        })
+    };
 }
 
 export function createUser(user) {
@@ -84,7 +85,7 @@ export function getUser(user_id) {
         type: Types.GET_USER,
         payload: axios({
             method: "get",
-            url: `${baseUrl}/api/users/${user_id}`,
+            url: `api/users/${user_id}`,
             withCredentials: "true",
         }),
     };
@@ -92,32 +93,38 @@ export function getUser(user_id) {
 
 export function getProfiles() {
     console.log("in action profile");
+    const url = `/api/profiles`;
+
   return {
       type: Types.GET_PROFILES,
       payload: axios({
           method: "get",
-          url: `${baseUrl}/api/profiles`,
-          withCredentials: "true",
+          url
       }),
   };
 }
 
-export function getRoles() {
-    console.log("in action roles");
-  return {
-      type: Types.GET_ROLES,
-      payload: axios({
-          method: "get",
-          url: `${baseUrl}/api/roles`,
-          withCredentials: "true",
-      }),
-  };
-}
+// export function getRoles() {
+//     console.log("in action roles");
+//   return {
+//       type: Types.GET_ROLES,
+//       payload: axios({
+//           method: "get",
+//           url: `${baseUrl}/api/roles`,
+//           withCredentials: "true",
+//       }),
+//   };
+// }
 
 
 
-export function updateUser(usersID, updatedUser) {
-    return axios.patch(`${baseUrl}/api/users/${usersID}`, updatedUser, {
-        withCredentials: true,
-    });
+export function updateUser(usersID, data) {
+    return {
+        type: Types.UPDATE_USERS,
+        payload: axios({
+            method: "patch",
+            url: `/api/users/${usersID}`,
+            data,
+        })
+    };
 }

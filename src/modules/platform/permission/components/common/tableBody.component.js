@@ -5,7 +5,7 @@ const TableBody = ({ items, columns }) => {
 
     return (
         <tbody>
-            {items.map(item => (
+            {items?.map(item => (
                 <tr key={item.id}>
                     {columns.map(column => (
                         <Fragment key={count++}>
