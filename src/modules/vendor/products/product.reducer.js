@@ -1,4 +1,4 @@
-import Types from "./products.types";
+import Types from "./product.types";
 
 const initialState = {
     productData: {},

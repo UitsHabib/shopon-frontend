@@ -1,11 +1,10 @@
 import React from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom';
-import { resetPasswordSchema } from '../shop.schema';
+import { forgotPasswordSchema } from '../shop.schema';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
-const ResetPassword = (props) => {
-	const handleReset = (values) => {
+const ForgotPassword = (props) => {
+	const handleForgot = (values) => {
 		console.log(values);
 	};
 
@@ -14,48 +13,33 @@ const ResetPassword = (props) => {
 			<div className="card" style={{ width: ' 25rem ', height: 'auto' }}>
 				<div className="card-body">
 					<h5 className="d-flex flex-wrap justify-content-center">
-						Reset Password
+						Forgot Password
 					</h5>
 					<Formik
 						initialValues={{
-							newPassword: '',
-							confirmPassword: '',
+							email: '',
 						}}
 						onSubmit={(values, actions) => {
-							handleReset(values);
+							handleForgot(values);
 							actions.setSubmitting(false);
 						}}
-						validationSchema={resetPasswordSchema}
+						validationSchema={forgotPasswordSchema}
 					>
 						{(formikProps) => {
 							return (
 								<Form onSubmit={formikProps.handleSubmit}>
 									<div className="form-group mb-3">
-										<label htmlFor="newPassword" className="form-label">
-											Password
+										<label htmlFor="email" className="form-label">
+											Email Address
 										</label>
 										<Field
-											type="password"
+											type="email"
 											className="form-control"
-											id="newPassword"
-											name="newPassword"
+											id="email"
+											name="email"
 										/>
 										<div className="invalid-feedback d-block">
-											<ErrorMessage name="newPassword" />
-										</div>
-									</div>
-									<div className="form-group mb-3">
-										<label htmlFor="confirmPassword" className="form-label">
-											Confirm Password
-										</label>
-										<Field
-											type="password"
-											className="form-control"
-											id="confirmPassword"
-											name="confirmPassword"
-										/>
-										<div className="invalid-feedback d-block">
-											<ErrorMessage name="confirmPassword" />
+											<ErrorMessage name="email" />
 										</div>
 									</div>
 
@@ -72,4 +56,4 @@ const ResetPassword = (props) => {
 	);
 };
 
-export default ResetPassword;
+export default ForgotPassword;

@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Button, Dropdown } from "react-bootstrap";
 
-import Pagination from "./common/pagination.component";
+import Pagination from "./pagination.component";
 import ProductForm from "./product-form.component";
-import { getProducts, getProduct } from "../products/products.actions";
-import { ProductModals } from "./common/productModals.component";
+import { getProducts, getProduct } from "../product.actions";
+import { ProductModals } from "./productModals.component";
 
 const Products = (props) => {
     const dispatch = useDispatch();

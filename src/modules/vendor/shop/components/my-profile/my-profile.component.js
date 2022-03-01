@@ -11,7 +11,7 @@ const MyShopProfile = (props) => {
 				<div className="d-flex flex-wrap flex-column align-items-center">
 					<img
 						className="card-img-top"
-						src={require(`../../../core/images/profile.jpg`)}
+						src={require(`../../../../core/images/profile.jpg`)}
 						alt="Profile Image"
 						style={{ height: '15rem', width: '15rem' }}
 					/>

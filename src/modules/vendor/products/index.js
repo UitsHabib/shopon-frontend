@@ -1,3 +1,3 @@
-import Products from '../shop-products/products';
-import productsReducer from '../shop-products/products.reducer';
+import Products from './products';
+import productsReducer from './product.reducer';
 export { Products, productsReducer };

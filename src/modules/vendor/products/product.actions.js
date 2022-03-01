@@ -1,5 +1,5 @@
 import axios from "axios";
-import Types from "./products.types";
+import Types from "./product.types";
 
 export function getProducts(page, limit, orderBy, orderType) {
     const url =

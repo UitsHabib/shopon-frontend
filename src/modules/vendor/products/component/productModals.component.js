@@ -1,8 +1,8 @@
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { deleteProduct } from "../products.actions";
-import ProductForm from "../product-form.component";
+import { deleteProduct } from "../product.actions";
+import ProductForm from "./product-form.component";
 
 export function ProductModals({ type, targetProduct, show, onHide, needToFetch, fetch }) {
     const dispatch = useDispatch();

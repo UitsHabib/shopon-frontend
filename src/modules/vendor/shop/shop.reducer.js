@@ -14,13 +14,6 @@ export default function reducer(state = initialState, action) {
                 loggedInShop
             };
         }
-        case Types.UPDATE_SHOP_PROFILE: {
-            const loggedInShop = action.payload.data;
-            return {
-                ...state,
-                loggedInShop
-            };
-        }
     }
     return state;
 }
