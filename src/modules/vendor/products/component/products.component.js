@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Dropdown } from "react-bootstrap";
 
 import Pagination from "./pagination.component";
@@ -8,38 +9,45 @@ import { getProducts, getProduct } from "../product.actions";
 import { ProductModals } from "./productModals.component";
 
 const Products = (props) => {
-    const dispatch = useDispatch();
+    const history = useHistory();
+    const location = useLocation();
+	const dispatch = useDispatch();
 
     const [activePage, setActivePage] = useState(1);
-    const [sortColumn, setSortColumn] = useState({
-        path: "id",
-        order: "asc",
-    });
     const [needToFetch, setNeedToFetch] = useState(false);
     const [action, setAction] = useState({});
-    
+
     const productData = useSelector((state) => state.productsReducer.productData);
 
     const productsPerPage = 5;
 
+    const query = new URLSearchParams(location.search);
+	const page = query.get('page') || activePage;
+	const limit = query.get('limit') || productsPerPage;
+	const orderBy = query.get('orderBy') || 'id';
+	const orderType = query.get('orderType') || 'asc';
+
+
+    const changeUrl = query => {
+        const { orderBy, orderType, page, limit } = query || {};
+
+        const search = new URLSearchParams();
+
+        orderBy ? search.append('orderBy', orderBy) : search.append('orderBy', "id");
+        orderType ? search.append('orderType', orderType) : search.append('orderType', "asc");
+        page ? search.append('page', page) : search.append('page', activePage);
+        limit ? search.append('limit', limit) : search.append('limit', productsPerPage);
+        history.push(location.pathname + search ? `?${search.toString()}` : '');
+	}
+
     function handleClickPage(activePage) {
         setActivePage(activePage);
+        changeUrl({ page: activePage });
     }
 
-    function handleSort(sortColumn) {
-        setSortColumn(sortColumn);
-    }
-    
     useEffect(() => {
-        dispatch(
-            getProducts(
-                activePage,
-                productsPerPage,
-                sortColumn.path,
-                sortColumn.order
-            )
-        );
-    }, [sortColumn, activePage, needToFetch]);
+		dispatch(getProducts(page, limit, orderBy, orderType));
+	}, [location]);
 
     useEffect(() => {
         if(action.targetProduct)
@@ -65,20 +73,14 @@ const Products = (props) => {
                                     <table className="table">
                                         <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
                                             <tr>
-                                                <th scope="col" width="18%"><span onClick={() => handleSort({ path: "id", order: sortColumn.order === "asc" ? "desc" : "asc"})}>ID</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => handleSort({ path: "name", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Name</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => handleSort({ path: "category_id", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Category</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => handleSort({ path: "description", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Description</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => handleSort({ path: "price", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Price</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => handleSort({ path: "discount", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Discount</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => handleSort({ path: "stock_quantity", order: sortColumn.order === "asc" ? "desc" : "asc"})}>Available Quantity</span></th>
+                                                <th scope="col" width="18%"><span onClick={() => changeUrl({ orderBy: 'id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>ID</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'name', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Name</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'category_id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Category</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'description', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Description</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'price', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Price</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'discount', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Discount</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'stock_quantity', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Available Quantity</span></th>
                                                 <th scope="col" width="10%">Action</th>
-
-                                                {/* <th scope="col" width="20%"><span onClick={() => urlChange(1, 'description')}>Description</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => urlChange(1, 'type')}>Type</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => urlChange(1, 'created_by')}>Created By</span></th>
-                                                <th scope="col" width="10%"><span onClick={() => urlChange(1, 'created_at')}>Creation Date</span></th>
-                                                <th scope="col" width="10%">Action</th> */}
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -118,7 +120,7 @@ const Products = (props) => {
                                     <div>
                                         <Pagination
                                             totalItems={productData.metaData.total}
-                                            pageCount={productsPerPage}
+                                            pageCount={limit}
                                             activePage={activePage}
                                             onClickPage={handleClickPage}
                                         />
@@ -129,15 +131,6 @@ const Products = (props) => {
                     </div>
                 </div>
             </div>
-
-            {productData['products'] && productData['products'].length === 0 &&
-                        <><div className="row justify-content-center mt-5 pt-5 mb-3">
-                            <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
-                                <i class="icon icon-team icon-6x text-secondary"></i>
-                                <h3 className="fw-bold text-primary pt-4">Product List is empty.</h3>
-                            </div>
-                        </div></>
-                    }
 
             {action.showDetail && (
                 <ProductModals

@@ -10,7 +10,6 @@ export default function reducer(state = initialState, action) {
         case Types.GET_PRODUCTS_FULFILLED: {
             const productData = {products: action.payload.data.products, metaData: {
                 page: action.payload.data.metaData.page,
-                limit: action.payload.data.metaData.limit,
                 total: action.payload.data.metaData.total,
                 start: action.payload.data.metaData.start,
                 end: action.payload.data.metaData.end
