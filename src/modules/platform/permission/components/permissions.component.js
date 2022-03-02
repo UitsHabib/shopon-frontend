@@ -9,18 +9,39 @@ import Pagination from "./common/pagination.component";
 import PermissionForm from "./permission-form.component";
 import DeleteModal from "./common/delete-modal.component";
 import PermissionDetails from "./permission-details.component";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Permissions = () => {
     const location = useLocation();
-    const history = useHistory();
 
     const dispatch = useDispatch();
 
     const [action, setAction] = useState({});
     const permissionData = useSelector(state => state.permissionReducer.permissionData)
 
-    // const [sorting, setSorting] = useState({ path: "id", order: "asc" });
+    const columns = [
+        { label: "Title", path: "title", sort: true, style: {width: "20%"}, content: (data, path) => <td>{data[path]}</td>},
+        { label: "Description", path: "description", sort: true, style: {width: "30%"}, content: (data, path) => <td>{data[path]}</td>},
+        { label: "Type", path: "type", sort: true, style: {width: "10%"}, content: (data, path) => <td>{data[path]}</td>},
+        { label: "Created Date", path: "created_at", sort: true, style: {width: "15%"}, content: (data) => <td>{(new Date(data.created_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>},
+        { label: "Updated Date", path: "updated_at", style: {width: "15%"}, content: (data) => <td>{(new Date(data.updated_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>},
+        { label: "Action", path: "", style: {width: "10%"}, content: (data) => (
+            <Dropdown className="ms-auto dropdown-customize">
+                <Dropdown.Toggle
+                    variant=""
+                    className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
+                >
+                    <i className="bi bi-chevron-down fa-lg"></i>
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                    <Dropdown.Item onClick={() => setAction({ details: true, permissionId: data.id })} > Details </Dropdown.Item>
+                    <Dropdown.Item onClick={() => setAction({ update: true, permissionId: data.id })} > Edit </Dropdown.Item>
+                    <Dropdown.Item onClick={() => setAction({ deleteWarn: true, permissionId: data.id })}> Delete </Dropdown.Item>
+                </Dropdown.Menu>
+            </Dropdown>
+        )},
+    ]
 
     const handleDelete = () => {
         dispatch(deletePermission(action.permissionId))
@@ -40,28 +61,6 @@ const Permissions = () => {
             })
     };
 
-    const urlChange = (page, orderBy) => {
-        const urlSearchParams = new URLSearchParams(window.location.search);
-        urlSearchParams.set('page', page);
-        urlSearchParams.set('orderBy', orderBy)
-
-        const params = location.search.split('&');
-
-        if(params.find(param => param === "orderType=asc")){
-            urlSearchParams.set('orderType', "desc")
-        } else {
-            urlSearchParams.set('orderType', "asc")
-        }
-
-        const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
-        history.push(url);
-        window.scrollTo(0, 0);
-    }
-
-    const handelPageChange = (searchValue) => {
-        dispatch(getPermissions(searchValue.url));
-    }
-
     useEffect(() => {
         if(location.search) {
             dispatch(getPermissions(location.search))
@@ -69,8 +68,6 @@ const Permissions = () => {
             dispatch(getPermissions())
         }
     }, [action, location])
-
-    console.log(location.search.split('&'))
 
     return (
         <>
@@ -87,52 +84,17 @@ const Permissions = () => {
 
                     {permissionData['permissions'] && permissionData['permissions'].length > 0 &&
                         <div>
-                            <table className="table">
-                                <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
-                                    <tr>
-                                        <th scope="col" width="20%"><span onClick={() => urlChange(1, 'title')}>Title</span></th>
-                                        <th scope="col" width="30%"><span onClick={() => urlChange(1, 'description')}>Description</span></th>
-                                        <th scope="col" width="10%"><span onClick={() => urlChange(1, 'type')}>Type</span></th>
-                                        <th scope="col" width="15%"><span onClick={() => urlChange(1, 'created_at')}>Created Date</span></th>
-                                        <th scope="col" width="15%"><span onClick={() => urlChange(1, 'created_at')}>Updated Date</span></th>
-                                        <th scope="col" width="10%">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {permissionData.permissions.map(row => (
-                                        <tr key={row.id}>
-                                            <td className="text-break">{row.title}</td>
-                                            <td className="text-break">{row.description}</td>
-                                            <td className="text-break">{row.type}</td>
-                                            <td>{(new Date(row.created_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>
-                                            <td>{(new Date(row.updated_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>
-                                            <td data-for="Action">
-                                                <Dropdown className="ms-auto dropdown-customize">
-                                                    <Dropdown.Toggle
-                                                        variant=""
-                                                        className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
-                                                    >
-                                                        <i className="bi bi-chevron-down fa-lg"></i>
-                                                    </Dropdown.Toggle>
-
-                                                    <Dropdown.Menu>
-                                                        <Dropdown.Item onClick={() => setAction({ details: true, permissionId: row.id })} > Details </Dropdown.Item>
-                                                        <Dropdown.Item onClick={() => setAction({ update: true, permissionId: row.id })} > Edit </Dropdown.Item>
-                                                        <Dropdown.Item onClick={() => setAction({ deleteWarn: true, permissionId: row.id })}> Delete </Dropdown.Item>
-                                                    </Dropdown.Menu>
-                                                </Dropdown>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                            <Table 
+                                columns={columns}
+                                items={permissionData.permissions}
+                            />
 
                             <Pagination
                                 start={permissionData.metaData.start}
                                 end={permissionData.metaData.end}
                                 page={permissionData.metaData.page}
                                 total={permissionData.metaData.total}
-                                onPageChange={handelPageChange}
+                                onPageChange={(searchValue) => dispatch(getPermissions(searchValue.url))}
                             />
                         </div>
                     }
@@ -158,7 +120,7 @@ const Permissions = () => {
                     {permissionData['permissions'] && permissionData['permissions'].length === 0 &&
                         <div className="row justify-content-center mt-5 pt-5 mb-3">
                             <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
-                                <i class="icon icon-team icon-6x text-secondary"></i>
+                                <i class="icon icon-team icon-6x text-secondary" />
                                 <h3 className="fw-bold text-primary pt-4">No Permission Found!</h3>
                             </div>
                         </div>
