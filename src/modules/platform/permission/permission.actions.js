@@ -9,14 +9,8 @@ export const getPermissions = (searchParams) => {
     //     + (orderBy ? `&&orderBy=${orderBy}` : "")
     //     + (orderType ? `&&orderType=${orderType}` : "");
 
-    const defaultUrl = `/api/permissions`
-        + "?page=1"
-        + "&&limit=15"
-        + "&&orderBy=title"
-        + "&&orderType=asc";
-
     const url = `/api/permissions`
-        + (searchParams ? searchParams : defaultUrl)
+        + (searchParams ? searchParams : "")
 
     return {
         type: Types.GET_PERMISSIONS,

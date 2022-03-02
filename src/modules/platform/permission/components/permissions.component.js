@@ -9,10 +9,11 @@ import Pagination from "./common/pagination.component";
 import PermissionForm from "./permission-form.component";
 import DeleteModal from "./common/delete-modal.component";
 import PermissionDetails from "./permission-details.component";
-import { useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const Permissions = () => {
     const location = useLocation();
+    const history = useHistory();
 
     const dispatch = useDispatch();
 
@@ -65,7 +66,17 @@ const Permissions = () => {
         if(location.search) {
             dispatch(getPermissions(location.search))
         } else {
-            dispatch(getPermissions())
+            const urlSearchParams = new URLSearchParams(window.location.search);
+
+            urlSearchParams.set('page', 1);
+            urlSearchParams.set('orderBy', "title");
+            urlSearchParams.set("limit", 15);
+            urlSearchParams.set("orderType", "asc");
+
+            const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
+            history.push(url);
+
+            dispatch(getPermissions(url))
         }
     }, [action, location])
 
