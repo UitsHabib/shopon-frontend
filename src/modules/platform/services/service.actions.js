@@ -5,6 +5,8 @@ export const getServices = (searchParams) => {
     const url = `/api/services?`
         + (searchParams ? searchParams : "");
 
+    console.log(searchParams)
+
     return {
         type: Types.GET_SERVICES,
         payload: axios({

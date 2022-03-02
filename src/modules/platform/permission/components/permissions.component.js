@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "react-bootstrap";
 import {toast} from "react-toastify";
@@ -14,7 +14,6 @@ import { getPermissions, deletePermission } from "../permission.actions";
 
 const Permissions = () => {
     const location = useLocation();
-    const history = useHistory();
 
     const dispatch = useDispatch();
 
@@ -69,17 +68,7 @@ const Permissions = () => {
         if(location.search) {
             dispatch(getPermissions(location.search))
         } else {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-
-            urlSearchParams.set('page', 1);
-            urlSearchParams.set('orderBy', "title");
-            urlSearchParams.set("limit", 15);
-            urlSearchParams.set("orderType", "asc");
-
-            const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
-            history.push(url);
-
-            dispatch(getPermissions(url))
+            dispatch(getPermissions())
         }
     }, [action, location])
 

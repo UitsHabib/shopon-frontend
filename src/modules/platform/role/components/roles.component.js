@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useHistory } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
@@ -14,7 +14,6 @@ import RoleDetails from "./role-details.component";
 
 function Roles() {
     const location = useLocation();
-    const history = useHistory();
 
     const dispatch = useDispatch();
 
@@ -67,17 +66,7 @@ function Roles() {
         if(location.search) {
             dispatch(getRoles(location.search));
         } else {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-
-            urlSearchParams.set('page', 1);
-            urlSearchParams.set('orderBy', "title");
-            urlSearchParams.set("limit", 15);
-            urlSearchParams.set("orderType", "asc");
-
-            const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
-            history.push(url);
-
-            dispatch(getRoles(url));
+            dispatch(getRoles());
         }
     }, [action, location]);
 

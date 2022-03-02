@@ -3,12 +3,6 @@ import Types from './permission.types';
 
 
 export const getPermissions = (searchParams) => {
-    // const url = `/api/permissions`
-    //     + (page ? `?page=${page}` : "")
-    //     + (limit ? `&&limit=${limit}` : "")
-    //     + (orderBy ? `&&orderBy=${orderBy}` : "")
-    //     + (orderType ? `&&orderType=${orderType}` : "");
-
     const url = `/api/permissions`
         + (searchParams ? searchParams : "")
 

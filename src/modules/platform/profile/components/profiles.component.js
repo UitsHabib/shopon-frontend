@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
@@ -14,7 +14,6 @@ import ProfileForm from "./profile-form.component";
 
 const Profiles = () => {
 	const location = useLocation();
-	const history = useHistory();
 
 	const dispatch = useDispatch();
 
@@ -75,17 +74,7 @@ const Profiles = () => {
 		if(location.search) {
 			dispatch(getProfiles(location.search));
 		} else {
-			const urlSearchParams = new URLSearchParams(window.location.search);
-
-            urlSearchParams.set('page', 1);
-            urlSearchParams.set('orderBy', "title");
-            urlSearchParams.set("limit", 15);
-            urlSearchParams.set("orderType", "asc");
-
-            const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
-            history.push(url);
-
-			dispatch(getProfiles(url));
+			dispatch(getProfiles());
 		}
 	}, [action, location]);
 

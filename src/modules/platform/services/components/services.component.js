@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Dropdown from "react-bootstrap/Dropdown";
 
@@ -11,14 +11,12 @@ import { useSelector } from "react-redux";
 import ServiceDetails from "./serviceDetails.component";
 
 const Services = () => {
-	const history = useHistory();
     const location = useLocation();
 
 	const dispatch = useDispatch();
 
 	const [action, setAction] = useState({});
     const serviceData = useSelector(state => state.serviceReducer.serviceData);
-    console.log(serviceData)
 
     const columns = [
         { label: "Title", path: "title", sort: true, content: (data, path) => <td>{data[path]}</td> },
@@ -47,17 +45,7 @@ const Services = () => {
         if(location.search) {
             dispatch(getServices(location.search));
         } else {
-            const urlSearchParams = new URLSearchParams(window.location.search);
-
-            urlSearchParams.set('page', 1);
-            urlSearchParams.set('orderBy', "title");
-            urlSearchParams.set("limit", 15);
-            urlSearchParams.set("orderType", "asc");
-
-            const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
-            history.push(url);
-
-            dispatch(getServices(url));
+            dispatch(getServices());
         }
 	}, [action, location]);
 
