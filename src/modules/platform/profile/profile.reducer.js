@@ -1,7 +1,7 @@
 import Types from './profile.types';
 
 const initialState = {
-    profileData: [],
+    profileData: {},
     profile: {},
 };
 

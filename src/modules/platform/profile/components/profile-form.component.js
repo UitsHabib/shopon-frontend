@@ -1,46 +1,48 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { toast } from "react-toastify";
-import { Modal } from "react-bootstrap";
 import { Field, Form, Formik, ErrorMessage } from "formik";
+import { Modal } from "react-bootstrap";
+import { toast } from "react-toastify";
 
-import { createPermission, getPermission, updatePermission } from "../permission.actions";
-import { getServices } from "../../services/service.actions";
-import PermissionSchema from "../permission.schema";
+import { getProfile, updateProfile, createProfile } from "../profile.actions";
+import { permissionActions } from "../../permission";
+import profileSchema from "../profile.schema";
 import CheckboxGroup from "./checkbox-group.component";
 
-const PermissionForm = ({ permissionId, ...rest }) => {
+const ProfileForm = ({ profileId, ...rest }) => {
+    const { getPermissions } = permissionActions
+
     const dispatch = useDispatch();
 
-    const permission = useSelector(state => state.permissionReducer.permission);
-    const serviceData = useSelector(state => state.serviceReducer.serviceData);
+    const profile = useSelector(state => state.profileReducer.profile);
+    const permissionData = useSelector(state => state.permissionReducer.permissionData);
 
     useEffect(() => {
-        if(permissionId) dispatch(getPermission(permissionId));
-    }, [permissionId]);
+        if(profileId) dispatch(getProfile(profileId));
+    }, [profileId]);
 
     useEffect(() => {
-        dispatch(getServices());
+        dispatch(getPermissions());
     }, []);
 
     return (
         <Modal {...rest} size="lg" centered>
             <Modal.Header closeButton>
-                <Modal.Title><h3>{permissionId ? 'Update Permission' : 'Create Permission'}</h3></Modal.Title>
+                <Modal.Title><h3>{profileId ? 'Update Profile' : 'Create Profile'}</h3></Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Formik
                     enableReinitialize
                     initialValues={
                         { 
-                            title: permissionId ? permission.title || '' : '',
-                            description: permissionId ? permission.description || '' : '',
-                            services: permissionId && Array.isArray(permission.permission_services) ? permission.permission_services.map(permission_service => permission_service.service.id) : [],
+                            title: profileId ? profile.title || '' : '',
+                            description: profileId ? profile.description || '' : '',
+                            services: profileId && Array.isArray(profile.profile_permissions) ? profile.profile_permissions.map(profile_permission => profile_permission.permission.id) : [],
                         }
                     }
                     onSubmit={(values, action) => {
-                        if(permissionId) {
-                            dispatch(updatePermission(permissionId, values))
+                        if(profileId) {
+                            dispatch(updateProfile(profileId, values))
                                 .then(res => {
                                     toast.success('Successfuly Updated');
                                     rest.onHide();
@@ -52,7 +54,7 @@ const PermissionForm = ({ permissionId, ...rest }) => {
                                 })
 
                         } else {
-                            dispatch(createPermission(values))
+                            dispatch(createProfile(values))
                                 .then(res => {
                                     toast.success("Successfuly Created");
                                     rest.onHide();
@@ -65,7 +67,7 @@ const PermissionForm = ({ permissionId, ...rest }) => {
                         action.resetForm();
                         action.setSubmitting(false);
                     }}
-                    validationSchema={PermissionSchema}
+                    validationSchema={profileSchema}
                 >
                     {(formikProps) => (
                         <Form onSubmit={formikProps.handleSubmit}>
@@ -92,13 +94,13 @@ const PermissionForm = ({ permissionId, ...rest }) => {
                             </div>
 
                             <label><b>Services </b><span className="text-danger">*</span></label>
-                            <CheckboxGroup name="services" options={serviceData.services} />
+                            <CheckboxGroup name="services" options={permissionData.permissions} />
                             <div className="invalid-feedback d-block mb-3">
                                 <ErrorMessage name="services" />
                             </div>
 
                             <button type="submit" className="btn btn-block text-white btn-secondary mt-4 p-2">
-                                { permissionId ? 'Update' : 'Create' }
+                                { profileId ? 'Update' : 'Create' }
                             </button>
                         </Form>
                     )}
@@ -108,4 +110,4 @@ const PermissionForm = ({ permissionId, ...rest }) => {
     );
 };
 
-export default PermissionForm;
+export default ProfileForm;

@@ -25,23 +25,25 @@ const Permissions = () => {
         { label: "Title", path: "title", sort: true, style: {width: "20%"}, content: (data, path) => <td>{data[path]}</td>},
         { label: "Description", path: "description", sort: true, style: {width: "30%"}, content: (data, path) => <td>{data[path]}</td>},
         { label: "Type", path: "type", sort: true, style: {width: "10%"}, content: (data, path) => <td>{data[path]}</td>},
-        { label: "Created Date", path: "created_at", sort: true, style: {width: "15%"}, content: (data) => <td>{(new Date(data.created_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>},
-        { label: "Updated Date", path: "updated_at", style: {width: "15%"}, content: (data) => <td>{(new Date(data.updated_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td>},
+        { label: "Created Date", path: "created_at", sort: true, style: {width: "15%"}, content: (data) => <td>{(new Date(data.created_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td> },
+        { label: "Updated Date", path: "updated_at", style: {width: "15%"}, content: (data) => <td>{(new Date(data.updated_at)).toLocaleDateString('en-GB').replace(/\//g, '.')}</td> },
         { label: "Action", path: "", style: {width: "10%"}, content: (data) => (
-            <Dropdown className="ms-auto dropdown-customize">
-                <Dropdown.Toggle
-                    variant=""
-                    className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
-                >
-                    <i className="bi bi-chevron-down fa-lg"></i>
-                </Dropdown.Toggle>
+            <td>
+                <Dropdown className="ms-auto dropdown-customize">
+                    <Dropdown.Toggle
+                        variant=""
+                        className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
+                    >
+                        <i className="bi bi-chevron-down fa-lg"></i>
+                    </Dropdown.Toggle>
 
-                <Dropdown.Menu>
-                    <Dropdown.Item onClick={() => setAction({ details: true, permissionId: data.id })} > Details </Dropdown.Item>
-                    <Dropdown.Item onClick={() => setAction({ update: true, permissionId: data.id })} > Edit </Dropdown.Item>
-                    <Dropdown.Item onClick={() => setAction({ deleteWarn: true, permissionId: data.id })}> Delete </Dropdown.Item>
-                </Dropdown.Menu>
-            </Dropdown>
+                    <Dropdown.Menu>
+                        <Dropdown.Item onClick={() => setAction({ details: true, permissionId: data.id })} > Details </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setAction({ update: true, permissionId: data.id })} > Edit </Dropdown.Item>
+                        <Dropdown.Item onClick={() => setAction({ deleteWarn: true, permissionId: data.id })}> Delete </Dropdown.Item>
+                    </Dropdown.Menu>
+                </Dropdown>
+            </td>
         )},
     ]
 
