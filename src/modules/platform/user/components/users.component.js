@@ -4,7 +4,7 @@ import Table from '../../../core/components/table.component';
 import Pagination from '../../../core/components/pagination.component';
 import _ from 'lodash';
 import { Link } from 'react-router-dom';
-import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
+import { useRouteMatch } from 'react-router-dom';
 import { getUsers, deleteUser } from '../user.actions';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { toast } from 'react-toastify';
@@ -25,30 +25,31 @@ const Users = (props) => {
         {
             label: 'Profile ID',
             path: 'profile_id',
-            sorting: true,
+            sort: true,
             content: (profile, detail) => <td>{profile[detail]}</td>,
         },
         {
             label: 'First Name',
             path: 'first_name',
-            sorting: true,
+            sort: true,
             content: (profile, detail) => <td>{profile[detail]}</td>,
         },
         {
             label: 'Last Name',
             path: 'last_name',
-            sorting: true,
+            sort: true,
             content: (profile, detail) => <td>{profile[detail]}</td>,
         },
         {
             label: 'Email',
             path: 'email',
-            sorting: true,
+            sort: true,
             content: (profile, detail) => <td>{profile[detail]}</td>,
         },
         {
             label: 'Phone No.',
             path: 'phone',
+            sort: true,
             content: (profile, detail) => <td>{profile[detail]}</td>,
         },
         {
@@ -111,11 +112,8 @@ const Users = (props) => {
         dispatch(getUsers());
     }, [needToFetchUser]);
 
-    const paginatedUsers = paginateUsers();
-    const userList = sortUsers(paginatedUsers);
-
     return (
-        <div className="container">
+        <div className="container-fluid">
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div></div>
                 <Link to="/platform/users/create" className="btn btn-primary m-2">
@@ -123,8 +121,8 @@ const Users = (props) => {
                 </Link>
             </div>
 
-            <Table users={userList} columns={columns} sortColumns={sortColumn} onSort={handleSort} />
-            <Pagination totalUsers={users.length} pageCount={pageCount} activePage={activePage} onClickPage={handleClickPage} />
+            <Table columns={columns} items={users} />
+            <Pagination />
         </div>
     );
 };

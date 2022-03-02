@@ -1,7 +1,8 @@
 import Types from './service.types';
 
 const initialState = {
-    serviceData: {}
+    serviceData: {},
+    service: {}
 }
 
 export default function reducer(state = initialState, action) {
@@ -10,6 +11,12 @@ export default function reducer(state = initialState, action) {
             return {
                 ...state,
                 serviceData: action.payload.data
+            }
+        }
+        case Types.GET_SERVICE_FULFILLED: {
+            return { 
+                ...state,
+                service: action.payload.data
             }
         }
     } 

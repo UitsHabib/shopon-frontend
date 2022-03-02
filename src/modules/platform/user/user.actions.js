@@ -66,6 +66,7 @@ export function getUser(user_id) {
         withCredentials: true,
     });
 }
+
 export function getRoles() {
     return axios.get(`${baseUrl}/api/roles`, { withCredentials: true });
 }
