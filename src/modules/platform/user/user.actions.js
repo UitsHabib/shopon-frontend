@@ -73,10 +73,20 @@ export function deleteUser(userId) {
     };
 }
 
-export function createUser(user) {
-    return axios.post("http://localhost:5000/api/users", user, {
-        withCredentials: true,
-    });
+// export function createUser(user) {
+//     return axios.post("http://localhost:5000/api/users", user, {
+//         withCredentials: true,
+//     });
+// }
+export function createUser(userInfo) {
+    return {
+        type: Types.CREATE_USER,
+        payload: axios({
+            method: "post",
+            url: `/api/users`,
+            userInfo,
+        })
+    };
 }
 
 export function getUser(user_id) {

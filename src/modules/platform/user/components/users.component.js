@@ -6,7 +6,7 @@ import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import { Link } from "react-router-dom";
 import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
-import { getUsers, deleteUser, getUser } from "../user.actions";
+import { getUsers, deleteUser, getUser, createUser } from "../user.actions";
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";

@@ -1,13 +1,14 @@
 import { SignInSchema } from "../user.schema";
-import { Formik, Field, Form, ErrorMessage } from "formik";
+import { Formik, Field, form, ErrorMessage } from "formik";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { createUser} from "../user.actions";
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from "react-redux";
 import { roleActions } from "../../role";
+import { getProfiles } from "../user.actions";
 
-export default function UserForm({...rest}){
+ const UserForm = ({...rest}) => {
     // console.log(roleActions);
     const dispatch = useDispatch()
     const [apiError, setapiError] = useState(null);
@@ -15,8 +16,9 @@ export default function UserForm({...rest}){
     const [profile, setprofile] = useState([]);
 
     const roles = useSelector(state => state.roleReducer.roleData.roles);
+    const profiles = useSelector(state => state.userReducer.profileData.profiles);
 
-    roles?.map(role=> console.log(role.title));
+    profiles?.map(profile=>console.log(profile))
 
     const handleSubmit = async (values) => {
         console.log('jsdgfyj');
@@ -29,28 +31,25 @@ export default function UserForm({...rest}){
             confirm_password: values.confirmPassword,
             role_id: values.role_id,
         };
-        try {
-            const response = await createUser(newAdmin);
-            // console.log(response);
-            if (response) {
-                toast("User Added Successfully", {
-                    backgroundColor: "#8329C5",
-                    color: "#ffffff",
-                });
-            }
-        } catch (e) {
-            console.log(e.response.data);
-            toast.warn(e.response.data, {
+        dispatch(createUser(newAdmin))
+        .then(response=> {
+            toast("User Added Successfully", {
+                backgroundColor: "#8329C5",
+                color: "#ffffff",
+            });
+        })
+        .catch(err => {
+            toast.warn(err.response.data, {
                 backgroundColor: "#ce0d0d",
                 color: "#ffffff",
             });
             if (
-                e.response.data ===
+                err.response.data ===
                 "Already registered with this email address."
             ) {
-                setapiError(e.response.data);
+                setapiError(err.response.data);
             }
-        }
+        })
     };
 
     // const getRolesFromApi = async () => {
@@ -73,6 +72,7 @@ export default function UserForm({...rest}){
     // };
     useEffect(() => {
         dispatch(roleActions.getRoles());
+        dispatch(getProfiles());
         // getRolesFromApi();
         // getProfilesFromApi();
     }, []);
@@ -98,18 +98,15 @@ export default function UserForm({...rest}){
                                 profile_id: "",
                             }}
                             validationSchema={SignInSchema }
-                            // enableReinitialize={true}
-                            onSubmit={(values) => {
+                            onSubmit={({values,action}) => {
                                 console.log('sdfsd');
+                                action.setSubmitting(false);
                                 handleSubmit(values);
-                                
-                                // props.history.push("/platform/users");
                             }}
-                            validationSchema={SignInSchema}
                         >
-                        {formikProps => {
+                        {(formikProps) => {
                             return (
-                                <Form className="px-4 py-3" onSubmit={formikProps.handleSubmit}>
+                                <form className="px-4 py-3" onSubmit={handleSubmit}>
                                     {/* fname */}
                                     <div className="row g-3">
                                         <div className="col">
@@ -170,7 +167,7 @@ export default function UserForm({...rest}){
                                         </div>
                                     </div>
                                     {/* select profile */}
-                                    {/* <div className="row g-3">
+                                    <div className="row g-3">
                                         <div className="col">
                                             <label
                                                 htmlFor="profile_id"
@@ -188,20 +185,20 @@ export default function UserForm({...rest}){
                                                 <option value="choose">
                                                     Choose...
                                                 </option>
-                                                {profile.map((item) => {
+                                                {profiles?.map((profile) => {
                                                     return (
                                                         <option
-                                                            key={item.id}
-                                                            value={item.id}
+                                                            key={profile.id}
+                                                            value={profile.id}
                                                         >
-                                                            {item.title}
+                                                            {profile.title}
                                                         </option>
                                                     );
                                                 })}
                                             </Field>
                                              <ErrorMessage name="profile_id" />
                                         </div>
-                                    </div>*/}
+                                    </div>
                                     {/* select role */}
                                     <div className="row g-3">
                                         <div className="col">
@@ -278,21 +275,17 @@ export default function UserForm({...rest}){
                                     >
                                         Create
                                     </button>
-                            </Form>
-                          
-
-
+                                </form>
                             );
                         }}
                         </Formik>
                     </div>
 
-                {/* <Modal.Footer>
-                    <button variant="secondary">Close</button>
-                    <button variant="primary">Save changes</button>
-                </Modal.Footer> */}
+            
             </Modal.Body>
         </Modal>
 
     );
 }
+
+export default UserForm;
