@@ -3,48 +3,70 @@ import { useSelector , useDispatch } from "react-redux";
 import { Field, Form, Formik, ErrorMessage } from "formik";
 import { useRouteMatch } from "react-router-dom"; 
 import {toast} from "react-toastify";
+import Modal from 'react-bootstrap/Modal';
 
 import { updateUserSchema } from "../user.schema";
-import { getUser, updateUser,getProfiles } from "../user.actions";
+import { getUser, updateUser, createUser } from "../user.actions";
 import {getRoles} from "../../role/role.actions"
-// import {getProfiles} from "../../profile/profile.actions"
+import {getProfiles} from "../../profile/profile.actions"
 
 const UpdateUser = (props) => {
     const { path } = useRouteMatch();
     const dispatch = useDispatch();
     const userID = props.id;
-    const {setUpdateModal , toggleNeedToFecthUsers} = props;
+    const updateMode = props.updateMode;
+    const {setUpdateModal , toggleNeedToFecthUsers , ...rest} = props;
     
     const [dataImported, setDataImported] = useState(false);
    
     const roles = useSelector((state) => state.roleReducer.roleData.roles);
     const user = useSelector((state) => state.userReducer.user);
-    const profiles = useSelector((state) => state.userReducer?.loggedInUser.profiles);
-    // const profiles = useSelector((state) => state.profileReducer?.profileData.profiles);
+    // const profiles = useSelector((state) => state.userReducer?.loggedInUser.profiles);
+    const profiles = useSelector((state) => state.profileReducer?.profileData?.profiles);
     
-    async function handleUpdateUser(data) {
-        try {
+    function handleUpdateUser(data) {
             const updatedUser = {
                 profile_id: data.profile_id,
                 first_name: data.first_name,
                 last_name : data.last_name,
-                // email  : data.email,
-                password  : data.password,
+                // password  : data.password,
                 role_id   : data.role_id,
             };
-            console.log(updatedUser , data);
-            updateUser( userID , updatedUser );
+            if(!updateMode){
+                updatedUser.email  = data.email;
+                updatedUser.password = data.password; 
+                updatedUser.confirm_password = data.confirm_password;
+            }
             
-            toggleNeedToFecthUsers();
-            toast.success(`User ${user.first_name} ${user.last_name} updated`, 
-            { backgroundColor: '#8329C5', color: '#ffffff', });
-            setUpdateModal({});
-        } catch (error) {
-            toggleNeedToFecthUsers();
+            updateUser( userID , updatedUser );
+            if(updateMode)
+           { dispatch(updateUser( userID , updatedUser ))
+                .then(() => {
+                    toast.success(`User ${user.first_name} ${user.last_name} updated`);
+                    rest.onHide();
+                    toggleNeedToFecthUsers();
+                    setUpdateModal({});
+                })
+                .catch(err => {
+                    const errorMessage = typeof err.response?.data === 'string' ? err.response?.data : err.response?.statusText;
+                    toast.error(errorMessage);
+                    // rest.onHide();
+                    // toggleNeedToFecthUsers();
+                    // setUpdateModal({});
+                });}
+                else {
+                    dispatch(createUser(updatedUser))
+                        .then(() => {
+                            toast.success('Successfuly Created');
+                            rest.onHide();
+                            toggleNeedToFecthUsers();
+                        })
+                        .catch(err => {
+                            const errorMessage = typeof err.response.data === 'string' ? err.response.data : err.response.statusText;
+                            toast.error(errorMessage);
+                        });
+                }
 
-            console.log(error);
-            toast.warning(error.response, { backgroundColor: '#8329C5', color: '#ffffff', })
-        }
     }
  
     useEffect(() => {
@@ -59,28 +81,37 @@ const UpdateUser = (props) => {
     
     return (
         <> 
-            {console.log("profiles" ,profiles , "roles" ,roles , "user", user)}
-            <br />
-            <div className="mx-5 text-center">
-                <h3>Update User</h3>
-            </div>
-            {dataImported && user?.id ===userID && profiles && roles  ? (
+            <Modal 
+            {...rest}
+            size="lg"
+            centered
+        >
+            <Modal.Header closeButton>
+                <Modal.Title>
+                    <div className="mx-5 text-center">
+                        <h3> {updateMode ? "Update" : "Create" } User</h3>
+                    </div>
+                </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+
+            {dataImported &&  user?.id ===userID && profiles && roles  ? (
                 <div className="card bg-light " style={{ margin: "30px auto", maxWidth: "45rem" }}>
                     <Formik
                         initialValues={{
-                            profile_id      : user.profile ? user.profile.id : "",
-                            first_name      : user.first_name,
-                            last_name       : user.last_name,
-                            email           : user.email,
-                            password        : user.password ? user.password : "" ,
-                            confirm_password: user.confirm_password,
-                            role_id         : user.role ? user.role.id : ""
+                            profile_id      : updateMode ? (user.profile ? user.profile.id : "") : "",
+                            first_name      : updateMode ? (user.first_name) : "",
+                            last_name       : updateMode ? ( user.last_name) : "",
+                            email           : updateMode ? (user.email) : "",
+                            password        : updateMode ? "1" : "",
+                            confirm_password: updateMode ? "1" : "",
+                            role_id         : updateMode ? (user.role ? user.role.id : "") : "" 
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
                             handleUpdateUser(values);
-                            console.log(values);
-                            actions.setSubmitting(false);
+                             console.log(values);
+                            actions.setSubmitting(true);
                         }}
                     >
                         {(formikProps) => (
@@ -143,7 +174,7 @@ const UpdateUser = (props) => {
                                         type="email"
                                         id="email"
                                         name="email"
-                                        disabled={true}
+                                        disabled={updateMode}
                                     />
                                     <div className="invalid-feedback d-block">
                                         <ErrorMessage name="email" />
@@ -245,7 +276,7 @@ const UpdateUser = (props) => {
                                     className="btn btn-danger "
                                     style={{ margin: "20px 40% " }}
                                 >
-                                    Update
+                                    { updateMode ? "Update" : "Create"}
                                 </button>
                             </Form>
                         )}
@@ -258,6 +289,8 @@ const UpdateUser = (props) => {
                     </p>
                 </div>
             )}
+            </Modal.Body>
+        </Modal>
         </>
     );
 };

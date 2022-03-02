@@ -267,9 +267,12 @@ const Users = (props) => {
                             close
                         </button>
                         <UpdateUser
+                            show={action.update || false}
+                            onHide={() => setAction({})}
                             id={updateUserId}
                             setUpdateModal={setAction}
                             toggleNeedToFecthUsers={toggleNeedToFecthUsers}
+                            updateMode={true}
                         />
                     </Modal>
                    
@@ -302,10 +305,11 @@ const Users = (props) => {
                         </div>
                     </Modal>
                   
-                    <UserForm
+                    {/* <UpdateUser
                         show={action.create || false}
                         onHide={() => setAction({})}
-                    />
+                        updateMode={false}
+                    /> */}
                     
                     <div className="row">
                     <div className="d-sm-flex justify-content-between align-items-center py-3">
