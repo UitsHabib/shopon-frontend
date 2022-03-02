@@ -46,7 +46,7 @@ const Permissions = () => {
         urlSearchParams.set('orderBy', orderBy)
 
         const params = location.search.split('&');
-        
+
         if(params.find(param => param === "orderType=asc")){
             urlSearchParams.set('orderType', "desc")
         } else {
@@ -93,7 +93,7 @@ const Permissions = () => {
                                         <th scope="col" width="20%"><span onClick={() => urlChange(1, 'title')}>Title</span></th>
                                         <th scope="col" width="30%"><span onClick={() => urlChange(1, 'description')}>Description</span></th>
                                         <th scope="col" width="10%"><span onClick={() => urlChange(1, 'type')}>Type</span></th>
-                                        <th scope="col" width="15%"><span onClick={() => urlChange(1, 'created_by')}>Created Date</span></th>
+                                        <th scope="col" width="15%"><span onClick={() => urlChange(1, 'created_at')}>Created Date</span></th>
                                         <th scope="col" width="15%"><span onClick={() => urlChange(1, 'created_at')}>Updated Date</span></th>
                                         <th scope="col" width="10%">Action</th>
                                     </tr>
