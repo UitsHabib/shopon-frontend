@@ -62,14 +62,3 @@ export const deletePermission = (id) => {
         })
     };
 }
-
-
-export function getAllPermissions () {
-    return {
-        type: Types.GET_PERMISSIONS,
-        payload: axios({
-            method: 'get',
-            url: `/api/permissions`
-        })
-    }
-}

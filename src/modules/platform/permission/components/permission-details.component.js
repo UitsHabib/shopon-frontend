@@ -12,14 +12,10 @@ const PermissionDetails = ({ permissionId, ...rest }) => {
 
     useEffect(() => {
         if(permissionId) dispatch(getPermission(permissionId));
-    }, [dispatch, permissionId]);
+    }, [permissionId]);
 
     return (
-        <Modal 
-            {...rest}
-            size="lg"
-            centered
-        >
+        <Modal size="lg" centered {...rest}>
             <Modal.Header closeButton>
                 <Modal.Title>
                     <h3>Details</h3>

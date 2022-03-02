@@ -19,114 +19,65 @@ const RoleDetails = ({ roleId, ...rest }) => {
     }, [roleId]);
 
     return (
-        <Modal 
-            {...rest}
-            size="lg"
-            centered
-        >
+        <Modal size="lg" centered {...rest}>
             <Modal.Header closeButton>
-                <Modal.Title><h3>{roleId ? 'Update Role' : 'Create Role'}</h3></Modal.Title>
+                <Modal.Title>
+                    <h3>Details</h3>
+                    <p style={{fontSize: "15px"}}>Here is permission details.</p>
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                    <div>
-                        <Formik
-                            initialValues={{
-                                title: roleId ? role.title || '' : '',
-                                description: roleId ? role.description || '' : '',
-                                permissions: roleId && Array.isArray(role.role_permissions) ? role.role_permissions.map(rolePermission => rolePermission.permission.id) : [],
-                            }}
-                            validationSchema={roleCreateSchema}
-                            enableReinitialize={true}
-                            onSubmit={(values, action) => {
-                                if(roleId) {
-                                    dispatch(updateRole(roleId, values))
-                                        .then(res => {
-                                            toast.success('Successfuly Updated');
-                                            rest.onHide();
-                                            action.resetForm();
-                                        })
-                                        .catch(err => {
-                                            const errorMessage = typeof err.response.data === 'string' ? err.response.data : err.response.statusText;
-                                            toast.error(errorMessage);
-                                        });
-                                }
-                                else {
-                                    dispatch(createRole(values))
-                                        .then(res => {
-                                            toast.success('Successfuly Created');
-                                            rest.onHide();
-                                            action.resetForm();
-                                        })
-                                        .catch(err => {
-                                            const errorMessage = typeof err.response.data === 'string' ? err.response.data : err.response.statusText;
-                                            toast.error(errorMessage);
-                                        });
-                                }
-                            }}
-                        >
-                            {formikProps => {
-                                return (
-                                    <Form onSubmit={formikProps.handleSubmit}>
-                                        <div className="row">
-                                            <div className="col-12">
-                                                <div className="form-group">
-                                                    <label htmlFor="title" className="col-form-label" > Title </label> <span className="text-danger">*</span>
-                                                    <Field type="text" className="form-control" id="title" name="title" />
-                                                    <div className="invalid-feedback"><ErrorMessage name="title" /></div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-12">
-                                                <div className="form-group">
-                                                    <label htmlFor="description" className="col-form-label" > Description </label> <span className="text-danger">*</span>
-                                                    <Field type="text" className="form-control" id="description" name="description" component="textarea" />
-                                                    <div className="invalid-feedback"><ErrorMessage name="description" /></div>
-                                                </div>
-                                            </div>
-
-                                            <div className="col-12">
-                                                <div className="row">
-                                                    <div className="form-group">
-                                                        <label className="form-label fw-bold">Select Permissions</label> <span className="text-danger">*</span>
-                                                        {permissionData.permissions?.length ?
-                                                            <div className="row">
-                                                                <ToggleListSlider 
-                                                                    name="permissions" 
-                                                                    options={permissionData.permissions} 
-                                                                    valueExtractor={item => item.id} 
-                                                                    idExtractor={item => item.id} 
-                                                                    labelExtractor={item => item.title} 
-                                                                />
-                                                            </div> :
-                                                            <div>
-                                                                No custom permission set found. 
-                                                                <Link 
-                                                                    className="text-secondary" 
-                                                                    to={{ pathname: "/platform/permissions", state: { showCreateModal: true } }}  
-                                                                > 
-                                                                    Click here to create one.
-                                                                </Link>
-                                                            </div>
-                                                        }
-                                                        <div className="invalid-feedback col-12"><ErrorMessage name="permissionsError" /></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <button type="submit" className="btn btn-block text-white btn-secondary mt-4 p-2">
-                                            { roleId ? 'Update' : 'Create' }
-                                        </button>
-                                    </Form>
-                                );
-                            }}
-                        </Formik>
-                    </div>
-
-                {/* <Modal.Footer>
-                    <button variant="secondary">Close</button>
-                    <button variant="primary">Save changes</button>
-                </Modal.Footer> */}
+                <div>
+                    <label>
+                        <strong>Title:</strong>{" "}
+                        {role.title}
+                        <br />
+                        <br />
+                        <strong>
+                            Description:
+                        </strong>{" "}
+                        {role.description}
+                        <br />
+                        <br />
+                        <strong>Type:</strong>{" "}
+                        {role.type}
+                        <br />
+                        <br />
+                        <strong>Slug:</strong>{" "}
+                        {role.slug}
+                        <br />
+                        <br />
+                        <strong>
+                            Created At:
+                        </strong>{" "}
+                        {role.created_at}
+                        <br />
+                        <br />
+                        <strong>
+                            Updated At:
+                        </strong>{" "}
+                        {role.updated_at}
+                        <br />
+                        <br />
+                        <strong>
+                            Role Permissions:
+                        </strong>
+                        {role?.role_permissions?.map(
+                            (role_permission) => (
+                                <p
+                                    key={role_permission.id}
+                                    style={{
+                                        marginLeft:
+                                            "50px",
+                                    }}
+                                >
+                                    {role_permission.permission.title}
+                                </p>
+                            )
+                        )}
+                        <br />
+                    </label>
+                </div>
             </Modal.Body>
         </Modal>
     );

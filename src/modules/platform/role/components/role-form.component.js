@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { NavLink, Link } from 'react-router-dom';
+import { useEffect } from "react";
+import { Link } from 'react-router-dom';
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,7 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 
 import { createRole, updateRole, getRole } from "../role.actions";
 import ToggleList from "../../../core/components/toggle-list.component";
-import { getAllPermissions } from "../../permission/permission.actions";
+import { getPermissions } from "../../permission/permission.actions";
 import { roleCreateSchema } from "../role.schema";
 
 const ToggleListSlider = (props) => (
@@ -44,7 +44,7 @@ const RoleForm = ({ roleId, ...rest }) => {
     }, [roleId]);
 
     useEffect(() => {
-        dispatch(getAllPermissions());
+        dispatch(getPermissions());
     }, []);
 
     return (

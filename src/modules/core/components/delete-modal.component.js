@@ -1,19 +1,15 @@
 import { Modal } from "react-bootstrap"
 
-const DeleteModal = ({ onClickCancel, onClickDelete, ...rest }) => {
+const DeleteModal = ({ deleteName, onClickDelete, ...rest }) => {
     return (
-        <Modal 
-            {...rest}
-            size="lg"
-            centered
-        >
+        <Modal size="lg" centered {...rest}>
             <Modal.Header closeButton>
                 <Modal.Title>
-                    <h1>Delete Permission</h1>
+                    <h1>Delete {deleteName}</h1>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                <p>Are you sure you want to delete this Permission?</p>
+                <p>Are you sure you want to delete this {deleteName}?</p>
             </Modal.Body>
             <Modal.Footer>
                 <button

@@ -1,12 +1,15 @@
 import Types from './role.types';
 import axios from 'axios';
 
-export function getRoles() {
+export function getRoles(searchParams) {
+    const url = `/api/roles`
+        + (searchParams ? searchParams : "");
+
     return {
         type: Types.GET_ROLES,
         payload: axios({
             method: 'get',
-            url: `/api/roles`
+            url
         })
     };
 }

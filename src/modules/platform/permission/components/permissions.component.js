@@ -82,65 +82,64 @@ const Permissions = () => {
     }, [action, location])
 
     return (
-        <>
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="d-sm-flex justify-content-between align-items-center py-3">
-                        <h4 className="mb-2 mb-sm-0 cdp-text-primary fw-bold mb-0 mb-sm-0 d-flex align-items-end pe-2">
-                            Permission list
-                        </h4>
-                        <button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0" onClick={() => setAction({ create: true })}>
-                            <span className="d-none d-sm-inline-block ps-1">Create new permission</span>
-                        </button>
-                    </div>
-
-                    {permissionData['permissions'] && permissionData['permissions'].length > 0 &&
-                        <div>
-                            <Table 
-                                columns={columns}
-                                items={permissionData.permissions}
-                            />
-
-                            <Pagination
-                                start={permissionData.metaData.start}
-                                end={permissionData.metaData.end}
-                                page={permissionData.metaData.page}
-                                total={permissionData.metaData.total}
-                                onPageChange={(searchValue) => dispatch(getPermissions(searchValue.url))}
-                            />
-                        </div>
-                    }
-
-                    <PermissionDetails
-                        show={action.details}
-                        permissionId={action.permissionId}
-                        onHide={() => setAction({})}
-                    />
-
-                    <PermissionForm 
-                        show={action.create || action.update}
-                        permissionId={action.permissionId} 
-                        onHide={() => setAction({})}
-                    />
-
-                    <DeleteModal 
-                        show={action.deleteWarn}
-                        onClickDelete={handleDelete}
-                        onHide={() => setAction({})}
-                    /> 
-
-                    {permissionData['permissions'] && permissionData['permissions'].length === 0 &&
-                        <div className="row justify-content-center mt-5 pt-5 mb-3">
-                            <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
-                                <i class="icon icon-team icon-6x text-secondary" />
-                                <h3 className="fw-bold text-primary pt-4">No Permission Found!</h3>
-                            </div>
-                        </div>
-                    }
-                    
+        <div className="container-fluid">
+            <div className="row">
+                <div className="d-sm-flex justify-content-between align-items-center py-3">
+                    <h4 className="mb-2 mb-sm-0 cdp-text-primary fw-bold mb-0 mb-sm-0 d-flex align-items-end pe-2">
+                        Permission list
+                    </h4>
+                    <button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0" onClick={() => setAction({ create: true })}>
+                        <span className="d-none d-sm-inline-block ps-1">Create new permission</span>
+                    </button>
                 </div>
+
+                {permissionData['permissions'] && permissionData['permissions'].length > 0 &&
+                    <div>
+                        <Table 
+                            columns={columns}
+                            items={permissionData.permissions}
+                        />
+
+                        <Pagination
+                            start={permissionData.metaData.start}
+                            end={permissionData.metaData.end}
+                            page={permissionData.metaData.page}
+                            total={permissionData.metaData.total}
+                            onPageChange={(searchValue) => dispatch(getPermissions(searchValue.url))}
+                        />
+                    </div>
+                }
+
+                <PermissionDetails
+                    show={action.details}
+                    permissionId={action.permissionId}
+                    onHide={() => setAction({})}
+                />
+
+                <PermissionForm 
+                    show={action.create || action.update}
+                    permissionId={action.permissionId} 
+                    onHide={() => setAction({})}
+                />
+
+                <DeleteModal 
+                    show={action.deleteWarn}
+                    deleteName="Permission"
+                    onClickDelete={handleDelete}
+                    onHide={() => setAction({})}
+                /> 
+
+                {permissionData['permissions'] && permissionData['permissions'].length === 0 &&
+                    <div className="row justify-content-center mt-5 pt-5 mb-3">
+                        <div className="col-12 col-sm-6 py-4 bg-white shadow-sm rounded text-center">
+                            <i class="icon icon-team icon-6x text-secondary" />
+                            <h3 className="fw-bold text-primary pt-4">No Permission Found!</h3>
+                        </div>
+                    </div>
+                }
+                
             </div>
-        </>
+        </div>
     );
 };
 
