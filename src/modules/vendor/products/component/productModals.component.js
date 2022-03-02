@@ -4,13 +4,12 @@ import { toast } from "react-toastify";
 import { deleteProduct } from "../product.actions";
 import ProductForm from "./product-form.component";
 
-export function ProductModals({ type, targetProduct, show, onHide, needToFetch, fetch }) {
+export function ProductModals({ type, targetProduct, show, onHide }) {
     const dispatch = useDispatch();
 
     const handleDeleteDetail = () => {
         dispatch(deleteProduct(targetProduct.id))
             .then((res) => {
-                fetch(!needToFetch);
                 toast.success("Product Has Been Deleted Successfully", {
                     backgroundColor: "#8329C5",
                     color: "#ffffff",
@@ -93,8 +92,6 @@ export function ProductModals({ type, targetProduct, show, onHide, needToFetch, 
                     <ProductForm
                         show={show}
                         onHide={onHide}
-                        needToFetch={needToFetch}
-                        fetch={fetch}
                         productId={targetProduct.id}
                     />
                 </>

@@ -35,7 +35,7 @@ const ToggleListSlider = (props) => (
     </ToggleList>
 );
 
-const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
+const ProductForm = ({ productId, ...rest }) => {
     const dispatch = useDispatch();
 
     const product = useSelector((state) => state.productsReducer.product);
@@ -72,7 +72,6 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                 dispatch(updateProduct(values))
                                     .then((res) => {
                                         toast.success("Successfuly Updated");
-                                        fetch(!needToFetch);
                                         rest.onHide();
                                         action.resetForm();
                                     })
@@ -84,7 +83,6 @@ const ProductForm = ({ productId, needToFetch, fetch, ...rest }) => {
                                 dispatch(addNewProduct(values))
                                     .then((res) => {
                                         toast.success("Successfuly Created");
-                                        fetch(!needToFetch);
                                         rest.onHide();
                                         action.resetForm();
                                     })

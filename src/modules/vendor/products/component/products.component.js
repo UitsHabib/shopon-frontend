@@ -13,7 +13,6 @@ const Products = (props) => {
     const location = useLocation();
 	const dispatch = useDispatch();
 
-    const [needToFetch, setNeedToFetch] = useState(false);
     const [action, setAction] = useState({});
 
     const productData = useSelector((state) => state.productsReducer.productData);
@@ -40,7 +39,7 @@ const Products = (props) => {
 
     useEffect(() => {
 		dispatch(getProducts(page, limit, orderBy, orderType));
-	}, [location, needToFetch]);
+	}, [location, action]);
 
     useEffect(() => {
         if(action.targetProduct)
@@ -54,7 +53,7 @@ const Products = (props) => {
                 <Button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0" onClick={() => setAction({ addNewProduct: true })}>
                     <span className="d-none d-sm-inline-block ps-1">Add New Product</span>
                 </Button>
-                <ProductForm show={action.addNewProduct || action.updateDetail} onHide={() => setAction({})} needToFetch={needToFetch} fetch={setNeedToFetch} />
+                <ProductForm show={action.addNewProduct || action.updateDetail} onHide={() => setAction({})} />
             </div>
             
             <div className="d-flex flex-wrap justify-content-center">
@@ -140,8 +139,6 @@ const Products = (props) => {
                     targetProduct={action.targetProduct}
                     show={action.addNewProduct || action.updateDetail}
                     onHide={() => setAction({})}
-                    needToFetch={needToFetch}
-                    fetch={setNeedToFetch}
                 />
             )}
 
@@ -151,8 +148,6 @@ const Products = (props) => {
                     targetProduct={action.targetProduct}
                     show={action.deleteDetailModal}
                     onHide={() => setAction({})}
-                    needToFetch={needToFetch}
-                    fetch={setNeedToFetch}
                 />
             )}
         </>

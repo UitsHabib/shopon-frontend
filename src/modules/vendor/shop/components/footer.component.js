@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 const Footer = () => {
     return (
         <footer className="footer" id="footer">
@@ -5,6 +7,7 @@ const Footer = () => {
                 <h3 className="col-title">Info</h3>
                 <nav className="col-list">
                     <ul>
+                        <Link to="/sell">Sell</Link>
                         <li>
                             <a href="#">Formats</a>
                         </li>

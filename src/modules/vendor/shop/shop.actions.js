@@ -44,5 +44,12 @@ export function updateShopProfile(updatedShop) {
 }
 
 export function shopRegister(newShop) {
-    return axios.post(`/api/shops`, newShop);
+    return {
+        type: Types.REGISTER_SHOP_PROFILE,
+        payload: axios({
+            method: 'post',
+            url: `/api/shops`,
+            data: newShop,
+        })
+    };
 }
