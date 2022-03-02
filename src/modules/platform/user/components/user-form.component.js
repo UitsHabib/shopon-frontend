@@ -19,6 +19,7 @@ export default function UserForm({...rest}){
     roles?.map(role=> console.log(role.title));
 
     const handleSubmit = async (values) => {
+        console.log('jsdgfyj');
         const newAdmin = {
             profile_id: values.profile_id,
             first_name: values.firstName,
@@ -98,10 +99,10 @@ export default function UserForm({...rest}){
                             }}
                             validationSchema={SignInSchema }
                             // enableReinitialize={true}
-                            onSubmit={(values, { resetForm }) => {
-                                console.log(values);
+                            onSubmit={(values) => {
+                                console.log('sdfsd');
                                 handleSubmit(values);
-                                resetForm();
+                                
                                 // props.history.push("/platform/users");
                             }}
                             validationSchema={SignInSchema}
@@ -220,7 +221,7 @@ export default function UserForm({...rest}){
                                                 <option value="choose">
                                                     Choose...
                                                 </option>
-                                                {role?.map((role) => {
+                                                {roles?.map((role) => {
                                                     return (
                                                         <option
                                                             key={role.id}

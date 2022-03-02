@@ -119,7 +119,7 @@ export function getProfiles() {
 
 export function updateUser(usersID, data) {
     return {
-        type: Types.UPDATE_USERS,
+        type: Types.UPDATE_USER,
         payload: axios({
             method: "patch",
             url: `/api/users/${usersID}`,
