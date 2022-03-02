@@ -1,54 +1,47 @@
-import _ from "lodash";
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
-const Pagination = (props) => {
-  const { totalUsers, pageCount, activePage, onClickPage } = props;
-  const totalPages = Math.ceil(totalUsers/pageCount);
-  const pages = _.range(1, totalPages + 1, 1);
-  if( totalUsers <= pageCount ) return null;
-  return (
-      <div>
-        <nav style={{marginLeft:'40%',marginTop:'5%'}} aria-label="Page navigation example">
-        <ul className="pagination">
-            <li 
-                style={{cursor:'pointer'}}
-                onClick={ () => activePage - 1 >= 1 ? onClickPage(activePage -1) : null } 
-                className="page-item"
-            >
-                <a className="page-link">
-                Previous
-                </a>
-            </li>
-            {
-                pages.map((page) => {
-                    return (
-                        <>
-                            <li 
-                                style={{cursor:'pointer'}} 
-                                onClick={() => onClickPage(page) } 
-                                className={ activePage === page ? "page-item active" : "page-item"}
-                            >
-                                <a className="page-link">
-                                    {page}
-                                </a>
-                            </li>
-                        </>
-                    );
-                    }
-                )
-            }
+export default function Pagination({ start, end, page, total, shouldChangeBrowserUrl = true, shouldScrollToTop = true, onPageChange, disabled }) {
+    const history = useHistory();
+    const location = useLocation();
 
-            <li className="page-item" 
-                style={{cursor:'pointer'}} 
-                onClick={ () => activePage + 1 <= totalPages ? onClickPage(activePage +1) : null }
+    const changePageTo = (page) => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        urlSearchParams.set('page', page);
+
+        const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
+
+        shouldChangeBrowserUrl && history.push(url);
+        shouldScrollToTop && window.scrollTo(0, 0);
+        onPageChange && onPageChange({ url, urlSearchParams });
+    }
+
+    const isPrevDisabled = () => (page <= 1) || disabled;
+    const isNextDisabled = () => (end === total) || disabled;
+
+    return (
+        (end < total || page > 1) &&
+        <div className="pagination justify-content-end align-items-center border-top p-3">
+            <span className="cdp-text-primary fw-bold">{start + ' - ' + end}</span> <span className="text-muted ps-1 pe-2"> {' of ' + total}</span>
+
+            <span className="pagination-btn"
+                onClick={() => !isPrevDisabled() && changePageTo(page - 1)}
+                disabled={isPrevDisabled()}
+                data-testid='Prev'
             >
-                <a className="page-link">
+                <i className="icon icon-arrow-down ms-2 prev"></i>
+                Prev
+            </span>
+
+            <span className="pagination-btn"
+                onClick={() => !isNextDisabled() && changePageTo(page + 1)}
+                disabled={isNextDisabled()}
+                data-testid='Next'
+            >
+                <i className="icon icon-arrow-down ms-2 next"></i>
                 Next
-                </a>
-            </li>
-        </ul>
-        </nav>
-    </div>
-  );
-};
+            </span>
+        </div>
+    )
+}
 
-export default Pagination;

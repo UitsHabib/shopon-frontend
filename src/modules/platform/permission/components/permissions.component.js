@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown } from "react-bootstrap";
 import {toast} from "react-toastify";
 
-import { getPermissions, deletePermission } from "../permission.actions";
-import Table from "./common/table.component";
-import Pagination from "./common/pagination.component";
+import Table from "../../../core/components/table.component";
+import Pagination from "../../../core/components/pagination.component";
+import DeleteModal from "../../../core/components/delete-modal.component";
+
 import PermissionForm from "./permission-form.component";
-import DeleteModal from "./common/delete-modal.component";
 import PermissionDetails from "./permission-details.component";
-import { useHistory, useLocation } from "react-router-dom";
+import { getPermissions, deletePermission } from "../permission.actions";
 
 const Permissions = () => {
     const location = useLocation();

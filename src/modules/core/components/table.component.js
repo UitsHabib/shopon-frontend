@@ -1,21 +1,17 @@
-import TableBody from "./table.body.component";
-import TableHeader from "./table.header.component";
+import TableHead from "./tableHead.component";
+import TableBody from "./tableBody.component";
 
-const Table = (props) => {
-  const { users, columns, sortColumns, onSort } = props;
-   
-  return (
-    <>
-      <table className="container table table-bordered table-hover" >
-        <TableHeader
-          columns={columns}
-          sortColumns={sortColumns}
-          onSort={onSort}
-        />
-        <TableBody users={users} columns={columns} />
-      </table>
-    </>
-  );
-};
-
+const Table = ({ columns, sorting, onClickSort, items }) => {
+    return (
+        <table className="table">
+            <TableHead
+                columns={columns}
+                sorting={sorting}
+                onClickSort={onClickSort}
+            />
+            <TableBody items={items} columns={columns} />
+        </table>
+    );
+}
+ 
 export default Table;
