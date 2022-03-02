@@ -38,7 +38,7 @@ const UpdateUser = (props) => {
             toggleNeedToFecthUsers();
             toast.success(`User ${user.first_name} ${user.last_name} updated`, 
             { backgroundColor: '#8329C5', color: '#ffffff', });
-            setUpdateModal(false);
+            setUpdateModal({});
         } catch (error) {
             toggleNeedToFecthUsers();
 

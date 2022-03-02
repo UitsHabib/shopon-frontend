@@ -80,8 +80,6 @@ export function createUser(user) {
 }
 
 export function getUser(user_id) {
-    // console.log("U ID : ", user_id);
-
     return {
         type: Types.GET_USER,
         payload: axios({

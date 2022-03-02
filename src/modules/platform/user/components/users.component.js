@@ -11,6 +11,7 @@ import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
 import UpdateUser from "./updateUser.component";
+import UserForm from "./user-form.component";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
@@ -26,14 +27,12 @@ const Users = (props) => {
 
     const [activePage, setActivePage] = useState(1);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
-    const [detailsModal, setDetailsModal] = useState(false);
-    const [updateModal, setUpdateModal] = useState(false);
-    const [userDetails, setUserDetails] = useState({});
-    const [userPermissions, setUserPermissions] = useState([]);
     const [showPermission, setShowPermission] = useState(false);
-    const [deleteModal, setDeleteModal] = useState(false);
-    const [deletedUserId, setDeletedUserId] = useState("1");
+    const [userPermissions, setUserPermissions] = useState([]);
     const [updateUserId, setUpdateUserId] = useState();
+    const [deletedUserId, setDeletedUserId] = useState("1");
+    // const [userDetails, setUserDetails] = useState({});
+    const [action, setAction] = useState({});
 
     const modalStyle = {
         content: {
@@ -49,75 +48,76 @@ const Users = (props) => {
         overlay: { zIndex: 1000 },
     };
 
-    const columns = [
-        {
-            label: "Profile ID",
-            path: "profile_id",
-            sorting: true,
-            content: (profile, detail) => <td>{profile[detail]}</td>,
-        },
-        {
-            label: "First Name",
-            path: "first_name",
-            sorting: true,
-            content: (profile, detail) => <td>{profile[detail]}</td>,
-        },
-        {
-            label: "Last Name",
-            path: "last_name",
-            sorting: true,
-            content: (profile, detail) => <td>{profile[detail]}</td>,
-        },
-        {
-            label: "Email",
-            path: "email",
-            sorting: true,
-            content: (profile, detail) => <td>{profile[detail]}</td>,
-        },
-        {
-            label: "Phone No.",
-            path: "phone",
-            content: (profile, detail) => <td>{profile[detail]}</td>,
-        },
-        {
-            label: "Actions",
-            content: (profile, detail) => (
-                <td>
-                    <Dropdown>
-                        <Dropdown.Toggle
-                            variant="secondary"
-                            id="dropdown-basic"
-                        >
-                            <i className="bi bi-pencil-square"></i>
-                        </Dropdown.Toggle>
+    // const columns = [
+    //     {
+    //         label: "Profile ID",
+    //         path: "profile_id",
+    //         sorting: true,
+    //         content: (profile, detail) => <td>{profile[detail]}</td>,
+    //     },
+    //     {
+    //         label: "First Name",
+    //         path: "first_name",
+    //         sorting: true,
+    //         content: (profile, detail) => <td>{profile[detail]}</td>,
+    //     },
+    //     {
+    //         label: "Last Name",
+    //         path: "last_name",
+    //         sorting: true,
+    //         content: (profile, detail) => <td>{profile[detail]}</td>,
+    //     },
+    //     {
+    //         label: "Email",
+    //         path: "email",
+    //         sorting: true,
+    //         content: (profile, detail) => <td>{profile[detail]}</td>,
+    //     },
+    //     {
+    //         label: "Phone No.",
+    //         path: "phone",
+    //         content: (profile, detail) => <td>{profile[detail]}</td>,
+    //     },
+    //     {
+    //         label: "Actions",
+    //         content: (profile, detail) => (
+    //             <td>
+    //                 <Dropdown>
+    //                     <Dropdown.Toggle
+    //                         variant="secondary"
+    //                         id="dropdown-basic"
+    //                     >
+    //                         <i className="bi bi-pencil-square"></i>
+    //                     </Dropdown.Toggle>
 
-                        <Dropdown.Menu>
-                            <Dropdown.Item
-                                onClick={() => handleUpdateModal(profile.id)}
-                            >
-                                Update
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => {
-                                    setDeletedUserId(profile.id);
-                                    setDeleteModal(true);
-                                }}
-                            >
-                                Delete
-                            </Dropdown.Item>
-                            <Dropdown.Item
-                                onClick={() => handleShowDetails(profile.id)}
-                            >
-                                Details
-                            </Dropdown.Item>
-                        </Dropdown.Menu>
-                    </Dropdown>
-                </td>
-            ),
-        },
-    ];
+    //                     <Dropdown.Menu>
+    //                         <Dropdown.Item
+    //                             onClick={() => handleUpdateModal(profile.id)}
+    //                         >
+    //                             Update
+    //                         </Dropdown.Item>
+    //                         <Dropdown.Item
+    //                             onClick={() => {
+    //                                 setDeletedUserId(profile.id);
+    //                                 setDeleteModal(true);
+    //                             }}
+    //                         >
+    //                             Delete
+    //                         </Dropdown.Item>
+    //                         <Dropdown.Item
+    //                             onClick={() => handleShowDetails(profile.id)}
+    //                         >
+    //                             Details
+    //                         </Dropdown.Item>
+    //                     </Dropdown.Menu>
+    //                 </Dropdown>
+    //             </td>
+    //         ),
+    //     },
+    // ];
 
     const users = useSelector((state) => state.userReducer.userData.users);
+    const user = useSelector(state => state.userReducer.user);
     const userMetaData = useSelector(
         (state) => state.userReducer.userData.metaData
     );
@@ -130,27 +130,29 @@ const Users = (props) => {
     const limit = userMetaData?.limit;
     const total = userMetaData?.total;
 
-    const handleSort = (sortColumn) => {
-        setSortColumn(sortColumn);
-        const queryParams = `/?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
+    const handleSort = (sortColumns) => {
+        const queryParams = `?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
         history.push(location.pathname + queryParams || ``);
+        setSortColumn(sortColumns);
+        
     }
 
     const handleClickPage = (activePage) => {
         setActivePage(activePage);
-        const queryParams = `/?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
+        const queryParams = `?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
         history.push(location.pathname + queryParams || ``);
     }
+
     const handleShowDetails = (id) => {
-        setDetailsModal(true);
-        try {
-            getUser(id).then((res) => setUserDetails(res.data));
-        } catch (err) {
-            console.log("err getting user");
-        }
+        // try {
+        //     getUser(id).then((res) => setUserDetails(res.data));
+        // } catch (err) {
+        //     console.log("err getting user");
+        // }
+        dispatch(getUser(id));
     };
+
     const handleUpdateModal = (id) => {
-        setUpdateModal(true);
         try {
             setUpdateUserId(id);
             console.log("uuuupppppppppp");
@@ -174,7 +176,7 @@ const Users = (props) => {
         setNeedToFetchUser(!needToFetchUser);
     };
 
-    async function handleDeleteUser() {
+     function handleDeleteUser() {
         try {
             deleteUser(deletedUserId);
             toast.success(`Successfully deleted`);
@@ -183,39 +185,42 @@ const Users = (props) => {
             alert(`Could not delete User ${deletedUserId}`);
         }
     }
-
+    function urlChange() {
+       
+    }
     useEffect(() => {
         dispatch(getUsers(activePage,pageCount,sortColumn.path,sortColumn.order));
     }, [needToFetchUser, location]);
 
     return (
-        <div className="container">
+        <div className="container-fluid">
             {users ? (
                 <>
+                    
                     <Modal
-                        isOpen={detailsModal}
+                        isOpen={action.details || false}
                         style={modalStyle}
                         contentLabel="Details Modal"
                     >
-                        <button onClick={() => setDetailsModal(false)}>
+                        <button onClick={() => setAction({})}>
                             close
                         </button>
                         <div>
                             <ul>
                                 {
                                     <>
-                                        <li>ID: {userDetails.id}</li>
+                                        <li>ID: {user?.id}</li>
                                         <li>
-                                            First Name: {userDetails.first_name}
+                                            First Name: {user?.first_name}
                                         </li>
                                         <li>
-                                            Last Name: {userDetails.last_name}
+                                            Last Name: {user?.last_name}
                                         </li>
-                                        <li>Email: {userDetails.email}</li>
-                                        <li>Phone No: {userDetails.phone}</li>
+                                        <li>Email: {user?.email}</li>
+                                        <li>Phone No: {user?.phone}</li>
                                         <li>
                                             Profile Slug:{" "}
-                                            {userDetails.profile_id}
+                                            {user?.profile_id}
                                         </li>
                                     </>
                                 }
@@ -224,7 +229,7 @@ const Users = (props) => {
                                 <button
                                     onClick={() => {
                                         handleUserPermission(
-                                            userDetails.profile
+                                            user?.profile
                                                 .profile_permissions[0]
                                                 .permission_id
                                         );
@@ -249,25 +254,27 @@ const Users = (props) => {
                             </div>
                         </div>
                     </Modal>
+                   
                     <Modal
-                        isOpen={updateModal}
+                        isOpen={action.update || false}
                         // style={modalStyle}
                         contentLabel="Update Modal"
                     >
                         <button
-                            onClick={() => setUpdateModal(false)}
+                            onClick={() => setAction({})}
                             style={{ margin: "20px", marginLeft: "85%" }}
                         >
                             close
                         </button>
                         <UpdateUser
                             id={updateUserId}
-                            setUpdateModal={setUpdateModal}
+                            setUpdateModal={setAction}
                             toggleNeedToFecthUsers={toggleNeedToFecthUsers}
                         />
                     </Modal>
+                   
                     <Modal
-                        isOpen={deleteModal}
+                        isOpen={action.delete || false}
                         style={modalStyle}
                         contentLabel="Details Modal"
                     >
@@ -279,7 +286,7 @@ const Users = (props) => {
                                 class="btn btn-warning"
                                 onClick={() => {
                                     handleDeleteUser();
-                                    setDeleteModal(false);
+                                    setAction({});
                                 }}
                                 style={{ marginRight: "10px" }}
                             >
@@ -288,30 +295,82 @@ const Users = (props) => {
                             <button
                                 type="button"
                                 class="btn btn-secondary"
-                                onClick={() => setDeleteModal(false)}
+                                onClick={() => setAction({})}
                             >
                                 No
                             </button>
                         </div>
                     </Modal>
-
-                    <div style={{display: "flex",justifyContent: "space-between"}}>
-                        <div></div>
-                        <Link
-                            to="/platform/users/create"
-                            className="btn btn-primary m-2"
-                        >
-                            Create User{" "}
-                        </Link>
-                    </div>
-
-                    <Table
-                        users={users}
-                        columns={columns}
-                        sortColumns={sortColumn}
-                        onSort={handleSort}
+                  
+                    <UserForm
+                        show={action.create || false}
+                        onHide={() => setAction({})}
                     />
-                    {updateModal ? null : (
+                    
+                    <div className="row">
+                    <div className="d-sm-flex justify-content-between align-items-center py-3">
+                        <h4 className="mb-2 mb-sm-0 cdp-text-primary fw-bold mb-0 mb-sm-0 d-flex align-items-end pe-2">
+                            User List
+                        </h4>
+                        <button className="btn btn-secondary text-white ms-2 mt-2 mt-sm-0">
+                            <span className="d-none d-sm-inline-block ps-1" onClick={()=> setAction({create: true})}>Create User</span>
+                        </button>
+                    </div>
+                    </div>
+                    
+                    <table className="table">
+                    <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
+                        <tr>
+                            <th scope="col" width="12%"><span onClick={() => handleSort({path: 'profile_id', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>Profile ID</span></th>
+                            <th scope="col" width="20%"><span onClick={() => handleSort({path: 'first_name', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>First Name</span></th>
+                            <th scope="col" width="12%"><span onClick={() => handleSort({path: 'last_name', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>Last Name</span></th>
+                            <th scope="col" width="12%"><span onClick={() => handleSort({path: 'email', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>Email</span></th>
+                            <th scope="col" width="10%"><span>Phone</span></th>
+                            <th scope="col" width="10%">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {users.map(user => (
+                            <tr key={user.id}>
+                                <td className="text-break">{user.profile_id}</td>
+                                <td className="text-break">{user.first_name}</td>
+                                <td className="text-break">{user.last_name}</td>
+                                <td className="text-break">{user.email}</td>
+                                <td className="text-break">{user.phone}</td>
+ 
+                                <td data-for="Action">
+                                    <Dropdown className="ms-auto dropdown-customize">
+                                        <Dropdown.Toggle
+                                            variant=""
+                                            className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
+                                        >
+                                            <i className="bi bi-chevron-down fa-lg"></i>
+                                        </Dropdown.Toggle>
+
+                                        <Dropdown.Menu>
+                                            <Dropdown.Item  onClick={() => {
+                                                setAction({details: true});
+                                                handleShowDetails(user.id);
+                                            }} > Details </Dropdown.Item>
+
+                                            <Dropdown.Item onClick={() => {
+                                                handleUpdateModal(user.id)
+                                                setAction({update: true});
+                                            }} > Edit </Dropdown.Item>
+
+                                            <Dropdown.Item  onClick={() => {
+                                                setDeletedUserId(user.id);
+                                                setAction({delete: true});
+                                            }}> Delete </Dropdown.Item>
+                                        </Dropdown.Menu>
+                                    </Dropdown>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                    </table>
+
+                    {action.update ? null : (
                         <Pagination
                             totalUsers={total}
                             pageCount={pageCount}
