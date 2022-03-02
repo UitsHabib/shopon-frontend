@@ -6,6 +6,9 @@ const Footer = () => {
                 <nav className="col-list">
                     <ul>
                         <li>
+                            <a href="/sell">Sell</a>
+                        </li>
+                        <li>
                             <a href="#">Formats</a>
                         </li>
                         <li>
