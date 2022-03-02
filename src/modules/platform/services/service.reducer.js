@@ -7,7 +7,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
     switch (action.type) {
-        case Types.GET_SERVICES_FULFILLED: {
+        case Types.GET_SERVICES_FULFILLED: { 
             return {
                 ...state,
                 serviceData: action.payload.data
