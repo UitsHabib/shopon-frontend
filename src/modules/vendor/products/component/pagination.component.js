@@ -1,52 +1,44 @@
-import _ from "lodash";
+import React from 'react';
+import { useHistory, useLocation } from 'react-router-dom';
 
-const Pagination = ({ totalItems, pageCount, activePage, onClickPage }) => {
-    
-    const totalPages = Math.ceil(totalItems / pageCount);
-    const pages = _.range(1, totalPages + 1, 1);
+export default function Pagination({ start, end, page, total, shouldChangeBrowserUrl = true, shouldScrollToTop = true, onPageChange, disabled }) {
+    const history = useHistory();
+    const location = useLocation();
 
-    if (totalItems <= pageCount) return null;
+    const changePageTo = (page) => {
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        urlSearchParams.set('page', page);
+
+        const url = location.pathname + urlSearchParams ? `?${urlSearchParams.toString()}` : '';
+
+        shouldChangeBrowserUrl && history.push(url);
+        shouldScrollToTop && window.scrollTo(0, 0);
+        onPageChange && onPageChange({ url, urlSearchParams });
+    }
+
+    const isPrevDisabled = () => (page <= 1) || disabled;
+    const isNextDisabled = () => (end === total) || disabled;
 
     return (
-        <nav aria-label="Page navigation example">
-            <ul className="pagination">
-                <li
-                    onClick={() =>
-                        activePage - 1 >= 1 ? onClickPage(activePage - 1) : null
-                    }
-                    className="page-item"
-                >
-                    <a className="page-link">Previous</a>
-                </li>
-                {pages.map((page, index) => {
-                    return (
-                        <li
-                            key={index}
-                            onClick={() => onClickPage(page)}
-                            className={
-                                page === activePage
-                                    ? "page-item active"
-                                    : "page-item"
-                            }
-                        >
-                            <a className="page-link">{page}</a>
-                        </li>
-                    );
-                })}
+        (end < total || page > 1) &&
+        <div className="pagination justify-content-end align-items-center border-top p-3">
+            <span className="cdp-text-primary fw-bold">{start + ' - ' + end}</span> <span className="text-muted ps-1 pe-2"> {' of ' + total}</span>
 
-                <li
-                    onClick={() =>
-                        activePage + 1 <= totalPages
-                            ? onClickPage(activePage + 1)
-                            : null
-                    }
-                    className="page-item"
-                >
-                    <a className="page-link">Next</a>
-                </li>
-            </ul>
-        </nav>
-    );
-};
+            <span className="pagination-btn"
+                onClick={() => !isPrevDisabled() && changePageTo(page - 1)}
+                disabled={isPrevDisabled()}
+                data-testid='Prev'
+            >
+                <i className="icon icon-arrow-down ms-2 prev"></i>
+            </span>
 
-export default Pagination;
+            <span className="pagination-btn"
+                onClick={() => !isNextDisabled() && changePageTo(page + 1)}
+                disabled={isNextDisabled()}
+                data-testid='Next'
+            >
+                <i className="icon icon-arrow-down ms-2 next"></i>
+            </span>
+        </div>
+    )
+}

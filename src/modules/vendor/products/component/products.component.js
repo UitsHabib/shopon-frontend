@@ -13,17 +13,14 @@ const Products = (props) => {
     const location = useLocation();
 	const dispatch = useDispatch();
 
-    const [activePage, setActivePage] = useState(1);
     const [needToFetch, setNeedToFetch] = useState(false);
     const [action, setAction] = useState({});
 
     const productData = useSelector((state) => state.productsReducer.productData);
 
-    const productsPerPage = 5;
-
     const query = new URLSearchParams(location.search);
-	const page = query.get('page') || activePage;
-	const limit = query.get('limit') || productsPerPage;
+	const page = query.get('page') || 1;
+	const limit = query.get('limit') || 5;
 	const orderBy = query.get('orderBy') || 'id';
 	const orderType = query.get('orderType') || 'asc';
 
@@ -33,21 +30,17 @@ const Products = (props) => {
 
         const search = new URLSearchParams();
 
-        orderBy ? search.append('orderBy', orderBy) : search.append('orderBy', "id");
-        orderType ? search.append('orderType', orderType) : search.append('orderType', "asc");
-        page ? search.append('page', page) : search.append('page', activePage);
-        limit ? search.append('limit', limit) : search.append('limit', productsPerPage);
+        orderBy && search.append('orderBy', orderBy);
+        orderType && search.append('orderType', orderType);
+        page && search.append('page', page);
+        limit && search.append('limit', limit);
+
         history.push(location.pathname + search ? `?${search.toString()}` : '');
 	}
 
-    function handleClickPage(activePage) {
-        setActivePage(activePage);
-        changeUrl({ page: activePage });
-    }
-
     useEffect(() => {
 		dispatch(getProducts(page, limit, orderBy, orderType));
-	}, [location]);
+	}, [location, needToFetch]);
 
     useEffect(() => {
         if(action.targetProduct)
@@ -73,13 +66,13 @@ const Products = (props) => {
                                     <table className="table">
                                         <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
                                             <tr>
-                                                <th scope="col" width="18%"><span onClick={() => changeUrl({ orderBy: 'id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>ID</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'name', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Name</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'category_id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Category</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'description', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Description</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'price', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Price</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'discount', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Discount</span></th>
-                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'stock_quantity', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Available Quantity</span></th>
+                                                <th scope="col" width="18%"><span onClick={() => changeUrl({ page, limit, orderBy: 'id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>ID</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ page, limit, orderBy: 'name', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Name</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ page, limit, orderBy: 'category_id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Category</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ page, limit, orderBy: 'description', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Description</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ page, limit, orderBy: 'price', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Price</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ page, limit, orderBy: 'discount', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Discount</span></th>
+                                                <th scope="col" width="12%"><span onClick={() => changeUrl({ page, limit, orderBy: 'stock_quantity', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Available Quantity</span></th>
                                                 <th scope="col" width="10%">Action</th>
                                             </tr>
                                         </thead>
@@ -118,12 +111,12 @@ const Products = (props) => {
                                     </table>
 
                                     <div>
-                                        <Pagination
-                                            totalItems={productData.metaData.total}
-                                            pageCount={limit}
-                                            activePage={activePage}
-                                            onClickPage={handleClickPage}
-                                        />
+                                    <Pagination
+                                        start={productData.metaData.start}
+                                        end={productData.metaData.end}
+                                        page={productData.metaData.page}
+                                        total={productData.metaData.total}
+                                    />
                                     </div>
                                 </div>
                             </React.Fragment>
