@@ -1,258 +1,290 @@
-import { SignInSchema } from "../user.schema";
-import { Formik, Field, form, ErrorMessage } from "formik";
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import { createUser } from "../user.actions";
+import { useEffect, useState } from "react";
+import { useSelector , useDispatch } from "react-redux";
+import { Field, Form, Formik, ErrorMessage } from "formik";
+import {toast} from "react-toastify";
 import Modal from 'react-bootstrap/Modal';
-import { useDispatch, useSelector } from "react-redux";
-import { roleActions } from "../../role";
-import { getProfiles } from "../user.actions";
 
- const UserForm = ({...rest}) => {
+import { updateUserSchema } from "../user.schema";
+import { getUser, updateUser, createUser } from "../user.actions";
+import {getRoles} from "../../role/role.actions"
+import {getProfiles} from "../../profile/profile.actions"
+
+const UserForm = (props) => {
+    const dispatch = useDispatch();
+    const userID = props.id;
+    const updating = props.updating === "true" ? true : false;
+    const {resetAction , toggleNeedToFecthUsers , ...rest} = props;
     
-    const dispatch = useDispatch()
+    const [dataImported, setDataImported] = useState(false);
+   
+    const roles = useSelector((state) => state.roleReducer.roleData.roles);
+    const user = useSelector((state) => state.userReducer.user);
+    const profiles = useSelector((state) => state.profileReducer?.profileData?.profiles);
+    
+    function handleUpdateUser(data) {
+            const updatedUser = {
+                profile_id: data.profile_id,
+                first_name: data.first_name,
+                last_name : data.last_name,
+                role_id   : data.role_id,
+            };
+            if(!updating){
+                updatedUser.email  = data.email;
+                updatedUser.password = data.password; 
+                updatedUser.confirm_password = data.confirm_password;
+            }
 
-    const roles = useSelector(state => state.roleReducer.roleData.roles);
-    const profiles = useSelector(state => state.userReducer.profileData.profiles);
-
-    // roles?.map(role=> console.log(role.title));
-
-    const handleSubmit = (values) => {
-        console.log(values);
-        const newAdmin = {
-            profile_id: values.profile_id,
-            first_name: values.firstName,
-            last_name: values.lastName,
-            email: values.email,
-            password: values.password,
-            confirm_password: values.confirmPassword,
-            role_id: values.role_id,
-        };
-        dispatch(createUser(newAdmin))
-        .then(response=> {
-            toast("User Added Successfully", {
-                backgroundColor: "#8329C5",
-                color: "#ffffff",
-            });
-            rest.onHide();
-            
-        })
-        .catch(err => {
-            toast.warn(err.response.data, {
-                backgroundColor: "#ce0d0d",
-                color: "#ffffff",
-            });
-        })
-    };
-
+            if(updating){ 
+                dispatch(updateUser( userID , updatedUser ))
+                    .then(() => {
+                        toast.success(`User ${user.first_name} ${user.last_name} updated`);
+                        rest.onHide();
+                        toggleNeedToFecthUsers();
+                        resetAction({});
+                    })
+                    .catch(err => {
+                        const errorMessage = typeof err.response?.data === 'string' ? err.response?.data : err.response?.statusText;
+                        toast.error(errorMessage);
+                    });}
+                else {
+                    dispatch(createUser(updatedUser))
+                        .then(() => {
+                            toast.success('Successfuly Created');
+                            rest.onHide();
+                            toggleNeedToFecthUsers();
+                            resetAction({});
+                        })
+                        .catch(err => {
+                            const errorMessage = typeof err.response.data === 'string' ? err.response.data : err.response.statusText;
+                            toast.error(errorMessage);
+                        });
+                }
+    }
+ 
     useEffect(() => {
-        dispatch(roleActions.getRoles());
-        dispatch(getProfiles());
-    }, []);
-    return(
-        <Modal 
+            dispatch(getProfiles()); 
+            dispatch(getRoles());
+            if(userID)
+                dispatch(getUser(userID));
+            
+            if(!dataImported)
+                setDataImported(true);   
+    }, [dataImported , dispatch , userID]);
+    
+    
+    return (
+        <> 
+            <Modal 
             {...rest}
             size="lg"
             centered
         >
             <Modal.Header closeButton>
-                <Modal.Title><h3>Create User</h3></Modal.Title>
+                <Modal.Title>
+                    <div className="mx-5 text-center">
+                        <h3> {updating ? "Update" : "Create" } User</h3>
+                    </div>
+                </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-                    <div>
-                        <Formik
-                            initialValues={{
-                                email: "",
-                                password: "",
-                                firstName: "",
-                                lastName: "",
-                                confirmPassword: "",
-                                role_id: "",
-                                profile_id: "",
-                            }}
-                            validationSchema={SignInSchema }
-                            onSubmit={(values,action) => {
-                                action.setSubmitting(false);
-                                handleSubmit(values);
-                            }}
-                        >
-                        {(formikProps) => {
-                            return (
-                                <form className="px-4 py-3" onSubmit={formikProps.handleSubmit}>
-                                    {/* fname */}
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="firstName"
-                                                className="col-form-label"
-                                            >
-                                                First Name <span style={{'color':'red'}}> *</span>
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                className="form-control"
-                                                id="firstName"
-                                                name="firstName"
-                                            />
-                                            <ErrorMessage name="firstName" />
-                                        </div>
-                                    </div>
-                                    {/* lname */}
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="lastName"
-                                                className="col-form-label"
-                                            >
-                                                Last Name <span style={{'color':'red'}}> *</span>
-                                            </label>
-                                            <Field
-                                                type="text"
-                                                className="form-control"
-                                                id="lastName"
-                                                name="lastName"
-                                            />
-                                             <ErrorMessage name="lastName" />
-                                        </div>
-                                    </div>
-                                    {/* email */}
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="email"
-                                                className="col-form-label"
-                                            >
-                                                Email <span style={{'color':'red'}}> *</span>
-                                            </label>
-                                            <Field
-                                                type="email"
-                                                className="form-control"
-                                                id="email"
-                                                name="email"
-                                            />
-                                             <ErrorMessage name="email" />
-                                        </div>
-                                    </div>
-                                    {/* select profile */}
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="profile_id"
-                                                className="col-form-label"
-                                            >
-                                                Select Profile <span style={{'color':'red'}}> *</span>
-                                            </label>
-                                            <Field
-                                                type="select"
-                                                id="profile_id"
-                                                name="profile_id"
-                                                className="form-select"
-                                                as="select"
-                                            >
-                                                <option value="choose">
-                                                    Choose...
-                                                </option>
-                                                {profiles?.map((profile) => {
-                                                    return (
-                                                        <option
-                                                            key={profile.id}
-                                                            value={profile.id}
-                                                        >
-                                                            {profile.title}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </Field>
-                                             <ErrorMessage name="profile_id" />
-                                        </div>
-                                    </div>
-                                    {/* select role */}
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="role_id"
-                                                className="col-form-label"
-                                            >
-                                                Select Role
-                                            </label>
-                                            <Field
-                                                type="select"
-                                                id="role_id"
-                                                name="role_id"
-                                                className="form-select"
-                                                as="select"
-                                            >
-                                                <option value="choose">
-                                                    Choose...
-                                                </option>
-                                                {roles?.map((role) => {
-                                                    return (
-                                                        <option
-                                                            key={role.id}
-                                                            value={role.id}
-                                                        >
-                                                            {role.title}
-                                                        </option>
-                                                    );
-                                                })}
-                                            </Field>
-                                             <ErrorMessage name="role_id" />
-                                        </div>
-                                    </div>
-                                    {/* pass */}
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="password"
-                                                className="col-form-label"
-                                            >
-                                                Password <span style={{'color':'red'}}> *</span>
-                                            </label>
-                                            <Field
-                                                type="password"
-                                                className="form-control"
-                                                id="password"
-                                                name="password"
-                                            />
-                                            <ErrorMessage name="password" />
-                                        </div>
-                                    </div>
-                                     {/* cpassword */}           
-                                    <div className="row g-3">
-                                        <div className="col">
-                                            <label
-                                                htmlFor="confirmPassword"
-                                                className="col-form-label"
-                                            >
-                                                Confirm Password <span style={{'color':'red'}}> *</span>
-                                            </label>
-                                            <Field
-                                                type="password"
-                                                className="form-control"
-                                                id="confirmPassword"
-                                                name="confirmPassword"
-                                                values=""
-                                            />
-                                            <ErrorMessage name="confirmPassword" />
-                                        </div>
-                                    </div>
-                                    <button
-                                        className="btn btn-primary"
-                                        type="submit"
-                                    >
-                                        Create
-                                    </button>
-                                </form>
-                            );
-                        }}
-                        </Formik>
-                    </div>
-
             
+            {dataImported && (updating ? userID===user?.id : true) ? (
+                <div className="card bg-light " style={{ margin: "30px auto", maxWidth: "45rem" }}>
+                    <Formik
+                        initialValues={{
+                            profile_id      : updating ? (user?.profile ? user?.profile.id : "") : "",
+                            first_name      : updating ? (user?.first_name) : "",
+                            last_name       : updating ? (user?.last_name) : "",
+                            email           : updating ? (user?.email) : "",
+                            password        : updating ? "1" : "",
+                            confirm_password: updating ? "1" : "",
+                            role_id         : updating ? (user?.role ? user.role.id : "") : "" 
+                        }}
+                        validationSchema={updateUserSchema}
+                        onSubmit={(values, actions) => {
+                            handleUpdateUser(values);
+                            actions.setSubmitting(true);
+                        }}
+                    >
+                        {(formikProps) => (
+                            <Form
+                                onSubmit={formikProps.handleSubmit}
+                                className="px-4 py-3"
+                            >
+                                
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
+                                        htmlFor="first_name"
+                                    >
+                                        First Name
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        type="text"
+                                        id="first_name"
+                                        name="first_name"
+                                    />
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="first_name" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
+                                        htmlFor="last_name"
+                                    >
+                                        Last Name
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        type="text"
+                                        id="last_name"
+                                        name="last_name"
+                                    />
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="last_name" />
+                                    </div>
+                                </div>
+
+                                <div
+                                    className="form-group"
+                                >
+                                    <label
+                                        className="form-label"
+                                        htmlFor="email"
+                                    >
+                                        Email
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field 
+                                        
+                                        className="form-control"
+                                        type="email"
+                                        id="email"
+                                        name="email"
+                                        disabled={updating}
+                                    />
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="email" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
+                                        htmlFor="password"
+                                    >
+                                        Password
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        type="password"
+                                        id="password"
+                                        name="password"
+                                    />
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="password" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
+                                        htmlFor="confirm_password"
+                                    >
+                                        Confirm Password
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        type="confirm_password"
+                                        id="confirm_password"
+                                        name="confirm_password"
+                                    />
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="confirm_password" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
+                                        htmlFor="profile_id"
+                                    >
+                                        Select Profile
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        as="select"
+                                        id="profile_id"
+                                        name="profile_id"            
+                                    >
+                                        <option value={""} disabled={true}> Select a Profile </option>
+                                        {
+                                            profiles ?
+                                            profiles.map((profile , index)=>  <option key={index} value={profile.id} >{profile.title}</option>)
+                                            : ""
+                                        }
+                                    </Field>
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="profile_id" />
+                                    </div>
+                                </div>
+
+                                <div className="form-group">
+                                    <label
+                                        className="form-label"
+                                        htmlFor="role_id"
+                                    >
+                                        Select Role
+                                        <span className="text-danger">*</span>
+                                    </label>
+                                    <Field
+                                        className="form-control"
+                                        as="select"
+                                        id="role_id"
+                                        name="role_id"
+                                    >
+                                         <option value={""} disabled={true}> Select a Role </option>
+                                        {
+                                            roles ?
+                                            roles.map((role , index)=>  <option key={index} value={role.id} >{role.title}</option>)
+                                            : ""
+                                        }
+                                    </Field>
+                                    <div className="invalid-feedback d-block">
+                                        <ErrorMessage name="role_id" />
+                                    </div>
+                                </div>
+
+                                <button
+                                    type="submit"
+                                    className="btn btn-danger "
+                                    style={{ margin: "20px 40% " }}
+                                >
+                                    { updating ? "Update" : "Create"}
+                                </button>
+                            </Form>
+                        )}
+                    </Formik>
+                </div>
+            ) : (
+                <div className="mx-auto text-center w-50">
+                    <p className="text-white bg-dark text-xl font-weight-bold">
+                        User Not Found!
+                    </p>
+                </div>
+            )}
             </Modal.Body>
         </Modal>
-
+        </>
     );
-}
+};
 
 export default UserForm;

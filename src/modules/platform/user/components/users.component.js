@@ -3,17 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 
 import Pagination from "../../../core/components/pagination.component";
-import { Link } from "react-router-dom";
-import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
-import { getUsers, deleteUser, getUser, createUser } from "../user.actions";
+import { useHistory, useLocation } from "react-router-dom";
+import { getUsers, deleteUser, getUser } from "../user.actions";
 import { getPermission } from "../../permission/permission.actions";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
-import UpdateUser from "./updateUser.component";
 import UserForm from "./user-form.component";
 
 const Users = (props) => {
-    const { path } = useRouteMatch();
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -26,7 +23,6 @@ const Users = (props) => {
     const [userPermissions, setUserPermissions] = useState([]);
     const [updateUserId, setUpdateUserId] = useState();
     const [deletedUserId, setDeletedUserId] = useState("1");
-    // const [userDetails, setUserDetails] = useState({});
     const [action, setAction] = useState({});
 
     const modalStyle = {
@@ -56,10 +52,7 @@ const Users = (props) => {
         if (user.phone === null) user.phone = "--";
     });
 
-    const page = userMetaData?.page;
-    const limit = userMetaData?.limit;
     const total = userMetaData?.total;
-
 
     const handleClickPage = (activePage) => {
         setActivePage(activePage);
@@ -68,7 +61,6 @@ const Users = (props) => {
     }
 
     const handleShowDetails = (id) => {
-        console.log('-------------------')
         getUser(id);
     }
     
@@ -97,20 +89,17 @@ const Users = (props) => {
 
      function handleDeleteUser() {
             dispatch(deleteUser(deletedUserId))
-            .then(() => {
-                toast.success(`Successfully deleted`);              
-                setNeedToFetchUser(!needToFetchUser);
-             })
+                .then(() => {
+                    toast.success(`Successfully deleted`);              
+                    setNeedToFetchUser(!needToFetchUser);
+                })
             .catch(err => {
                 const errorMessage = typeof err.response?.data === 'string' ? err.response?.data : err.response?.statusText;
                 toast.error(errorMessage);
                 console.log("errrrrrrrrrrrr " , err );
-                // alert(`Could not delete User ${deletedUserId}`);
             });
     }
     const query = new URLSearchParams(location.search);
-	// const page = query.get('page');
-	// const limit = query.get('limit');
 	const orderBy = query.get('orderBy');
 	const orderType = query.get('orderType');
 	const changeUrl = query => {
@@ -205,7 +194,7 @@ const Users = (props) => {
                         >
                             close
                         </button>
-                        <UpdateUser
+                        <UserForm
                             show={action.update || action.create || false}
                             onHide={() => setAction({})}
                             id={ action.update? updateUserId : null}
@@ -287,7 +276,6 @@ const Users = (props) => {
                                         <Dropdown.Menu>
                                             <Dropdown.Item  onClick={() => {
                                                 setAction({details: true});
-                                                console.log('ssssssssssssssssssssssssssssssssssssssss')
                                                 handleShowDetails(user.id);
                                             }} > Details </Dropdown.Item>
 
@@ -317,7 +305,7 @@ const Users = (props) => {
                         />
                     )}
                 </>
-            ) : null}{" "}
+            ) : null}
         </div>
     );
 };

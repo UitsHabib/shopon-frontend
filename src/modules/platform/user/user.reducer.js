@@ -25,7 +25,6 @@ export default function reducer(state = initialState, action) {
         }
         
         case Types.GET_USER_FULFILLED: {
-            console.log("in fulfilled :  ",action.payload.data);
             return {
                 ...state,
                 user: action.payload.data,
