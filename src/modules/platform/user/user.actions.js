@@ -7,7 +7,6 @@ export function getSignedInUserProfile() {
         payload: axios({
             method: 'get',
             url: `/api/users/profile`,
-            withCredentials: "true",
         })
     };
 }
@@ -49,8 +48,9 @@ export function getUsers(page, limit, orderBy, orderType) {
 }
 
 export function deleteUser(userId) {
+    console.log(userId);
     return {
-        type: Types.UPDATE_USERS,
+        type: Types.DELETE_USER,
         payload: axios({
             method: "delete",
             url: `/api/users/${userId}`
@@ -78,7 +78,6 @@ export function getUser(user_id) {
         payload: axios({
             method: "get",
             url: `api/users/${user_id}`,
-            withCredentials: "true",
         }),
     };
 }
