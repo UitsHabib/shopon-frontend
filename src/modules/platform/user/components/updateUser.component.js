@@ -14,7 +14,7 @@ const UpdateUser = (props) => {
     const { path } = useRouteMatch();
     const dispatch = useDispatch();
     const userID = props.id;
-    const updateMode = props.updateMode;
+    const updating = props.updating;
     const {setUpdateModal , toggleNeedToFecthUsers , ...rest} = props;
     
     const [dataImported, setDataImported] = useState(false);
@@ -32,14 +32,13 @@ const UpdateUser = (props) => {
                 // password  : data.password,
                 role_id   : data.role_id,
             };
-            if(!updateMode){
+            if(!updating){
                 updatedUser.email  = data.email;
                 updatedUser.password = data.password; 
                 updatedUser.confirm_password = data.confirm_password;
             }
-            
-            updateUser( userID , updatedUser );
-            if(updateMode)
+
+            if(updating)
            { dispatch(updateUser( userID , updatedUser ))
                 .then(() => {
                     toast.success(`User ${user.first_name} ${user.last_name} updated`);
@@ -60,6 +59,7 @@ const UpdateUser = (props) => {
                             toast.success('Successfuly Created');
                             rest.onHide();
                             toggleNeedToFecthUsers();
+                            setUpdateModal({});
                         })
                         .catch(err => {
                             const errorMessage = typeof err.response.data === 'string' ? err.response.data : err.response.statusText;
@@ -89,23 +89,24 @@ const UpdateUser = (props) => {
             <Modal.Header closeButton>
                 <Modal.Title>
                     <div className="mx-5 text-center">
-                        <h3> {updateMode ? "Update" : "Create" } User</h3>
+                        <h3> {updating ? "Update" : "Create" } User</h3>
                     </div>
                 </Modal.Title>
             </Modal.Header>
             <Modal.Body>
 
-            {dataImported &&  user?.id ===userID && profiles && roles  ? (
+            {/* {dataImported &&  user?.id ===userID && profiles && roles  ? ( */}
+            {dataImported && (updating ? userID===user?.id : true) ? (
                 <div className="card bg-light " style={{ margin: "30px auto", maxWidth: "45rem" }}>
                     <Formik
                         initialValues={{
-                            profile_id      : updateMode ? (user.profile ? user.profile.id : "") : "",
-                            first_name      : updateMode ? (user.first_name) : "",
-                            last_name       : updateMode ? ( user.last_name) : "",
-                            email           : updateMode ? (user.email) : "",
-                            password        : updateMode ? "1" : "",
-                            confirm_password: updateMode ? "1" : "",
-                            role_id         : updateMode ? (user.role ? user.role.id : "") : "" 
+                            profile_id      : updating ? (user?.profile ? user?.profile.id : "") : "",
+                            first_name      : updating ? (user?.first_name) : "",
+                            last_name       : updating ? (user?.last_name) : "",
+                            email           : updating ? (user?.email) : "",
+                            password        : updating ? "1" : "",
+                            confirm_password: updating ? "1" : "",
+                            role_id         : updating ? (user?.role ? user.role.id : "") : "" 
                         }}
                         validationSchema={updateUserSchema}
                         onSubmit={(values, actions) => {
@@ -174,7 +175,7 @@ const UpdateUser = (props) => {
                                         type="email"
                                         id="email"
                                         name="email"
-                                        disabled={updateMode}
+                                        disabled={updating}
                                     />
                                     <div className="invalid-feedback d-block">
                                         <ErrorMessage name="email" />
@@ -276,7 +277,7 @@ const UpdateUser = (props) => {
                                     className="btn btn-danger "
                                     style={{ margin: "20px 40% " }}
                                 >
-                                    { updateMode ? "Update" : "Create"}
+                                    { updating ? "Update" : "Create"}
                                 </button>
                             </Form>
                         )}

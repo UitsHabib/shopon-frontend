@@ -256,7 +256,7 @@ const Users = (props) => {
                     </Modal>
                    
                     <Modal
-                        isOpen={action.update || false}
+                        isOpen={action.update || action.create || false}
                         // style={modalStyle}
                         contentLabel="Update Modal"
                     >
@@ -267,12 +267,12 @@ const Users = (props) => {
                             close
                         </button>
                         <UpdateUser
-                            show={action.update || false}
+                            show={action.update || action.create || false}
                             onHide={() => setAction({})}
-                            id={updateUserId}
+                            id={ action.update? updateUserId : null}
                             setUpdateModal={setAction}
                             toggleNeedToFecthUsers={toggleNeedToFecthUsers}
-                            updateMode={true}
+                            updating={action.update ? true : false}
                         />
                     </Modal>
                    
