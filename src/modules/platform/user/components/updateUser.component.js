@@ -11,17 +11,15 @@ import {getRoles} from "../../role/role.actions"
 import {getProfiles} from "../../profile/profile.actions"
 
 const UpdateUser = (props) => {
-    const { path } = useRouteMatch();
     const dispatch = useDispatch();
     const userID = props.id;
-    const updating = props.updating;
-    const {setUpdateModal , toggleNeedToFecthUsers , ...rest} = props;
+    const updating = props.updating === "true" ? true : false;
+    const {resetAction , toggleNeedToFecthUsers , ...rest} = props;
     
     const [dataImported, setDataImported] = useState(false);
    
     const roles = useSelector((state) => state.roleReducer.roleData.roles);
     const user = useSelector((state) => state.userReducer.user);
-    // const profiles = useSelector((state) => state.userReducer?.loggedInUser.profiles);
     const profiles = useSelector((state) => state.profileReducer?.profileData?.profiles);
     
     function handleUpdateUser(data) {
@@ -29,7 +27,6 @@ const UpdateUser = (props) => {
                 profile_id: data.profile_id,
                 first_name: data.first_name,
                 last_name : data.last_name,
-                // password  : data.password,
                 role_id   : data.role_id,
             };
             if(!updating){
@@ -38,28 +35,25 @@ const UpdateUser = (props) => {
                 updatedUser.confirm_password = data.confirm_password;
             }
 
-            if(updating)
-           { dispatch(updateUser( userID , updatedUser ))
-                .then(() => {
-                    toast.success(`User ${user.first_name} ${user.last_name} updated`);
-                    rest.onHide();
-                    toggleNeedToFecthUsers();
-                    setUpdateModal({});
-                })
-                .catch(err => {
-                    const errorMessage = typeof err.response?.data === 'string' ? err.response?.data : err.response?.statusText;
-                    toast.error(errorMessage);
-                    // rest.onHide();
-                    // toggleNeedToFecthUsers();
-                    // setUpdateModal({});
-                });}
+            if(updating){ 
+                dispatch(updateUser( userID , updatedUser ))
+                    .then(() => {
+                        toast.success(`User ${user.first_name} ${user.last_name} updated`);
+                        rest.onHide();
+                        toggleNeedToFecthUsers();
+                        resetAction({});
+                    })
+                    .catch(err => {
+                        const errorMessage = typeof err.response?.data === 'string' ? err.response?.data : err.response?.statusText;
+                        toast.error(errorMessage);
+                    });}
                 else {
                     dispatch(createUser(updatedUser))
                         .then(() => {
                             toast.success('Successfuly Created');
                             rest.onHide();
                             toggleNeedToFecthUsers();
-                            setUpdateModal({});
+                            resetAction({});
                         })
                         .catch(err => {
                             const errorMessage = typeof err.response.data === 'string' ? err.response.data : err.response.statusText;
@@ -72,7 +66,8 @@ const UpdateUser = (props) => {
     useEffect(() => {
             dispatch(getProfiles()); 
             dispatch(getRoles());
-            dispatch(getUser(userID));
+            if(userID)
+                dispatch(getUser(userID));
             
             if(!dataImported)
                 setDataImported(true);   
@@ -286,7 +281,7 @@ const UpdateUser = (props) => {
             ) : (
                 <div className="mx-auto text-center w-50">
                     <p className="text-white bg-dark text-xl font-weight-bold">
-                        User Not Found! {userID}
+                        User Not Found!
                     </p>
                 </div>
             )}

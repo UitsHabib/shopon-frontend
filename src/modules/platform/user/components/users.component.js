@@ -48,74 +48,6 @@ const Users = (props) => {
         overlay: { zIndex: 1000 },
     };
 
-    // const columns = [
-    //     {
-    //         label: "Profile ID",
-    //         path: "profile_id",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "First Name",
-    //         path: "first_name",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Last Name",
-    //         path: "last_name",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Email",
-    //         path: "email",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Phone No.",
-    //         path: "phone",
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Actions",
-    //         content: (profile, detail) => (
-    //             <td>
-    //                 <Dropdown>
-    //                     <Dropdown.Toggle
-    //                         variant="secondary"
-    //                         id="dropdown-basic"
-    //                     >
-    //                         <i className="bi bi-pencil-square"></i>
-    //                     </Dropdown.Toggle>
-
-    //                     <Dropdown.Menu>
-    //                         <Dropdown.Item
-    //                             onClick={() => handleUpdateModal(profile.id)}
-    //                         >
-    //                             Update
-    //                         </Dropdown.Item>
-    //                         <Dropdown.Item
-    //                             onClick={() => {
-    //                                 setDeletedUserId(profile.id);
-    //                                 setDeleteModal(true);
-    //                             }}
-    //                         >
-    //                             Delete
-    //                         </Dropdown.Item>
-    //                         <Dropdown.Item
-    //                             onClick={() => handleShowDetails(profile.id)}
-    //                         >
-    //                             Details
-    //                         </Dropdown.Item>
-    //                     </Dropdown.Menu>
-    //                 </Dropdown>
-    //             </td>
-    //         ),
-    //     },
-    // ];
-
     const users = useSelector((state) => state.userReducer.userData.users);
     const user = useSelector(state => state.userReducer.user);
     const userMetaData = useSelector(
@@ -257,7 +189,6 @@ const Users = (props) => {
                    
                     <Modal
                         isOpen={action.update || action.create || false}
-                        // style={modalStyle}
                         contentLabel="Update Modal"
                     >
                         <button
@@ -270,9 +201,9 @@ const Users = (props) => {
                             show={action.update || action.create || false}
                             onHide={() => setAction({})}
                             id={ action.update? updateUserId : null}
-                            setUpdateModal={setAction}
+                            resetAction={setAction}
                             toggleNeedToFecthUsers={toggleNeedToFecthUsers}
-                            updating={action.update ? true : false}
+                            updating={action.update ? "true" : "false"}
                         />
                     </Modal>
                    
@@ -304,12 +235,6 @@ const Users = (props) => {
                             </button>
                         </div>
                     </Modal>
-                  
-                    {/* <UpdateUser
-                        show={action.create || false}
-                        onHide={() => setAction({})}
-                        updateMode={false}
-                    /> */}
                     
                     <div className="row">
                     <div className="d-sm-flex justify-content-between align-items-center py-3">
