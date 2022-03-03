@@ -1,8 +1,6 @@
 import axios from "axios";
 import Types from "./user.types";
 
-// const baseUrl = "http://localhost:5000";
-
 export function getSignedInUserProfile() {
     return {
         type: Types.GET_PROFILE,
@@ -35,15 +33,6 @@ export function logout() {
     };
 }
 
-// export function getUsers() {
-//     return {
-//         type: Types.GET_USERS,
-//         payload: axios({
-//             method: "get",
-//             url: `/api/users`,
-//         })
-//     };
-// }
 
 export function getUsers(page, limit, orderBy, orderType) {
 
@@ -52,7 +41,6 @@ export function getUsers(page, limit, orderBy, orderType) {
     + (orderBy ? `&orderBy=${orderBy}` : "") 
     + (orderType ? `&orderType=${orderType}` : "");
 
-    console.log(url);
     return {
         type: Types.GET_USERS,
         payload: axios({
@@ -73,18 +61,14 @@ export function deleteUser(userId) {
     };
 }
 
-// export function createUser(user) {
-//     return axios.post("http://localhost:5000/api/users", user, {
-//         withCredentials: true,
-//     });
-// }
 export function createUser(userInfo) {
+    console.log(userInfo);
     return {
         type: Types.CREATE_USER,
         payload: axios({
             method: "post",
             url: `/api/users`,
-            userInfo,
+            userInfo
         })
     };
 }
@@ -95,7 +79,6 @@ export function getUser(user_id) {
         payload: axios({
             method: "get",
             url: `api/users/${user_id}`,
-            withCredentials: "true",
         }),
     };
 }

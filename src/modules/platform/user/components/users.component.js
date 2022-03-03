@@ -20,10 +20,6 @@ const Users = (props) => {
     const dispatch = useDispatch();
 
     const pageCount = 2;
-    const [sortColumn, setSortColumn] = useState({
-        path: "first_name",
-        order: "asc",
-    });
 
     const [activePage, setActivePage] = useState(1);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
@@ -48,76 +44,11 @@ const Users = (props) => {
         overlay: { zIndex: 1000 },
     };
 
-    // const columns = [
-    //     {
-    //         label: "Profile ID",
-    //         path: "profile_id",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "First Name",
-    //         path: "first_name",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Last Name",
-    //         path: "last_name",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Email",
-    //         path: "email",
-    //         sorting: true,
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Phone No.",
-    //         path: "phone",
-    //         content: (profile, detail) => <td>{profile[detail]}</td>,
-    //     },
-    //     {
-    //         label: "Actions",
-    //         content: (profile, detail) => (
-    //             <td>
-    //                 <Dropdown>
-    //                     <Dropdown.Toggle
-    //                         variant="secondary"
-    //                         id="dropdown-basic"
-    //                     >
-    //                         <i className="bi bi-pencil-square"></i>
-    //                     </Dropdown.Toggle>
-
-    //                     <Dropdown.Menu>
-    //                         <Dropdown.Item
-    //                             onClick={() => handleUpdateModal(profile.id)}
-    //                         >
-    //                             Update
-    //                         </Dropdown.Item>
-    //                         <Dropdown.Item
-    //                             onClick={() => {
-    //                                 setDeletedUserId(profile.id);
-    //                                 setDeleteModal(true);
-    //                             }}
-    //                         >
-    //                             Delete
-    //                         </Dropdown.Item>
-    //                         <Dropdown.Item
-    //                             onClick={() => handleShowDetails(profile.id)}
-    //                         >
-    //                             Details
-    //                         </Dropdown.Item>
-    //                     </Dropdown.Menu>
-    //                 </Dropdown>
-    //             </td>
-    //         ),
-    //     },
-    // ];
 
     const users = useSelector((state) => state.userReducer.userData.users);
+
     const user = useSelector(state => state.userReducer.user);
+    
     const userMetaData = useSelector(
         (state) => state.userReducer.userData.metaData
     );
@@ -130,34 +61,23 @@ const Users = (props) => {
     const limit = userMetaData?.limit;
     const total = userMetaData?.total;
 
-    const handleSort = (sortColumns) => {
-        const queryParams = `?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
-        history.push(location.pathname + queryParams || ``);
-        setSortColumn(sortColumns);
-        
-    }
 
     const handleClickPage = (activePage) => {
         setActivePage(activePage);
-        const queryParams = `?page=${activePage}&limit=${pageCount}&orderBy=${sortColumn.path}&orderType=${sortColumn.order}`;
+        const queryParams = `?page=${activePage}&orderBy=${orderBy}&orderType=${orderType}`;
         history.push(location.pathname + queryParams || ``);
     }
 
     const handleShowDetails = (id) => {
-        // try {
-        //     getUser(id).then((res) => setUserDetails(res.data));
-        // } catch (err) {
-        //     console.log("err getting user");
-        // }
-        dispatch(getUser(id));
-    };
+        console.log('-------------------')
+        getUser(id);
+    }
+    
 
     const handleUpdateModal = (id) => {
         try {
             setUpdateUserId(id);
-            console.log("uuuupppppppppp");
         } catch (err) {
-            console.log("err updating");
         }
         toggleNeedToFecthUsers();
     };
@@ -165,7 +85,7 @@ const Users = (props) => {
     const handleUserPermission = (id) => {
         try {
             getPermission(id).then((res) => {
-                setUserPermissions(res.data.permission_services);
+            setUserPermissions(res.data.permission_services);
             });
         } catch (err) {
             console.log("err getting user permission");
@@ -185,11 +105,26 @@ const Users = (props) => {
             alert(`Could not delete User ${deletedUserId}`);
         }
     }
-    function urlChange() {
-       
-    }
+    const query = new URLSearchParams(location.search);
+	// const page = query.get('page');
+	// const limit = query.get('limit');
+	const orderBy = query.get('orderBy');
+	const orderType = query.get('orderType');
+	const changeUrl = query => {
+        const { orderBy, orderType } = query || {};
+
+        const search = new URLSearchParams();
+
+        activePage && search.append('page', activePage);
+        orderBy && search.append('orderBy', orderBy);
+        orderType && search.append('orderType', orderType);
+        
+
+        history.push(location.pathname + search ? `?${search.toString()}` : '');
+	}
+
     useEffect(() => {
-        dispatch(getUsers(activePage,pageCount,sortColumn.path,sortColumn.order));
+        dispatch(getUsers(activePage,pageCount,orderBy,orderType));
     }, [needToFetchUser, location]);
 
     return (
@@ -222,6 +157,8 @@ const Users = (props) => {
                                             Profile Slug:{" "}
                                             {user?.profile_id}
                                         </li>
+                                        <h2>Permissions</h2>
+
                                     </>
                                 }
                             </ul>
@@ -321,10 +258,10 @@ const Users = (props) => {
                     <table className="table">
                     <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
                         <tr>
-                            <th scope="col" width="12%"><span onClick={() => handleSort({path: 'profile_id', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>Profile ID</span></th>
-                            <th scope="col" width="20%"><span onClick={() => handleSort({path: 'first_name', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>First Name</span></th>
-                            <th scope="col" width="12%"><span onClick={() => handleSort({path: 'last_name', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>Last Name</span></th>
-                            <th scope="col" width="12%"><span onClick={() => handleSort({path: 'email', order: sortColumn.path == 'asc' ? 'desc' : 'asc'})}>Email</span></th>
+                            <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'profile_id', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Profile ID</span></th>
+                            <th scope="col" width="20%"><span onClick={() => changeUrl({ orderBy: 'first_name', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>First Name</span></th>
+                            <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'last_name', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Last Name</span></th>
+                            <th scope="col" width="12%"><span onClick={() => changeUrl({ orderBy: 'email', orderType: orderType === undefined || orderType === 'desc' ? 'asc' : 'desc' })}>Email</span></th>
                             <th scope="col" width="10%"><span>Phone</span></th>
                             <th scope="col" width="10%">Action</th>
                         </tr>
@@ -350,6 +287,7 @@ const Users = (props) => {
                                         <Dropdown.Menu>
                                             <Dropdown.Item  onClick={() => {
                                                 setAction({details: true});
+                                                console.log('ssssssssssssssssssssssssssssssssssssssss')
                                                 handleShowDetails(user.id);
                                             }} > Details </Dropdown.Item>
 

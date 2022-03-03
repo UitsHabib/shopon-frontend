@@ -2,26 +2,22 @@ import { SignInSchema } from "../user.schema";
 import { Formik, Field, form, ErrorMessage } from "formik";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { createUser} from "../user.actions";
+import { createUser } from "../user.actions";
 import Modal from 'react-bootstrap/Modal';
 import { useDispatch, useSelector } from "react-redux";
 import { roleActions } from "../../role";
 import { getProfiles } from "../user.actions";
 
  const UserForm = ({...rest}) => {
-    // console.log(roleActions);
+    
     const dispatch = useDispatch()
-    const [apiError, setapiError] = useState(null);
-    const [role, setrole] = useState([]);
-    const [profile, setprofile] = useState([]);
 
     const roles = useSelector(state => state.roleReducer.roleData.roles);
     const profiles = useSelector(state => state.userReducer.profileData.profiles);
 
-    profiles?.map(profile=>console.log(profile))
 
-    const handleSubmit = async (values) => {
-        console.log('jsdgfyj');
+    const handleSubmit = (values) => {
+        console.log(values);
         const newAdmin = {
             profile_id: values.profile_id,
             first_name: values.firstName,
@@ -37,44 +33,20 @@ import { getProfiles } from "../user.actions";
                 backgroundColor: "#8329C5",
                 color: "#ffffff",
             });
+            rest.onHide();
+            
         })
         .catch(err => {
             toast.warn(err.response.data, {
                 backgroundColor: "#ce0d0d",
                 color: "#ffffff",
             });
-            if (
-                err.response.data ===
-                "Already registered with this email address."
-            ) {
-                setapiError(err.response.data);
-            }
         })
     };
 
-    // const getRolesFromApi = async () => {
-    //     try {
-    //         const response = await getRoles();
-    //         console.log(response.data);
-    //         setrole(response.data.roles);
-    //     } catch (e) {
-    //         console.log(e.response.data);
-    //     }
-    // };
-    // const getProfilesFromApi = async () => {
-    //     try {
-    //         const response = await getProfiles();
-    //         console.log(response.data);
-    //         setprofile(response.data.profiles);
-    //     } catch (e) {
-    //         console.log(e.response.data);
-    //     }
-    // };
     useEffect(() => {
         dispatch(roleActions.getRoles());
         dispatch(getProfiles());
-        // getRolesFromApi();
-        // getProfilesFromApi();
     }, []);
     return(
         <Modal 
@@ -98,15 +70,14 @@ import { getProfiles } from "../user.actions";
                                 profile_id: "",
                             }}
                             validationSchema={SignInSchema }
-                            onSubmit={({values,action}) => {
-                                console.log('sdfsd');
+                            onSubmit={(values,action) => {
                                 action.setSubmitting(false);
                                 handleSubmit(values);
                             }}
                         >
                         {(formikProps) => {
                             return (
-                                <form className="px-4 py-3" onSubmit={handleSubmit}>
+                                <form className="px-4 py-3" onSubmit={formikProps.handleSubmit}>
                                     {/* fname */}
                                     <div className="row g-3">
                                         <div className="col">
@@ -159,11 +130,6 @@ import { getProfiles } from "../user.actions";
                                                 name="email"
                                             />
                                              <ErrorMessage name="email" />
-                                            {apiError ? (
-                                                <div className="invalid-feedback d-block">
-                                                    {apiError}
-                                                </div>
-                                            ) : null}
                                         </div>
                                     </div>
                                     {/* select profile */}
@@ -270,7 +236,7 @@ import { getProfiles } from "../user.actions";
                                         </div>
                                     </div>
                                     <button
-                                        className="btn btn-primary m-2"
+                                        className="btn btn-primary"
                                         type="submit"
                                     >
                                         Create
