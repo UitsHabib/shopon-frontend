@@ -16,3 +16,12 @@ export const getServices = (page, limit, orderBy, orderType) => {
         })
     }
 }
+export const getService = (id) => {
+    return {
+        type: Types.GET_SERVICE,
+        payload: axios({
+            method: "get",
+            url: `/api/services/${id}`
+        })
+    }
+}

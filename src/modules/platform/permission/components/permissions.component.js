@@ -28,7 +28,7 @@ const Permissions = () => {
     const changeUrl = ({ page, path }) => {
         const search = new URLSearchParams();
         
-        search.append('page', page);
+        page && search.append('page', page);
         search.append('limit', limit);
         path && search.append('orderBy', path);
 
