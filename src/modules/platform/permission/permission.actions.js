@@ -2,15 +2,12 @@ import axios from "axios";
 import Types from './permission.types';
 
 
-export const getPermissions = (searchParams) => {
-    // const url = `/api/permissions`
-    //     + (page ? `?page=${page}` : "")
-    //     + (limit ? `&&limit=${limit}` : "")
-    //     + (orderBy ? `&&orderBy=${orderBy}` : "")
-    //     + (orderType ? `&&orderType=${orderType}` : "");
-
+export const getPermissions = (page, limit, orderBy, orderType) => {
     const url = `/api/permissions`
-        + (searchParams ? searchParams : "")
+        + (page ? `?page=${page}` : "1")
+        + (limit ? `&&limit=${limit}` : "")
+        + (orderBy ? `&&orderBy=${orderBy}` : "")
+        + (orderType ? `&&orderType=${orderType}` : "");
 
     return {
         type: Types.GET_PERMISSIONS,
