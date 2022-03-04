@@ -74,6 +74,7 @@ export function createUser(userInfo) {
 }
 
 export function getUser(user_id) {
+    console.log('in get user function');
     return {
         type: Types.GET_USER,
         payload: axios({

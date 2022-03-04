@@ -2,16 +2,16 @@ import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 
-import Table from "../../../core/components/table.component";
 import Pagination from "../../../core/components/pagination.component";
 import { Link } from "react-router-dom";
 import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { getUsers, deleteUser, getUser, createUser } from "../user.actions";
-import { getPermission } from "../../permission/permission.actions";
+import permissionActions from "../../permission";
 import Dropdown from "react-bootstrap/Dropdown";
 import { toast } from "react-toastify";
 import UpdateUser from "./updateUser.component";
 import UserForm from "./user-form.component";
+// import { getPermission } from "../../permission/permission.actions";
 
 const Users = (props) => {
     const { path } = useRouteMatch();
@@ -23,11 +23,8 @@ const Users = (props) => {
 
     const [activePage, setActivePage] = useState(1);
     const [needToFetchUser, setNeedToFetchUser] = useState(true);
-    const [showPermission, setShowPermission] = useState(false);
-    const [userPermissions, setUserPermissions] = useState([]);
     const [updateUserId, setUpdateUserId] = useState();
     const [deletedUserId, setDeletedUserId] = useState("1");
-    // const [userDetails, setUserDetails] = useState({});
     const [action, setAction] = useState({});
 
     const modalStyle = {
@@ -69,8 +66,7 @@ const Users = (props) => {
     }
 
     const handleShowDetails = (id) => {
-        console.log('-------------------')
-        getUser(id);
+        dispatch(getUser(id));
     }
     
 
@@ -80,16 +76,6 @@ const Users = (props) => {
         } catch (err) {
         }
         toggleNeedToFecthUsers();
-    };
-
-    const handleUserPermission = (id) => {
-        try {
-            getPermission(id).then((res) => {
-            setUserPermissions(res.data.permission_services);
-            });
-        } catch (err) {
-            console.log("err getting user permission");
-        }
     };
 
     const toggleNeedToFecthUsers = () => {
@@ -162,33 +148,7 @@ const Users = (props) => {
                                     </>
                                 }
                             </ul>
-                            <div>
-                                <button
-                                    onClick={() => {
-                                        handleUserPermission(
-                                            user?.profile
-                                                .profile_permissions[0]
-                                                .permission_id
-                                        );
-                                        setShowPermission(!showPermission);
-                                    }}
-                                >
-                                    {showPermission === false
-                                        ? "Show Permissions"
-                                        : "Close"}
-                                </button>
-                                {showPermission === true ? (
-                                    <ul>
-                                        {userPermissions.map((permission) => {
-                                            return (
-                                                <li key={permission.service.id}>
-                                                    {permission.service.title}
-                                                </li>
-                                            );
-                                        })}
-                                    </ul>
-                                ) : null}
-                            </div>
+                           
                         </div>
                     </Modal>
                    
@@ -287,7 +247,6 @@ const Users = (props) => {
                                         <Dropdown.Menu>
                                             <Dropdown.Item  onClick={() => {
                                                 setAction({details: true});
-                                                console.log('ssssssssssssssssssssssssssssssssssssssss')
                                                 handleShowDetails(user.id);
                                             }} > Details </Dropdown.Item>
 
