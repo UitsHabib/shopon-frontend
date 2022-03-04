@@ -2,7 +2,9 @@ import Types from "./user.types";
 
 const initialState = {
     loggedInUser: null,
-    users: []
+    userData: [],
+    user: {},
+    profileData:[],
 };
 
 export default function reducer(state = initialState, action) {
@@ -12,13 +14,26 @@ export default function reducer(state = initialState, action) {
             const loggedInUser = action.payload.data;
             return {
                 ...state,
-                loggedInUser
+                loggedInUser,
             };
         }
         case Types.GET_USERS_FULFILLED: {
+             return {
+                ...state,
+                userData: action.payload.data,
+            };
+        }
+        
+        case Types.GET_USER_FULFILLED: {
             return {
                 ...state,
-                users: action.payload.data.users
+                user: action.payload.data,
+            };
+        }
+        case Types.GET_PROFILES_FULFILLED: {
+            return {
+                ...state,
+                profileData: action.payload.data,
             };
         }
     }

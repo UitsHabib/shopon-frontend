@@ -4,7 +4,7 @@ const Pagination = (props) => {
   const { totalUsers, pageCount, activePage, onClickPage } = props;
   const totalPages = Math.ceil(totalUsers/pageCount);
   const pages = _.range(1, totalPages + 1, 1);
-  if( totalUsers <= pageCount ) return null;
+//   if( totalUsers <= pageCount ) return null;
   return (
       <div>
         <nav style={{marginLeft:'40%',marginTop:'5%'}} aria-label="Page navigation example">
@@ -26,6 +26,7 @@ const Pagination = (props) => {
                                 style={{cursor:'pointer'}} 
                                 onClick={() => onClickPage(page) } 
                                 className={ activePage === page ? "page-item active" : "page-item"}
+                                key={page}
                             >
                                 <a className="page-link">
                                     {page}

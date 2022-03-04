@@ -7,7 +7,7 @@ const TableBody = ({ users: rows, columns }) => {
         <tbody>
             {
                 rows.map(row => (
-                    <tr>
+                    <tr key={row.path}>
                         {
                            columns.map( column =>{
                                return column.content(row,column.path);
