@@ -1,20 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Dropdown from "react-bootstrap/Dropdown";
-import { Link } from "react-router-dom";
 import { useHistory, useRouteMatch, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
+import Modal from "react-modal";
 
 import Pagination from "../../../core/components/pagination.component";
 import { getUsers, deleteUser, getUser, createUser } from "../user.actions";
-import UpdateUser from "./updateUser.component";
 import UserForm from "./user-form.component";
 import UserDetails from './detailes-modal.component';
 import DeleteModal from './delete-modal.component';
-import { permissionActions } from "../../permission";
 
 const Users = (props) => {
-    const { path } = useRouteMatch();
     const history = useHistory();
     const location = useLocation();
     const dispatch = useDispatch();
@@ -96,6 +93,26 @@ const Users = (props) => {
                         </div>
                     </div>
                     
+                    <Modal
+                        isOpen={action.update || action.create || false}
+                        contentLabel="Update Modal"
+                    >
+                        <button
+                            onClick={() => setAction({})}
+                            style={{ margin: "20px", marginLeft: "85%" }}
+                        >
+                            close
+                        </button>
+                        <UserForm
+                            show={action.update || action.create || false}
+                            onHide={() => setAction({})}
+                            id={ action.update? updateUserId : null}
+                            resetAction={setAction}
+                            toggleNeedToFecthUsers={toggleNeedToFecthUsers}
+                            updating={action.update ? "true" : "false"}
+                        />
+                    </Modal>
+                    
                     <table className="table">
                         <thead style={{ backgroundColor: '#144d43', color: '#ffffff' }}>
                             <tr>
@@ -108,43 +125,44 @@ const Users = (props) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map(user => (
-                                <tr key={user.id}>
-                                    <td className="text-break">{user.profile_id}</td>
-                                    <td className="text-break">{user.first_name}</td>
-                                    <td className="text-break">{user.last_name}</td>
-                                    <td className="text-break">{user.email}</td>
-                                    <td className="text-break">{user.phone}</td>
-                                    <td data-for="Action">
-                                        <Dropdown className="ms-auto dropdown-customize">
-                                            <Dropdown.Toggle
-                                                variant=""
-                                                className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
-                                            >
-                                                <i className="bi bi-chevron-down fa-lg"></i>
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu>
+                                {users.map(user => (
+                                    <tr key={user.id}>
+                                        <td className="text-break">{user.profile_id}</td>
+                                        <td className="text-break">{user.first_name}</td>
+                                        <td className="text-break">{user.last_name}</td>
+                                        <td className="text-break">{user.email}</td>
+                                        <td className="text-break">{user.phone}</td>
+                                        <td data-for="Action">
+                                            <Dropdown className="ms-auto dropdown-customize">
+                                                <Dropdown.Toggle
+                                                    variant=""
+                                                    className="btn-outline-secondary dropdown-toggle btn-sm py-0 px-1 dropdown-toggle "
+                                                >
+                                                    <i className="bi bi-chevron-down fa-lg"></i>
+                                                </Dropdown.Toggle>
+                                                <Dropdown.Menu>
 
-                                                <Dropdown.Item  onClick={() => {
-                                                    setAction({details: true});
-                                                    handleShowDetails(user.id);
-                                                }} > Details </Dropdown.Item>
+                                                    <Dropdown.Item  onClick={() => {
+                                                        setAction({details: true});
+                                                        handleShowDetails(user.id);
+                                                    }} > Details </Dropdown.Item>
 
-                                                <Dropdown.Item onClick={() => {
-                                                    setAction({update: true});
-                                                }} > Edit </Dropdown.Item>
+                                                    <Dropdown.Item onClick={() => {
+                                                        setAction({update: true});
+                                                    }} > Edit </Dropdown.Item>
 
-                                                <Dropdown.Item  onClick={() => {
-                                                    setDeletedUserId(user.id);
-                                                    setAction({delete: true});
-                                                }}> Delete </Dropdown.Item>
+                                                    <Dropdown.Item  onClick={() => {
+                                                        setDeletedUserId(user.id);
+                                                        setAction({delete: true});
+                                                    }}> Delete </Dropdown.Item>
 
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
+                                                </Dropdown.Menu>
+                                            </Dropdown>
+                                        </td>
+                                    </tr>
+                                    ))
+                                }
+                            </tbody>
                     </table>
 
                     {action.update ? null : (
@@ -156,7 +174,7 @@ const Users = (props) => {
                         />
                     )}
                 </>
-            ) : null}{" "}
+            ) : null}
         </div>
     );
 };

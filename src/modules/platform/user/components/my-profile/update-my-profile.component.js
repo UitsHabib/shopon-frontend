@@ -73,7 +73,7 @@ const UpdateMyProfile = (props) => {
 
 									<div className="form-group mb-3">
 										<label htmlFor="first_name" className="form-label">
-											First Name
+											First Name <span className="text-danger">*</span>
 										</label>
 										<Field
 											type="text"
@@ -88,7 +88,7 @@ const UpdateMyProfile = (props) => {
 
 									<div className="form-group mb-3">
 										<label htmlFor="last_name" className="form-label">
-											Last Name
+											Last Name <span className="text-danger">*</span>
 										</label>
 										<Field
 											type="text"
@@ -103,7 +103,7 @@ const UpdateMyProfile = (props) => {
 
 									<div className="form-group mb-3">
 										<label htmlFor="email" className="form-label">
-											Email Address
+											Email Address 
 										</label>
 										<Field
 											type="email"

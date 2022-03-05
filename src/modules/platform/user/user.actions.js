@@ -7,12 +7,12 @@ export function getSignedInUserProfile() {
         payload: axios({
             method: 'get',
             url: `/api/users/profile`,
-            withCredentials: "true",
         })
     };
 }
 
 export function login(data) {
+    console.log(data);
     return {
         type: Types.LOGIN,
         payload: axios({
@@ -33,9 +33,7 @@ export function logout() {
     };
 }
 
-
 export function getUsers(page, limit, orderBy, orderType) {
-
     const url =`api/users/?page=${page}` 
     + (limit ? `&limit=${limit}` : "") 
     + (orderBy ? `&orderBy=${orderBy}` : "") 
@@ -50,8 +48,8 @@ export function getUsers(page, limit, orderBy, orderType) {
     };
 }
 
-
 export function deleteUser(userId) {
+    console.log(userId);
     return {
         type: Types.DELETE_USER,
         payload: axios({
@@ -61,16 +59,18 @@ export function deleteUser(userId) {
     };
 }
 
-export function createUser(userInfo) {
-    console.log(userInfo);
+export function createUser(data) {
     return {
         type: Types.CREATE_USER,
         payload: axios({
             method: "post",
             url: `/api/users`,
-            userInfo
+            data,
         })
     };
+    // return axios.post("http://localhost:5000/api/users", user, {
+    //     withCredentials: true,
+    // });
 }
 
 export function getUser(user_id) {
@@ -96,20 +96,6 @@ export function getProfiles() {
       }),
   };
 }
-
-// export function getRoles() {
-//     console.log("in action roles");
-//   return {
-//       type: Types.GET_ROLES,
-//       payload: axios({
-//           method: "get",
-//           url: `${baseUrl}/api/roles`,
-//           withCredentials: "true",
-//       }),
-//   };
-// }
-
-
 
 export function updateUser(usersID, data) {
     return {

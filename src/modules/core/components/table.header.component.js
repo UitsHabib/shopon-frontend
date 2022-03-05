@@ -1,5 +1,5 @@
 const TableHeader = ({columns, sortColumns, onSort}) => {//sortColumn = {path: id, order: descending/ascending}
-    const handleSort = ({ path, sorting}) => {
+    const handleSort = ({ path, sorting }) => {
         if(!sorting) return;
 
         if (sortColumns.path === path) {
