@@ -3,10 +3,10 @@ import Types from "./profile.types";
 
 export function getProfiles(page, limit, orderBy, orderType) {
     const url = `/api/profiles`
-        +(page ? `?page=${page}` : "")
-        +(limit ? `&&limit=${limit}` : "")
-        +(orderBy ? `&&orderBy=${orderBy}` : "")
-        +(orderType ? `&&orderType=${orderType}` : "");
+        + (page ? `?page=${page}` : "")
+        + (limit ? `&&limit=${limit}` : "")
+        + (orderBy ? `&&orderBy=${orderBy}` : "")
+        + (orderType ? `&&orderType=${orderType}` : "");
 
     return {
         type: Types.GET_PROFILES,
@@ -27,10 +27,6 @@ export const getProfile = (id) => {
     };
 }
 
-export function getPermissions() {
-	return axios.get(`/api/permissions`);
-}
-
 export const createProfile = (data) => {
     return {
         type: Types.CREATE_PROFILE,
@@ -42,8 +38,7 @@ export const createProfile = (data) => {
     };
 }
 
-export const updateProfile = (id, title, description, permissions) => {
-    const data = {title, description, permissions}
+export const updateProfile = (id, data) => {
     return {
         type: Types.UPDATE_PROFILE,
         payload: axios({

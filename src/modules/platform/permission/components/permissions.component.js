@@ -100,7 +100,7 @@ const Permissions = () => {
                                     <th scope="col" width="30%"><span onClick={() => changeUrl({ page, path: 'description' })}>Description {findSort('description')}</span></th>
                                     <th scope="col" width="10%"><span onClick={() => changeUrl({ page, path: 'type' })}>Type {findSort('type')}</span></th>
                                     <th scope="col" width="15%"><span onClick={() => changeUrl({ page,  path: 'created_at' })}>Created Date {findSort('created_at')}</span></th>
-                                    <th scope="col" width="15%"><span onClick={() => changeUrl({ page, path: 'updated_at' })}>Updated Date</span></th>
+                                    <th scope="col" width="15%"><span onClick={() => changeUrl({ page, path: 'updated_at' })}>Updated Date {findSort('updated_at')}</span></th>
                                     <th scope="col" width="10%">Action</th>
                                 </tr>
                             </thead>
