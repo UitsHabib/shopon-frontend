@@ -17,6 +17,7 @@ export default function reducer(state = initialState, action) {
                 loggedInUser,
             };
         }
+        
         case Types.GET_USERS_FULFILLED: {
              return {
                 ...state,
@@ -25,7 +26,7 @@ export default function reducer(state = initialState, action) {
         }
         
         case Types.GET_USER_FULFILLED: {
-            console.log("in fulfilled :  ",action.payload.data);
+            console.log("in fulfilled :  ",action.payload);
             return {
                 ...state,
                 user: action.payload.data,
@@ -37,6 +38,13 @@ export default function reducer(state = initialState, action) {
                 profileData: action.payload.data,
             };
         }
+        // case Types.DELETE_USER_FULFILLED: {
+        //     return {
+        //         ...state,
+        //         // userData: userData.users.filter(user => user.id !== action.payload.data )
+
+        //     };
+        // }
     }
     return state;
 }

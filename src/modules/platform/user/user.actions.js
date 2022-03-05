@@ -53,7 +53,7 @@ export function getUsers(page, limit, orderBy, orderType) {
 
 export function deleteUser(userId) {
     return {
-        type: Types.UPDATE_USERS,
+        type: Types.DELETE_USER,
         payload: axios({
             method: "delete",
             url: `/api/users/${userId}`
