@@ -1,12 +1,18 @@
-import Types from './role.types';
 import axios from 'axios';
+import Types from './role.types';
 
-export function getRoles() {
+export function getRoles(page, limit, orderBy, orderType) {
+    const url = `/api/roles`
+        + (page ? `?page=${page}` : "1")
+        + (limit ? `&&limit=${limit}` : "")
+        + (orderBy ? `&&orderBy=${orderBy}` : "")
+        + (orderType ? `&&orderType=${orderType}` : "");
+
     return {
         type: Types.GET_ROLES,
         payload: axios({
             method: 'get',
-            url: `/api/roles`
+            url
         })
     };
 }
